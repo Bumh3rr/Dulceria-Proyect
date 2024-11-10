@@ -47,13 +47,10 @@ public class producto {
         this.descripcion = descripcion;
     }
     public boolean verifyNotEmpty() {
-        return nombre_Prod != null && !nombre_Prod.trim().isEmpty() &&
-                id_Categoria != 0 &&
-                id_Prov != 0 &&
-                stock_Disp != 0 &&
-                precio_Compra != 0 &&
-                precio_Venta != 0 &&
-                descripcion != null && !descripcion.trim().isEmpty();
+        if (nombre_Prod == null || nombre_Prod.trim().isEmpty()) {
+            return false;
+        }
+        return true;
     }
     public Object[] getProductoArray(){
         return new Object[]{
