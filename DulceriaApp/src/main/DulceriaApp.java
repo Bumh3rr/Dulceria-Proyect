@@ -15,13 +15,22 @@ import raven.modal.Drawer;
 import raven.modal.ModalDialog;
 import raven.modal.option.BorderOption;
 import system.FormManager;
-
+/**
+ * DulceriaApp is the main class for the Dulceria application, extending JFrame.
+ * It initializes the application window and sets up various UI components and settings.
+ */
 public class DulceriaApp extends JFrame {
-
+    /**
+     * DulceriaApp is the main class for the Dulceria application, extending JFrame.
+     * It initializes the application window and sets up various UI components and settings.
+     */
     public DulceriaApp() {
         init();
     }
-
+    /**
+     * DulceriaApp is the main class for the Dulceria application, extending JFrame.
+     * It initializes the application window and sets up various UI components and settings.
+     */
     private void init() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Notify.install(this);
@@ -52,7 +61,10 @@ public class DulceriaApp extends JFrame {
         }
 
     }
-
+    /**
+     * DulceriaApp is the main class for the Dulceria application, extending JFrame.
+     * It initializes the application window and sets up various UI components and settings.
+     */
     public static void main(String[] args) {
         FlatLaf.registerCustomDefaultsSource("themes");
         FlatMacLightLaf.setup();
