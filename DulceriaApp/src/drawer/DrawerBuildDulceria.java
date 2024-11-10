@@ -74,8 +74,8 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
         MenuItem items[] = new MenuItem[]{
             new Item.Label("PRINCIPAL"),
             new Item("Ventas", "chart.svg", FormProducts.class),
-            new Item("Casa", "dashboard.svg", FormProducts.class),
-            new Item("Notas", "forms.svg", FormProducts.class),
+            new Item("", "dashboard.svg", FormProducts.class),
+            new Item("Productos", "ic_products.svg", FormProducts.class),
             new Item("Proveedor", "user2.svg", FormProveedor.class),
             new Item("Acerca De", "about.svg"),
             new Item("Cerrar Sesión", "logout.svg")
@@ -98,7 +98,7 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
                 System.out.println("Drawer menu selected " + Arrays.toString(index));
                 Class<?> itemClass = action.getItem().getItemClass();
                 int i = index[0];
-                if (i == 5) {
+                if (i == 6) {
                     System.exit(0);
                 }
                 if (itemClass == null || !Form.class.isAssignableFrom(itemClass)) {

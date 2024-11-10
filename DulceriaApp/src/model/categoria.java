@@ -1,28 +1,11 @@
 package model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
-
+@Data
+@AllArgsConstructor
 public class categoria {
     private int id;
-    @Getter
     private String tipo;
-    public categoria(int id, String tipo) {
-        this.id = id;
-        this.tipo = tipo;
-    }
-
-    public boolean verifyNotEmpty() {
-        if (tipo == null || tipo.trim().isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-    public Object[] getCategoriaArray(){
-        return new Object[]{
-            this.id,
-            this.tipo
-        };
-    }
-
-
 }
