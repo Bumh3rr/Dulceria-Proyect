@@ -84,7 +84,7 @@ public class FormProducts extends Form {
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
                     new SimpleModalBorder(panelAdd, "Agregar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
                         if (action == SimpleModalBorder.OK_OPTION) {
-                            
+                            panelAdd.commitInserts(controller);
                         } else if (action == SimpleModalBorder.CANCEL_OPTION) {
                             controller.close();
                         }
@@ -154,7 +154,7 @@ public class FormProducts extends Form {
 
     public static class ProductoRequest{
 
-        public static int addProducto(Producto producto) throws Exception {
+        public static Boolean addProducto(Producto producto) throws Exception {
             return PoolThreads.getInstance().getExecutorService().submit(() -> {
                 try {
                     return ProductoDao.addProductoBD(producto);

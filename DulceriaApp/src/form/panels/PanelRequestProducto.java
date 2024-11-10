@@ -6,9 +6,12 @@ import com.formdev.flatlaf.extras.components.FlatComboBox;
 import components.MyJTextField;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
+import components.Notify;
 import form.FormProducts;
 import form.FormProveedor;
+import form.request.RequestProducto;
 import java.awt.EventQueue;
+import java.text.DecimalFormat;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.component.ModalBorderAction;
@@ -17,21 +20,24 @@ import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
-import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Categoria;
 import model.Proveedor;
 import raven.modal.ModalDialog;
+import raven.modal.Toast;
+import raven.modal.listener.ModalController;
+import raven.modal.toast.ToastPromise;
 import utils.ConfigModal;
+import utils.EstadosMx;
 
 public class PanelRequestProducto extends JPanel {
-
+    
     private final String KEY = getClass().getName();
     private MyTxtAreaDescrip description;
-    private Producto producto;
-
+    
     private MyJTextField inputNombre;
     private MyJTextField inputMara;
     private MyJTextField inputDescripcion;
@@ -42,7 +48,7 @@ public class PanelRequestProducto extends JPanel {
     private FlatComboBox<Proveedor> inputProveedor;
     private JButton botton;
     private JButton buttonAddCategoria;
-
+    
     public PanelRequestProducto() {
         initComponents();
         initListeners();
@@ -50,12 +56,12 @@ public class PanelRequestProducto extends JPanel {
         fillBoxCategorias();
         fillBoxProveedores();
     }
-
+    
     private void initListeners() {
         botton.addActionListener((e) -> {
             ModalBorderAction.getModalBorderAction(botton).doAction(SimpleModalBorder.OK_OPTION);
         });
-
+        
         buttonAddCategoria.addActionListener((e) -> {
             PanelAddCategoria panelAdd = new PanelAddCategoria();
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
@@ -69,41 +75,43 @@ public class PanelRequestProducto extends JPanel {
                     }), ConfigModal.getModelShowDefault());
         });
     }
-
+    
     private void initComponents() {
-
-        NumberFormat numberFormat = NumberFormat.getIntegerInstance();
-        NumberFormatter numberFormatter = new NumberFormatter(numberFormat);
+        
+        NumberFormatter numberFormatter = new NumberFormatter(NumberFormat.getIntegerInstance());
+//        NumberFormatter numberFormatter = new NumberFormatter(NumberFormat.getIntegerInstance());
         numberFormatter.setValueClass(Integer.class);
-        numberFormatter.setAllowsInvalid(false);
         numberFormatter.setMinimum(0);
-        // Opcional: establece un mínimo de 0 (sin números negativos)
-        NumberFormatter numberFormatterFloat = new NumberFormatter(NumberFormat.getIntegerInstance());
-        numberFormatterFloat.setValueClass(Float.class);
-        numberFormatterFloat.setAllowsInvalid(false);
-        numberFormatterFloat.setMinimum(0); // Opcional: establece un mínimo de 0 (sin números negativos)
-
+        numberFormatter.setMaximum(Integer.MAX_VALUE);
+        numberFormatter.setAllowsInvalid(false);
+        
+        NumberFormatter decimalFormatter = new NumberFormatter(new DecimalFormat("#,##0.00"));
+        decimalFormatter.setValueClass(Double.class);
+        decimalFormatter.setMinimum(0.0);
+        decimalFormatter.setMaximum(Double.MAX_VALUE);
+        decimalFormatter.setAllowsInvalid(false);
+        
         description = new MyTxtAreaDescrip("Agregar Producto, Agrega un nuevo producto a la base de datos");
-
+        
         inputNombre = new MyJTextField();
         inputMara = new MyJTextField();
         inputDescripcion = new MyJTextField();
-
+        
         inputStock = new JFormattedTextField();
         inputStock.setFormatterFactory(new DefaultFormatterFactory(numberFormatter));
-
+        
         inputPrecioCompra = new JFormattedTextField();
-        inputPrecioCompra.setFormatterFactory(new DefaultFormatterFactory(numberFormatterFloat));
-
+        inputPrecioCompra.setFormatterFactory(new DefaultFormatterFactory(decimalFormatter));
+        
         inputPrecioVenta = new JFormattedTextField();
-        inputPrecioVenta.setFormatterFactory(new DefaultFormatterFactory(numberFormatterFloat));
-
+        inputPrecioVenta.setFormatterFactory(new DefaultFormatterFactory(decimalFormatter));
+        
         inputCategoria = new FlatComboBox<>();
         inputCategoria.setMaximumRowCount(8);
-
+        
         inputProveedor = new FlatComboBox<>();
         inputProveedor.setMaximumRowCount(8);
-
+        
         buttonAddCategoria = new JButton("Crear Categoria");
         botton = new JButton("Agregar Producto") {
             @Override
@@ -112,53 +120,57 @@ public class PanelRequestProducto extends JPanel {
             }
         };
     }
-
+    
     private void init() {
         setLayout(new MigLayout("fillx,insets 0", "[center]", "[center]"));
-
+        
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 0 45 0 45", "fill,400!"));
-
+        
         botton.putClientProperty(FlatClientProperties.STYLE, "" + "foreground:#FFFFFF");
         buttonAddCategoria.putClientProperty(FlatClientProperties.STYLE, "" + "foreground:#4f4f4f");
-
+        
         description.putClientProperty(FlatClientProperties.STYLE, ""
                 + "[light]foreground:lighten(@foreground,30%);"
                 + "[dark]foreground:darken(@foreground,30%);"
                 + "background:null");
-
+        
         inputNombre.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Nombre del Producto");
-        inputNombre.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_name.svg", 0.35f));
         inputNombre.putClientProperty(FlatClientProperties.STYLE, ""
-                + "iconTextGap:10;"
                 + "showClearButton:true");
-
+        
         inputMara.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Marca");
-        inputMara.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_name.svg", 0.35f));
         inputMara.putClientProperty(FlatClientProperties.STYLE, ""
-                + "iconTextGap:10;"
                 + "showClearButton:true");
-
+        
         inputDescripcion.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Descripcion del Producto");
-        inputDescripcion.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_email.svg", 0.35f));
         inputDescripcion.putClientProperty(FlatClientProperties.STYLE, ""
-                + "iconTextGap:10;"
                 + "showClearButton:true");
-
-        inputStock.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_address.svg", 0.35f));
+        
         inputStock.putClientProperty(FlatClientProperties.STYLE, ""
-                + "iconTextGap:10;"
                 + "showClearButton:true");
-
-        inputPrecioCompra.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_zipcode.svg", 0.35f));
+        
+        JLabel signo = new JLabel("$", JLabel.RIGHT);
+        signo.putClientProperty(FlatClientProperties.STYLE, ""
+                + "border:0,8,0,0;"
+                + "[light]foreground:lighten(@foreground,30%);"
+                + "[dark]foreground:darken(@foreground,30%);");
+        
+        inputPrecioCompra.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_COMPONENT, signo);
         inputPrecioCompra.putClientProperty(FlatClientProperties.STYLE, ""
                 + "iconTextGap:10;"
                 + "showClearButton:true");
-
-        inputPrecioVenta.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_zipcode.svg", 0.35f));
+        
+        JLabel signo2 = new JLabel("$", JLabel.RIGHT);
+        signo2.putClientProperty(FlatClientProperties.STYLE, ""
+                + "border:0,8,0,0;"
+                + "[light]foreground:lighten(@foreground,30%);"
+                + "[dark]foreground:darken(@foreground,30%);");
+        
+        inputPrecioVenta.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_COMPONENT, signo2);
         inputPrecioVenta.putClientProperty(FlatClientProperties.STYLE, ""
                 + "iconTextGap:10;"
                 + "showClearButton:true");
-
+        
         panel.add(description);
         panel.add(new JLabel("Producto"));
         panel.add(inputNombre, "split 2");
@@ -177,12 +189,115 @@ public class PanelRequestProducto extends JPanel {
         panel.add(new JLabel("Proveedor"));
         panel.add(inputProveedor);
         panel.add(botton, "grow 0,gapy 10,al trail");
-
+        
         add(new MyScrollPane(panel));
         updateUI();
         revalidate();
     }
-
+    
+    public void commitInserts(ModalController controller) {
+        if (Toast.checkPromiseId(KEY)) {
+            controller.consume();
+            return;
+        }
+        
+        Toast.showPromise(SwingUtilities.windowForComponent(this), "Agregar", Notify.getInstance().getSelectedOptionTop(),
+                new ToastPromise(KEY) {
+            @Override
+            public void execute(ToastPromise.PromiseCallback toas) {
+                try {
+                    toas.update("Verificando");
+                    if (insert()) {
+//                        new Thread(() -> form.formOpen()).start();
+                        toas.done(Toast.Type.SUCCESS, "Producto Agregado Exitoxamente");
+                        controller.close();
+                    } else {
+                        toas.done(Toast.Type.ERROR, "Operación fallida");
+                    }
+                } catch (Exception e) {
+                    if (e.getMessage().contains("Data too long")) {
+                        toas.done(Toast.Type.WARNING, "Has Revasado el Limite de Caracteres\n"
+                                + e.getLocalizedMessage());
+                    } else {
+                        toas.done(Toast.Type.ERROR, "Hubo un problema al Proveedor ala base de datos"
+                                + "\nCausa: " + e.getLocalizedMessage());
+                    }
+                    controller.consume();
+                }
+            }
+        });
+    }
+    
+    private Boolean insert() throws Exception {
+        Toast.closeAll();
+        
+        if (toastIsEmptyCampos()) {
+            return false;
+        }
+        
+        String nombre = inputNombre.getText().strip();
+        String marca = inputMara.getText().strip();
+        String descripcion = inputDescripcion.getText().strip();
+        int stock = inputStock.getValue() == null ? 0 : Integer.parseInt(inputStock.getText());
+        int precioCompra = inputPrecioCompra.getValue() == null ? 0 : Integer.parseInt(inputPrecioCompra.getText());
+        int precioVenta = inputPrecioVenta.getValue() == null ? 0 : Integer.parseInt(inputPrecioVenta.getText());
+        Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
+        Proveedor proveedor = (Proveedor) inputProveedor.getSelectedItem();
+        
+        Producto producto = new Producto(
+                nombre,
+                marca,
+                descripcion,
+                stock,
+                precioCompra,
+                precioVenta,
+                categoria,
+                proveedor);
+        
+        System.out.println(producto);
+        
+        if (producto.verifyNotEmpty()) {
+            return RequestProducto.addProducto(producto);
+        }
+        return false;
+    }
+    
+    private Boolean toastIsEmptyCampos() throws Exception {
+        if (verifyInputEmpty(inputNombre, "Nombre del Producto")) {
+            return true;
+        }
+        if (verifyInputEmpty(inputMara, "Marca")) {
+            return true;
+        }
+        if (verifyInputEmpty(inputStock, "Unidades")) {
+            return true;
+        }
+        if (verifyInputEmpty(inputPrecioVenta, "Precio Venta")) {
+            return true;
+        }
+        if (verifyInputEmpty(inputPrecioCompra, "Precio Compra")) {
+            return true;
+        }
+        return false;
+    }
+    
+    private Boolean verifyInputEmpty(JTextField field, String str) throws Exception {
+        try {
+            String text = String.valueOf(field.getText().strip());
+            if (text.isEmpty()) {
+                Notify.getInstance().showToast(Toast.Type.WARNING, "Es requerido el campo " + str);
+                return true;
+            }
+        } catch (Exception e) {
+            JFormattedTextField op = (JFormattedTextField) field;
+            if (op.getValue() == null) {
+                return false;
+            }
+        }
+        
+        return false;
+    }
+    
     private void fillBoxCategorias() {
         EventQueue.invokeLater(() -> {
             try {
@@ -195,9 +310,9 @@ public class PanelRequestProducto extends JPanel {
                 Logger.getLogger(PanelRequestProducto.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-
+        
     }
-
+    
     private void fillBoxProveedores() {
         try {
             LinkedList<Proveedor> allProveedors = FormProveedor.ProveedorRequest.getAllProveedors();
@@ -208,5 +323,5 @@ public class PanelRequestProducto extends JPanel {
             Logger.getLogger(PanelRequestProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
 }

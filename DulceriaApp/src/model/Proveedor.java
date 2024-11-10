@@ -45,6 +45,11 @@ public class Proveedor {
         this.date_register = date_register;
     }
 
+    public Proveedor(int id) {
+        this.id = id;
+    }
+    
+
     public boolean verifyNotEmpty() {
         if (first_name == null || first_name.trim().isEmpty()) {
             return false;

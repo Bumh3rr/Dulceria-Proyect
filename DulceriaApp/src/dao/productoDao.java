@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import lombok.Cleanup;
+import model.Categoria;
 import model.Producto;
+import model.Proveedor;
 
 /**
  * productoDao es una clase de objeto de acceso a datos (DAO) que proporciona métodos para interactuar con la tabla PRODUCTO en la base de datos.
@@ -20,8 +23,8 @@ public class ProductoDao {
      * @return el ID generado del nuevo producto
      * @throws Exception si hay un error durante la operación de la base de datos
      */
-    public static int addProductoBD(Producto producto) throws Exception {
-        String query = "INSERT INTO PRODUCTO(nombre_Prod, marca, descripcion, stock_Disp, precio_Compra, precio_Venta, PROVEEDOR_id_Proveedor,CATEGORIA_id_Categoria) values(?,?,?,?,?,?,?,?)";
+    public static Boolean addProductoBD(Producto producto) throws Exception {
+        String query = "INSERT INTO PRODUCTO(nombre_Prod,marca,descripcion,stock_Disp,precio_Compra,precio_Venta,PROVEEDOR_id_Proveedor,CATEGORIA_id_Categoria) values(?,?,?,?,?,?,?,?)";
         int generatedId = -1;
 
         @Cleanup
@@ -35,8 +38,8 @@ public class ProductoDao {
         ps.setInt(4, producto.getStock());
         ps.setDouble(5, producto.getPrecio_Compra());
         ps.setDouble(6, producto.getPrecio_Venta());
-        ps.setInt(7, producto.getId_Categoria());
-        ps.setInt(8, producto.getId_Prov());
+        ps.setInt(7, producto.getCategoria().getId());
+        ps.setInt(8, producto.getProveedor().getId());
 
         if (ps.executeUpdate() > 0) {
             @Cleanup
@@ -45,7 +48,7 @@ public class ProductoDao {
                 generatedId = rs.getInt(1);
             }
         }
-        return generatedId;
+        return generatedId > 0;
     }
 
     /**
@@ -54,28 +57,28 @@ public class ProductoDao {
      * @return una LinkedList de objetos producto
      * @throws Exception si hay un error durante la operación de la base de datos
      */
-    public static LinkedList<Producto> getAllProductosBD() throws Exception {
-        String query = "SELECT * FROM PRODUCTO";
-
-        LinkedList<Producto> list = new LinkedList<>();
-        @Cleanup
-        Connection connection = PoolConexion.getInstance().getConnection();
-        @Cleanup
-        ResultSet rs = connection.prepareStatement(query).executeQuery();
-
-        while (rs.next()) {
-            list.add(new Producto(
-                    rs.getInt("id_Prod"),
-                    rs.getString("nombre_Prod"),
-                    rs.getString("marca"),
-                    rs.getString("descripcion"),
-                    rs.getInt("stock_Disp"),
-                    rs.getDouble("precio_Compra"),
-                    rs.getDouble("precio_Venta"),
-                    rs.getInt("CATEGORIA_id_Categoria"),
-                    rs.getInt("PROVEEDOR_id_Proveedor")
-            ));
-        }
-        return list;
-    }
+//    public static LinkedList<Producto> getAllProductosBD() throws Exception {
+//        String query = "SELECT * FROM PRODUCTO";
+//
+//        LinkedList<Producto> list = new LinkedList<>();
+//        @Cleanup
+//        Connection connection = PoolConexion.getInstance().getConnection();
+//        @Cleanup
+//        ResultSet rs = connection.prepareStatement(query).executeQuery();
+//
+//        while (rs.next()) {
+//            list.add(new Producto(
+//                    rs.getInt("id_Prod"),
+//                    rs.getString("nombre_Prod"),
+//                    rs.getString("marca"),
+//                    rs.getString("descripcion"),
+//                    rs.getInt("stock_Disp"),
+//                    rs.getDouble("precio_Compra"),
+//                    rs.getDouble("precio_Venta"),
+//                    new Categoria(rs.getInt("CATEGORIA_id_Categoria"), rs.getString("tipo")),
+//                    new Proveedor(rs.getInt("PROVEEDOR_id_Proveedor"), query, query, query, query, query, query, query, query, LocalDateTime.MIN)
+//            ));
+//        }
+//        return list;
+//    }
 }
