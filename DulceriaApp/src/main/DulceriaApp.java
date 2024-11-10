@@ -64,6 +64,7 @@ public class DulceriaApp extends JFrame {
     /**
      * DulceriaApp is the main class for the Dulceria application, extending JFrame.
      * It initializes the application window and sets up various UI components and settings.
+     * e
      */
     public static void main(String[] args) {
         FlatLaf.registerCustomDefaultsSource("themes");
