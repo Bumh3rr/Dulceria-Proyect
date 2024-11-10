@@ -22,6 +22,7 @@ public class ProveedorDao {
      * @return el ID generado del nuevo Proveedor
      * @throws Exception si hay un error durante la operación de la base de datos
      */
+
     public static int addProveedorBD(Proveedor proveedor) throws Exception {
         String query = "INSERT INTO PROVEEDOR(first_name,last_name,phone,email,state,municipality,street,zip,date_register) values(?,?,?,?,?,?,?,?,?)";
         int generatedId = -1;
