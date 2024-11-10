@@ -39,7 +39,7 @@ public class CardProducto extends JPanel {
         JPanel header = new JPanel(new MigLayout("fill,insets 10 10 0 0", "[fill,center]", "[center]"));
         header.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:null");
-        icon = new JLabel(new AvatarIcon(CardProducto.class.getResource("/resources/lgo.png"), 100, 100, 16));
+        icon = new JLabel(new AvatarIcon(CardProducto.class.getResource("/resources/dulce.png"), 100, 100, 16));
         header.add(icon);
         return header;
     }
@@ -48,7 +48,7 @@ public class CardProducto extends JPanel {
         JPanel body = new JPanel(new MigLayout("wrap", "[150]", "[][]push[]push"));
         body.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:null");
-        JLabel title = new JLabel("Tecnico");
+        JLabel title = new JLabel("Producto");
         title.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:bold +1;");
         description = new JTextPane();
@@ -62,6 +62,7 @@ public class CardProducto extends JPanel {
                 "ID: " + producto.getId()
                         + "\nMarca: " + producto.getMarca() + ""
                         + "\nNombre: " + producto.getNombre()
+                        + "\nCategoria: " + producto.getCategoria().getTipo()
                         + "\nUnidades Disponibles: " + producto.getDescripcion()
                         + "\nPrecio Venta: " + producto.getPrecio_Venta()
         );

@@ -1,27 +1,26 @@
 package form.request;
 
+import dao.CategoriaDao;
 import dao.PoolThreads;
-import dao.ProductoDao;
-import model.Producto;
+import model.Categoria;
 
 import java.util.LinkedList;
 
-public class RequestProducto {
-
-    public static Boolean addProducto(Producto producto) throws Exception {
+public class RequestCategoria {
+    public static Boolean addCategoria(Categoria categoriaN) throws Exception {
         return PoolThreads.getInstance().getExecutorService().submit(() -> {
             try {
-                return ProductoDao.addProductoBD(producto);
+                return CategoriaDao.addCategoriaBD(categoriaN);
             } catch (Exception e) {
                 throw new Exception(e);
             }
         }).get();
     }
 
-    public static LinkedList<Producto> getAllProductos() throws Exception {
+    public static LinkedList<Categoria> getCategoriasAll() throws Exception {
         return PoolThreads.getInstance().getExecutorService().submit(() -> {
             try {
-                return ProductoDao.getAllProductosBD();
+                return dao.CategoriaDao.getCategoriasBD();
             } catch (Exception e) {
                 throw new Exception(e);
             }

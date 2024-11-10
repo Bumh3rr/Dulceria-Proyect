@@ -6,6 +6,7 @@ import dao.CategoriaDao;
 import dao.PoolThreads;
 import dao.ProductoDao;
 import form.panels.PanelRequestProducto;
+import form.request.RequestProducto;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import system.Form;
@@ -16,6 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+
 import model.Categoria;
 import raven.modal.ModalDialog;
 import raven.modal.component.SimpleModalBorder;
@@ -30,7 +32,7 @@ public class FormProducts extends Form {
 
     @Override
     public void formInit() {
-
+        addListProdcuctos();
     }
 
     @Override
@@ -40,8 +42,18 @@ public class FormProducts extends Form {
 
     @Override
     public void formRefresh() {
-
+        addListProdcuctos();
     }
+
+    public void addListProdcuctos() {
+        try {
+            listProductos = RequestProducto.getAllProductos();
+            refreshPanelProductos(listProductos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public FormProducts() {
         initComponents();
@@ -50,7 +62,7 @@ public class FormProducts extends Form {
     }
 
     private void initComponents() {
-
+        listProductos = new LinkedList<>();
     }
 
     private void initListeners() {
@@ -148,38 +160,6 @@ public class FormProducts extends Form {
 //                    }), Verify.option);
         };
 
-    }
-
-    public static class ProductoRequest{
-
-        public static Boolean addProducto(Producto producto) throws Exception {
-            return PoolThreads.getInstance().getExecutorService().submit(() -> {
-                try {
-                    return ProductoDao.addProductoBD(producto);
-                } catch (Exception e) {
-                    throw new Exception(e);
-                }
-            }).get();
-        }
-        public static Boolean addCategoria(Categoria categoriaN) throws Exception {
-            return PoolThreads.getInstance().getExecutorService().submit(() -> {
-                try {
-                    return CategoriaDao.addCategoriaBD(categoriaN);
-                } catch (Exception e) {
-                    throw new Exception(e);
-                }
-            }).get();
-        }
-        
-        public static LinkedList<Categoria> getCategoriasAll() throws Exception {
-            return PoolThreads.getInstance().getExecutorService().submit(() -> {
-                try {
-                    return dao.CategoriaDao.getCategoriasBD();
-                } catch (Exception e) {
-                    throw new Exception(e);
-                }
-            }).get();
-        }
     }
 
 

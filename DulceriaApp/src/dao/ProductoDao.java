@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
+
 import lombok.Cleanup;
 import model.Categoria;
 import model.Producto;
@@ -38,8 +38,8 @@ public class ProductoDao {
         ps.setInt(4, producto.getStock());
         ps.setDouble(5, producto.getPrecio_Compra());
         ps.setDouble(6, producto.getPrecio_Venta());
-        ps.setInt(7, producto.getCategoria().getId());
-        ps.setInt(8, producto.getProveedor().getId());
+        ps.setInt(7, producto.getProveedor().getId());
+        ps.setInt(8, producto.getCategoria().getId());
 
         if (ps.executeUpdate() > 0) {
             @Cleanup
@@ -57,28 +57,37 @@ public class ProductoDao {
      * @return una LinkedList de objetos producto
      * @throws Exception si hay un error durante la operación de la base de datos
      */
-//    public static LinkedList<Producto> getAllProductosBD() throws Exception {
-//        String query = "SELECT * FROM PRODUCTO";
-//
-//        LinkedList<Producto> list = new LinkedList<>();
-//        @Cleanup
-//        Connection connection = PoolConexion.getInstance().getConnection();
-//        @Cleanup
-//        ResultSet rs = connection.prepareStatement(query).executeQuery();
-//
-//        while (rs.next()) {
-//            list.add(new Producto(
-//                    rs.getInt("id_Prod"),
-//                    rs.getString("nombre_Prod"),
-//                    rs.getString("marca"),
-//                    rs.getString("descripcion"),
-//                    rs.getInt("stock_Disp"),
-//                    rs.getDouble("precio_Compra"),
-//                    rs.getDouble("precio_Venta"),
-//                    new Categoria(rs.getInt("CATEGORIA_id_Categoria"), rs.getString("tipo")),
-//                    new Proveedor(rs.getInt("PROVEEDOR_id_Proveedor"), query, query, query, query, query, query, query, query, LocalDateTime.MIN)
-//            ));
-//        }
-//        return list;
-//    }
+    public static LinkedList<Producto> getAllProductosBD() throws Exception {
+        String query = "SELECT * FROM PRODUCTO AS p " +
+                "JOIN CATEGORIA AS c ON c.id_Categoria = p.CATEGORIA_id_Categoria " +
+                "JOIN PROVEEDOR AS prov ON prov.id_Proveedor = p.PROVEEDOR_id_Proveedor;";
+
+        LinkedList<Producto> list = new LinkedList<>();
+        @Cleanup
+        Connection connection = PoolConexion.getInstance().getConnection();
+        @Cleanup
+        ResultSet rs = connection.prepareStatement(query).executeQuery();
+
+        while (rs.next()) {
+            list.add(new Producto(
+                    rs.getInt("p.id_Prod"),
+                    rs.getString("p.nombre_Prod"),
+                    rs.getString("p.marca"),
+                    rs.getString("p.descripcion"),
+                    rs.getInt("p.stock_Disp"),
+                    rs.getDouble("p.precio_Compra"),
+                    rs.getDouble("p.precio_Venta"),
+                    new Categoria(rs.getInt("c.id_Categoria"),
+                            rs.getString("c.tipo")),
+                    new Proveedor(
+                            rs.getInt("prov.id_Proveedor"),
+                            rs.getString("prov.nombre"),
+                            rs.getString("prov.apellido"),
+                            rs.getString("prov.telefono"),
+                            rs.getString("prov.correo")
+                    )
+            ));
+        }
+        return list;
+    }
 }

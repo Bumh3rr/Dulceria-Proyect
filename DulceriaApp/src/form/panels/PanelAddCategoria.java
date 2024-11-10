@@ -5,11 +5,12 @@ import components.MyJTextField;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
-import form.FormProducts;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import form.request.RequestCategoria;
 import model.Categoria;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.Toast;
@@ -17,7 +18,6 @@ import raven.modal.component.ModalBorderAction;
 import raven.modal.component.SimpleModalBorder;
 import raven.modal.listener.ModalController;
 import raven.modal.toast.ToastPromise;
-import system.AllForms;
 
 public class PanelAddCategoria extends JPanel {
 
@@ -100,6 +100,8 @@ public class PanelAddCategoria extends JPanel {
                         toas.done(Toast.Type.ERROR, "Hubo un problema al Categoria   ala base de datos"
                                 + "\nCausa: " + e.getLocalizedMessage());
                     }
+
+                    System.out.println(e.toString());
                     controller.consume();
                 }
             }
@@ -114,7 +116,7 @@ public class PanelAddCategoria extends JPanel {
             Notify.getInstance().showToast(Toast.Type.WARNING, "El campo es Requerido");
             return false;
         }
-        return FormProducts.ProductoRequest.addCategoria(new Categoria(categoriaName));
+        return RequestCategoria.addCategoria(new Categoria(categoriaName));
     }
 
 }

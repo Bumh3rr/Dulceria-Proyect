@@ -9,6 +9,7 @@ import components.MyTxtAreaDescrip;
 import components.Notify;
 import form.FormProducts;
 import form.FormProveedor;
+import form.request.RequestCategoria;
 import form.request.RequestProducto;
 import java.awt.EventQueue;
 import java.text.DecimalFormat;
@@ -201,7 +202,7 @@ public class PanelRequestProducto extends JPanel {
             return;
         }
         
-        Toast.showPromise(SwingUtilities.windowForComponent(this), "Agregar", Notify.getInstance().getSelectedOptionTop(),
+        Toast.showPromise(SwingUtilities.windowForComponent(this), "Agregar", Notify.getInstance().getSelectedOption(),
                 new ToastPromise(KEY) {
             @Override
             public void execute(ToastPromise.PromiseCallback toas) {
@@ -239,8 +240,8 @@ public class PanelRequestProducto extends JPanel {
         String marca = inputMara.getText().strip();
         String descripcion = inputDescripcion.getText().strip();
         int stock = inputStock.getValue() == null ? 0 : Integer.parseInt(inputStock.getText());
-        int precioCompra = inputPrecioCompra.getValue() == null ? 0 : Integer.parseInt(inputPrecioCompra.getText());
-        int precioVenta = inputPrecioVenta.getValue() == null ? 0 : Integer.parseInt(inputPrecioVenta.getText());
+        double precioCompra = inputPrecioCompra.getValue() == null ? 0 : Double.parseDouble(inputPrecioCompra.getText());
+        double precioVenta = inputPrecioVenta.getValue() == null ? 0 : Double.parseDouble(inputPrecioVenta.getText());
         Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
         Proveedor proveedor = (Proveedor) inputProveedor.getSelectedItem();
         
@@ -302,7 +303,7 @@ public class PanelRequestProducto extends JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 inputCategoria.removeAllItems();
-                LinkedList<Categoria> categorias = FormProducts.ProductoRequest.getCategoriasAll();
+                LinkedList<Categoria> categorias = RequestCategoria.getCategoriasAll();
                 for (Categoria categoria : categorias) {
                     inputCategoria.addItem(categoria);
                 }
