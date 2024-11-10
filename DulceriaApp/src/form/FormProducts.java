@@ -4,7 +4,8 @@ import com.formdev.flatlaf.FlatClientProperties;
 import components.CardProducto;
 import dao.PoolThreads;
 import dao.ProveedorDao;
-import dao.productoDao;
+import dao.CategoriaDao;
+import dao.ProductoDao;
 import form.panels.PanelRequestProducto;
 import model.Producto;
 import model.Proveedor;
@@ -17,6 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import model.Categoria;
 import raven.modal.ModalDialog;
 import raven.modal.component.SimpleModalBorder;
 import utils.ConfigModal;
@@ -82,7 +84,7 @@ public class FormProducts extends Form {
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
                     new SimpleModalBorder(panelAdd, "Agregar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
                         if (action == SimpleModalBorder.OK_OPTION) {
-
+                            
                         } else if (action == SimpleModalBorder.CANCEL_OPTION) {
                             controller.close();
                         }
@@ -155,7 +157,26 @@ public class FormProducts extends Form {
         public static int addProducto(Producto producto) throws Exception {
             return PoolThreads.getInstance().getExecutorService().submit(() -> {
                 try {
-                    return productoDao.addProductoBD(producto);
+                    return ProductoDao.addProductoBD(producto);
+                } catch (Exception e) {
+                    throw new Exception(e);
+                }
+            }).get();
+        }
+        public static Boolean addCategoria(Categoria categoriaN) throws Exception {
+            return PoolThreads.getInstance().getExecutorService().submit(() -> {
+                try {
+                    return CategoriaDao.addCategoriaBD(categoriaN);
+                } catch (Exception e) {
+                    throw new Exception(e);
+                }
+            }).get();
+        }
+        
+        public static LinkedList<Categoria> getCategoriasAll() throws Exception {
+            return PoolThreads.getInstance().getExecutorService().submit(() -> {
+                try {
+                    return CategoriaDao.getCategoriasBD();
                 } catch (Exception e) {
                     throw new Exception(e);
                 }

@@ -11,7 +11,7 @@ import model.Producto;
 /**
  * productoDao es una clase de objeto de acceso a datos (DAO) que proporciona métodos para interactuar con la tabla PRODUCTO en la base de datos.
  */
-public class productoDao {
+public class ProductoDao {
 
     /**
      * Agrega un nuevo producto a la base de datos.

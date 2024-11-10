@@ -8,6 +8,7 @@ import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import form.FormProducts;
 import form.FormProveedor;
+import java.awt.EventQueue;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.component.ModalBorderAction;
@@ -20,9 +21,13 @@ import java.util.LinkedList;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Categoria;
 import model.Proveedor;
+import raven.modal.ModalDialog;
+import utils.ConfigModal;
 
 public class PanelRequestProducto extends JPanel {
+
     private final String KEY = getClass().getName();
     private MyTxtAreaDescrip description;
     private Producto producto;
@@ -33,10 +38,10 @@ public class PanelRequestProducto extends JPanel {
     private JFormattedTextField inputStock;
     private JFormattedTextField inputPrecioCompra;
     private JFormattedTextField inputPrecioVenta;
-    private FlatComboBox<String> inputCategoria;
+    private FlatComboBox<Categoria> inputCategoria;
     private FlatComboBox<Proveedor> inputProveedor;
     private JButton botton;
-
+    private JButton buttonAddCategoria;
 
     public PanelRequestProducto() {
         initComponents();
@@ -49,6 +54,19 @@ public class PanelRequestProducto extends JPanel {
     private void initListeners() {
         botton.addActionListener((e) -> {
             ModalBorderAction.getModalBorderAction(botton).doAction(SimpleModalBorder.OK_OPTION);
+        });
+
+        buttonAddCategoria.addActionListener((e) -> {
+            PanelAddCategoria panelAdd = new PanelAddCategoria();
+            ModalDialog.showModal(SwingUtilities.windowForComponent(this),
+                    new SimpleModalBorder(panelAdd, "Agregar Categoria", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
+                        if (action == SimpleModalBorder.OK_OPTION) {
+                            panelAdd.commitInserts(controller);
+                            fillBoxCategorias();
+                        } else if (action == SimpleModalBorder.CANCEL_OPTION) {
+                            controller.close();
+                        }
+                    }), ConfigModal.getModelShowDefault());
         });
     }
 
@@ -64,7 +82,6 @@ public class PanelRequestProducto extends JPanel {
         numberFormatterFloat.setValueClass(Float.class);
         numberFormatterFloat.setAllowsInvalid(false);
         numberFormatterFloat.setMinimum(0); // Opcional: establece un mínimo de 0 (sin números negativos)
-
 
         description = new MyTxtAreaDescrip("Agregar Producto, Agrega un nuevo producto a la base de datos");
 
@@ -82,12 +99,12 @@ public class PanelRequestProducto extends JPanel {
         inputPrecioVenta.setFormatterFactory(new DefaultFormatterFactory(numberFormatterFloat));
 
         inputCategoria = new FlatComboBox<>();
-        inputCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Selecione la Categoria"}));
         inputCategoria.setMaximumRowCount(8);
 
         inputProveedor = new FlatComboBox<>();
         inputProveedor.setMaximumRowCount(8);
 
+        buttonAddCategoria = new JButton("Crear Categoria");
         botton = new JButton("Agregar Producto") {
             @Override
             public boolean isDefaultButton() {
@@ -96,13 +113,13 @@ public class PanelRequestProducto extends JPanel {
         };
     }
 
-
     private void init() {
         setLayout(new MigLayout("fillx,insets 0", "[center]", "[center]"));
 
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 0 45 0 45", "fill,400!"));
 
         botton.putClientProperty(FlatClientProperties.STYLE, "" + "foreground:#FFFFFF");
+        buttonAddCategoria.putClientProperty(FlatClientProperties.STYLE, "" + "foreground:#4f4f4f");
 
         description.putClientProperty(FlatClientProperties.STYLE, ""
                 + "[light]foreground:lighten(@foreground,30%);"
@@ -136,12 +153,11 @@ public class PanelRequestProducto extends JPanel {
         inputPrecioCompra.putClientProperty(FlatClientProperties.STYLE, ""
                 + "iconTextGap:10;"
                 + "showClearButton:true");
-        
+
         inputPrecioVenta.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_zipcode.svg", 0.35f));
         inputPrecioVenta.putClientProperty(FlatClientProperties.STYLE, ""
                 + "iconTextGap:10;"
                 + "showClearButton:true");
-
 
         panel.add(description);
         panel.add(new JLabel("Producto"));
@@ -156,7 +172,8 @@ public class PanelRequestProducto extends JPanel {
         panel.add(new JLabel("Precio Compra"));
         panel.add(inputPrecioCompra);
         panel.add(new JLabel("Categoria"));
-        panel.add(inputCategoria);
+        panel.add(inputCategoria, "split 2");
+        panel.add(buttonAddCategoria, "grow 0");
         panel.add(new JLabel("Proveedor"));
         panel.add(inputProveedor);
         panel.add(botton, "grow 0,gapy 10,al trail");
@@ -167,6 +184,21 @@ public class PanelRequestProducto extends JPanel {
     }
 
     private void fillBoxCategorias() {
+        EventQueue.invokeLater(() -> {
+            try {
+                inputCategoria.removeAllItems();
+                LinkedList<Categoria> categorias = FormProducts.ProductoRequest.getCategoriasAll();
+                for (Categoria categoria : categorias) {
+                    inputCategoria.addItem(categoria);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(PanelRequestProducto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
+    }
+
+    private void fillBoxProveedores() {
         try {
             LinkedList<Proveedor> allProveedors = FormProveedor.ProveedorRequest.getAllProveedors();
             for (Proveedor allProveedor : allProveedors) {
@@ -175,11 +207,6 @@ public class PanelRequestProducto extends JPanel {
         } catch (Exception ex) {
             Logger.getLogger(PanelRequestProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    }
-
-    private void fillBoxProveedores() {
-        
     }
 
 }
