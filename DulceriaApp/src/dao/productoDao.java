@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.LinkedList;
 import lombok.Cleanup;
-import model.producto;
-
+import model.Producto;
+    
 /**
  * productoDao es una clase de objeto de acceso a datos (DAO) que proporciona métodos para interactuar con la tabla PRODUCTO en la base de datos.
  */
@@ -20,8 +20,8 @@ public class productoDao {
      * @return el ID generado del nuevo producto
      * @throws Exception si hay un error durante la operación de la base de datos
      */
-    public static int addProductoBD(producto producto) throws Exception {
-        String query = "INSERT INTO PRODUCTO(nombre_Prod, id_Prov, precio_Compra, precio_Venta, id_Categoria, stock_Disp, descripcion) values(?,?,?,?,?,?,?)";
+    public static int addProductoBD(Producto producto) throws Exception {
+        String query = "INSERT INTO PRODUCTO(nombre_Prod, marca, descripcion, stock_Disp, precio_Compra, precio_Venta, PROVEEDOR_id_Proveedor,CATEGORIA_id_Categoria) values(?,?,?,?,?,?,?,?)";
         int generatedId = -1;
 
         @Cleanup
@@ -29,13 +29,14 @@ public class productoDao {
         @Cleanup
         PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-        ps.setString(1, producto.getNombre_Prod());
-        ps.setInt(3, producto.getId_Prov());
+        ps.setString(1, producto.getNombre());
+        ps.setString(2, producto.getMarca());
+        ps.setString(3, producto.getDescripcion());
+        ps.setInt(4, producto.getStock());
         ps.setDouble(5, producto.getPrecio_Compra());
         ps.setDouble(6, producto.getPrecio_Venta());
-        ps.setInt(2, producto.getId_Categoria());
-        ps.setInt(4, producto.getStock_Disp());
-        ps.setString(7, producto.getDescripcion());
+        ps.setInt(7, producto.getId_Categoria());
+        ps.setInt(8, producto.getId_Prov());
 
         if (ps.executeUpdate() > 0) {
             @Cleanup
@@ -53,24 +54,26 @@ public class productoDao {
      * @return una LinkedList de objetos producto
      * @throws Exception si hay un error durante la operación de la base de datos
      */
-    public static LinkedList<producto> getAllProductosBD() throws Exception {
+    public static LinkedList<Producto> getAllProductosBD() throws Exception {
         String query = "SELECT * FROM PRODUCTO";
 
-        LinkedList<producto> list = new LinkedList<>();
+        LinkedList<Producto> list = new LinkedList<>();
         @Cleanup
         Connection connection = PoolConexion.getInstance().getConnection();
         @Cleanup
         ResultSet rs = connection.prepareStatement(query).executeQuery();
 
         while (rs.next()) {
-            list.add(new producto(rs.getInt("id_Prod"),
+            list.add(new Producto(
+                    rs.getInt("id_Prod"),
                     rs.getString("nombre_Prod"),
-                    rs.getInt("id_Prov"),
-                    rs.getInt("precio_Compra"),
-                    rs.getInt("precio_Venta"),
-                    rs.getInt("id_Categoria"),
+                    rs.getString("marca"),
+                    rs.getString("descripcion"),
                     rs.getInt("stock_Disp"),
-                    rs.getString("descripcion")
+                    rs.getDouble("precio_Compra"),
+                    rs.getDouble("precio_Venta"),
+                    rs.getInt("CATEGORIA_id_Categoria"),
+                    rs.getInt("PROVEEDOR_id_Proveedor")
             ));
         }
         return list;
