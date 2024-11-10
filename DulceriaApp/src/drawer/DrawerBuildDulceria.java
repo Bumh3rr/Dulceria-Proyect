@@ -22,16 +22,24 @@ import raven.modal.option.Option;
 import system.AllForms;
 import system.Form;
 import system.FormManager;
-
+/**
+ * DrawerBuildDulceria es una clase que extiende SimpleDrawerBuilder para construir un menú de navegación personalizado para la aplicación Dulceria.
+ */
 public class DrawerBuildDulceria extends SimpleDrawerBuilder {
 
     private final int SHADOW_SIZE = 12;
-
+    /**
+     * Constructor de DrawerBuildDulceria que inicializa el menú simple y oculta el pie de página.
+     */
     public DrawerBuildDulceria() {
         super(createSimpleMenuOption());
         footer.setVisible(false);
     }
-
+    /**
+     * Obtiene los datos del pie de página simple.
+     *
+     * @return un objeto SimpleFooterData con el título y la descripción del pie de página
+     */
     @Override
     public SimpleFooterData getSimpleFooterData() {
         return new SimpleFooterData()
@@ -39,6 +47,11 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
                 .setDescription("V");
     }
 
+    /**
+     * Obtiene los datos del encabezado simple.
+     *
+     * @return un objeto SimpleHeaderData con el icono, el título y la descripción del encabezado
+     */
     @Override
     public SimpleHeaderData getSimpleHeaderData() {
         AvatarIcon icon = new AvatarIcon(DrawerBuildDulceria.class.getResource("/resources/logo_default.png"), 50, 50, 3.5f);
@@ -51,7 +64,11 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
                 .setDescription("");
 
     }
-
+    /**
+     * Crea una opción de menú simple con elementos predefinidos.
+     *
+     * @return un objeto MenuOption con la configuración del menú
+     */
     public static MenuOption createSimpleMenuOption() {
         MenuOption simpleMenuOption = new MenuOption();
         MenuItem items[] = new MenuItem[]{
@@ -99,22 +116,38 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
 
         return simpleMenuOption;
     }
-
+    /**
+     * Obtiene el ancho del drawer.
+     *
+     * @return el ancho del drawer en píxeles
+     */
     @Override
     public int getDrawerWidth() {
         return 270 + SHADOW_SIZE;
     }
-
+    /**
+     * Obtiene el ancho compacto del drawer.
+     *
+     * @return el ancho compacto del drawer en píxeles
+     */
     @Override
     public int getDrawerCompactWidth() {
         return 80 + SHADOW_SIZE;
     }
-
+    /**
+     * Obtiene el ancho compacto del drawer.
+     *
+     * @return el ancho compacto del drawer en píxeles
+     */
     @Override
     public int getOpenDrawerAt() {
         return 1000;
     }
-
+    /**
+     * Obtiene la opción de configuración del drawer.
+     *
+     * @return un objeto Option con la configuración del drawer
+     */
     @Override
     public Option getOption() {
         Option option = super.getOption();
@@ -123,17 +156,29 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
                 .setShadowSize(new Insets(0, 0, 0, SHADOW_SIZE));
         return option;
     }
-
+    /**
+     * Indica si el drawer se abre a escala.
+     *
+     * @return false, indicando que el drawer no se abre a escala
+     */
     @Override
     public boolean openDrawerAtScale() {
         return false;
     }
-
+    /**
+     * Construye el panel del drawer.
+     *
+     * @param drawerPanel el panel del drawer a construir
+     */
     @Override
     public void build(DrawerPanel drawerPanel) {
         drawerPanel.putClientProperty(FlatClientProperties.STYLE, getDrawerBackgroundStyle());
     }
-
+    /**
+     * Obtiene el estilo de fondo del drawer.
+     *
+     * @return una cadena con el estilo de fondo del drawer
+     */
     private static String getDrawerBackgroundStyle() {
         return ""
                 + "[light]background:tint($Panel.background,100%);"

@@ -33,7 +33,9 @@ import system.Form;
 import utils.ConfigModal;
 import utils.Promiseld;
 import utils.Request;
-
+/**
+ * FormSupplier es una clase que extiende Form y gestiona la interfaz de usuario para la gestión de proveedores.
+ */
 public class FormSupplier extends Form {
 
     private final String KEY = getClass().getName();
@@ -42,22 +44,30 @@ public class FormSupplier extends Form {
     private Table panelTable;
     private JButton button_view;
     private JButton button_create;
-
+    /**
+     * Método llamado al abrir el formulario.
+     */
     @Override
     public void formOpen() {
         refreshTabla();
     }
-
+    /**
+     * Método llamado para refrescar el formulario.
+     */
     @Override
     public void formRefresh() {
         refreshTabla();
     }
-
+    /**
+     * Método llamado para inicializar el formulario.
+     */
     @Override
     public void formInit() {
         refreshTabla();
     }
-
+    /**
+     * Refresca la tabla de proveedores.
+     */
     private void refreshTabla() {
         Toast.closeAll();
         if (Promiseld.checkPromiseId(KEY)) {
@@ -75,13 +85,17 @@ public class FormSupplier extends Form {
             }
         });
     }
-
+    /**
+     * Constructor de FormSupplier.
+     */
     public FormSupplier() {
         initComponents();
         initListeners();
         init();
     }
-
+    /**
+     * Inicializa los componentes del formulario.
+     */
     private void initComponents() {
         panelTable = new Table();
         button_view = new JButton("Visualizar");
@@ -93,17 +107,25 @@ public class FormSupplier extends Form {
         };
 
     }
-
+    /**
+     * Inicializa los listeners de los componentes.
+     */
     private void initListeners() {
         button_create.addActionListener((e) -> showPanelAddSupplier());
     }
-
+    /**
+     * Inicializa el formulario.
+     */
     private void init() {
         setLayout(new MigLayout("wrap,fill,insets n", "[fill]", "[grow 0][fill]"));
         add(createHeader("Proveedores", "description", 1));
         add(body(), "gapx 7 7");
     }
-
+    /**
+     * Crea el cuerpo del formulario.
+     *
+     * @return un componente JComponent que representa el cuerpo del formulario
+     */
     private JComponent body() {
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 0"));
         panel.putClientProperty(FlatClientProperties.STYLE, ""
@@ -112,7 +134,11 @@ public class FormSupplier extends Form {
         panel.add(panelTable, "grow, push");
         return panel;
     }
-
+    /**
+     * Crea los botones del encabezado.
+     *
+     * @return un componente JComponent que representa los botones del encabezado
+     */
     private JComponent headerButtons() {
         JPanel panel = new JPanel(new MigLayout("fill", "fill"));
         panel.putClientProperty(FlatClientProperties.STYLE, ""
@@ -123,7 +149,9 @@ public class FormSupplier extends Form {
         panel.add(button_create);
         return panel;
     }
-
+    /**
+     * Muestra el panel para agregar un nuevo proveedor.
+     */
     private void showPanelAddSupplier() {
         PanelRequestSupplier panelRequest = new PanelRequestSupplier(this, Request.INSERTS);
         ModalDialog.showModal(SwingUtilities.windowForComponent(this),
@@ -135,7 +163,9 @@ public class FormSupplier extends Form {
                     }
                 }), ConfigModal.getModelShowDefault());
     }
-
+    /**
+     * Table es una clase interna que extiende JPanel y gestiona la tabla de proveedores.
+     */
     public static class Table extends JPanel {
 
         private JTable table;
@@ -143,13 +173,17 @@ public class FormSupplier extends Form {
         private DefaultTableModel model;
 
         private String[] columnNames = {"ID", "Nombre", "Apellido", "Telefono", "Correo", "Fecha Registro"};
-
+        /**
+         * Constructor de Table.
+         */
         public Table() {
             initComponentsTable();
             initListenersTable();
             initTable();
         }
-
+        /**
+         * Inicializa los componentes de la tabla.
+         */
         private void initComponentsTable() {
             table = new FlatTable();
             scrollPane = new FlatScrollPane();
@@ -163,7 +197,9 @@ public class FormSupplier extends Form {
                 }
             };
         }
-
+        /**
+         * Inicializa los listeners de la tabla.
+         */
         private void initListenersTable() {
             table.addMouseListener(new MouseAdapter() {
                 @Override
@@ -180,7 +216,9 @@ public class FormSupplier extends Form {
                 }
             });
         }
-
+        /**
+         * Inicializa la tabla.
+         */
         private void initTable() {
             setLayout(new MigLayout("wrap,fillx,insets n", "fill", "[]-1[fill,grow]"));
             putClientProperty(FlatClientProperties.STYLE, ""
@@ -228,22 +266,36 @@ public class FormSupplier extends Form {
             updateUI();
             revalidate();
         }
-
+        /**
+         * Establece los datos de la tabla.
+         *
+         * @param proveedor una lista de objetos Proveedor
+         */
         public void setData(List<Proveedor> proveedor) {
             for (Proveedor proveedors : proveedor) {
                 model.addRow(proveedors.getUserArray());
             }
         }
-
+        /**
+         * Limpia los datos de la tabla.
+         */
         public void cleanData() {
             while (model.getRowCount() > 0) {
                 model.removeRow(0);
             }
         }
     }
-
+    /**
+     * ProveedorRequest es una clase interna que gestiona las solicitudes de proveedores.
+     */
     public static class ProveedorRequest {
-
+        /**
+         * Agrega un nuevo proveedor.
+         *
+         * @param proveedor el objeto Proveedor a agregar
+         * @return el ID generado del nuevo proveedor
+         * @throws Exception si hay un error durante la operación
+         */
         public static int addProveedor(Proveedor proveedor) throws Exception {
             return PoolThreads.getInstance().getExecutorService().submit(() -> {
                 try {
@@ -253,7 +305,12 @@ public class FormSupplier extends Form {
                 }
             }).get();
         }
-
+        /**
+         * Recupera todos los proveedores.
+         *
+         * @return una LinkedList de objetos Proveedor
+         * @throws Exception si hay un error durante la operación
+         */
         public static LinkedList<Proveedor> getAllProveedors() throws Exception {
             return PoolThreads.getInstance().getExecutorService().submit(() -> {
                 try {
