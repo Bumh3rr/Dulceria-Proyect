@@ -18,7 +18,6 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -59,7 +58,6 @@ public class FormSupplier extends Form {
     }
 
     private void refreshTabla() {
-        Toast.closeAll();
         if (Promiseld.checkPromiseId(KEY)) {
             return;
         }
@@ -223,13 +221,13 @@ public class FormSupplier extends Form {
 
             scrollPane.setViewportView(table);
 
-            add(new JSeparator(), "grow 1");
             add(scrollPane);
             updateUI();
             revalidate();
         }
 
         public void setData(List<Proveedor> proveedor) {
+            cleanData();
             for (Proveedor proveedors : proveedor) {
                 model.addRow(proveedors.getUserArray());
             }
