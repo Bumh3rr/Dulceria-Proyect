@@ -10,8 +10,18 @@ import java.util.LinkedList;
 import lombok.Cleanup;
 import model.Proveedor;
 
+/**
+ * ProveedorDao es una clase de objeto de acceso a datos (DAO) que proporciona métodos para interactuar con la tabla PROVEEDOR en la base de datos.
+ */
 public class ProveedorDao {
 
+    /**
+     * Agrega un nuevo Proveedor a la base de datos.
+     *
+     * @param proveedor el objeto Proveedor a agregar
+     * @return el ID generado del nuevo Proveedor
+     * @throws Exception si hay un error durante la operación de la base de datos
+     */
     public static int addProveedorBD(Proveedor proveedor) throws Exception {
         String query = "INSERT INTO PROVEEDOR(first_name,last_name,phone,email,state,municipality,street,zip,date_register) values(?,?,?,?,?,?,?,?,?)";
         int generatedId = -1;
@@ -40,9 +50,14 @@ public class ProveedorDao {
         }
         return generatedId;
     }
-    
-    
-        public static LinkedList<Proveedor> getAllProveedorsBD() throws Exception {
+
+    /**
+     * Recupera todos los Proveedors de la base de datos.
+     *
+     * @return una LinkedList de objetos Proveedor
+     * @throws Exception si hay un error durante la operación de la base de datos
+     */
+    public static LinkedList<Proveedor> getAllProveedorsBD() throws Exception {
         String query = "SELECT * FROM PROVEEDOR";
 
         LinkedList<Proveedor> list = new LinkedList<>();
@@ -52,15 +67,15 @@ public class ProveedorDao {
         ResultSet rs = connection.prepareStatement(query).executeQuery();
 
         while (rs.next()) {
-            list.add(new Proveedor(rs.getInt("id_Proveedor"), 
-                    rs.getString("first_name"), 
-                    rs.getString("last_name"), 
-                    rs.getString("phone"), 
-                    rs.getString("email"), 
-                    rs.getString("state"), 
-                    rs.getString("municipality"), 
-                    rs.getString("street"), 
-                    rs.getString("zip"), 
+            list.add(new Proveedor(rs.getInt("id_Proveedor"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("phone"),
+                    rs.getString("email"),
+                    rs.getString("state"),
+                    rs.getString("municipality"),
+                    rs.getString("street"),
+                    rs.getString("zip"),
                     rs.getObject("date_register") != null ? rs.getTimestamp("date_register").toLocalDateTime() : null
             ));
         }
