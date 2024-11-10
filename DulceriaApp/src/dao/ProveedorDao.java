@@ -24,7 +24,7 @@ public class ProveedorDao {
      */
 
     public static int addProveedorBD(Proveedor proveedor) throws Exception {
-        String query = "INSERT INTO PROVEEDOR(first_name,last_name,phone,email,state,municipality,street,zip,date_register) values(?,?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO PROVEEDOR(nombre,apellido,telefono,correo,estado,minicipio,calle,codigo_postal,fecha_registro) values(?,?,?,?,?,?,?,?,?)";
         int generatedId = -1;
 
         @Cleanup
@@ -69,15 +69,15 @@ public class ProveedorDao {
 
         while (rs.next()) {
             list.add(new Proveedor(rs.getInt("id_Proveedor"),
-                    rs.getString("first_name"),
-                    rs.getString("last_name"),
-                    rs.getString("phone"),
-                    rs.getString("email"),
-                    rs.getString("state"),
-                    rs.getString("municipality"),
-                    rs.getString("street"),
-                    rs.getString("zip"),
-                    rs.getObject("date_register") != null ? rs.getTimestamp("date_register").toLocalDateTime() : null
+                    rs.getString("nombre"),
+                    rs.getString("apellido"),
+                    rs.getString("telefono"),
+                    rs.getString("correo"),
+                    rs.getString("estado"),
+                    rs.getString("minicipio"),
+                    rs.getString("calle"),
+                    rs.getString("codigo_postal"),
+                    rs.getObject("fecha_registro") != null ? rs.getTimestamp("fecha_registro").toLocalDateTime() : null
             ));
         }
         return list;
