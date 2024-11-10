@@ -56,7 +56,7 @@ public class PoolConexion {
 
     /**
      * Obtiene una conexión del pool de conexiones.
-     *
+     *r
      * @return un objeto Connection
      * @throws Exception si hay un error al obtener la conexión
      */

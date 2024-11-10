@@ -10,7 +10,7 @@ import lombok.Cleanup;
 import model.Proveedor;
 
 /**
- * ProveedorDao.java
+ * ProveedorDao.java r
  * ProveedorDao es una clase de objeto de acceso a datos (DAO) que proporciona métodos para interactuar con la tabla PROVEEDOR en la base de datos.
  */
 public class ProveedorDao {

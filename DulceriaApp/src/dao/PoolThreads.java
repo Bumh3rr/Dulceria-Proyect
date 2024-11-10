@@ -32,7 +32,7 @@ public class PoolThreads {
 
     /**
      * Obtiene la instancia de ExecutorService.
-     *
+     *r
      * @return la instancia de ExecutorService
      */
     public ExecutorService getExecutorService(){
