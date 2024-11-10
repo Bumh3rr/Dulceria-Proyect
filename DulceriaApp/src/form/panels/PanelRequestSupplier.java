@@ -8,7 +8,7 @@ import components.MyJTextField;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
-import form.FormSupplier;
+import form.FormProveedor;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
@@ -17,7 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultFormatterFactory;
@@ -36,7 +35,7 @@ public class PanelRequestSupplier extends JPanel {
 
     private final String KEY = getClass().getName();
 
-    private FormSupplier form;
+    private FormProveedor form;
     private MyTxtAreaDescrip description;
     private Request request;
     private Proveedor supplier;
@@ -53,7 +52,7 @@ public class PanelRequestSupplier extends JPanel {
     private JButton button;
 
     //Add
-    public PanelRequestSupplier(FormSupplier form, Request request) {
+    public PanelRequestSupplier(FormProveedor form, Request request) {
         this.form = form;
         this.request = request;
 
@@ -65,7 +64,7 @@ public class PanelRequestSupplier extends JPanel {
     }
 
     //Update
-    public PanelRequestSupplier(Proveedor supplier, FormSupplier form, Request request) {
+    public PanelRequestSupplier(Proveedor supplier, FormProveedor form, Request request) {
         this.supplier = supplier;
         this.form = form;
         this.request = request;
@@ -298,7 +297,7 @@ public class PanelRequestSupplier extends JPanel {
         Proveedor proveedor = new Proveedor(firsName, lastName, phone, email, state, municipality, street, zip, dateRegister);
         
         if (proveedor.verifyNotEmpty()) {
-            return FormSupplier.ProveedorRequest.addProveedor(proveedor);
+            return FormProveedor.ProveedorRequest.addProveedor(proveedor);
         }
         return -1;
     }

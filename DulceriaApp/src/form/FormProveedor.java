@@ -35,7 +35,7 @@ import utils.Request;
 /**
  * FormSupplier es una clase que extiende Form y gestiona la interfaz de usuario para la gestión de proveedores.
  */
-public class FormSupplier extends Form {
+public class FormProveedor extends Form {
 
     private final String KEY = getClass().getName();
     private List<Proveedor> listProveedors;
@@ -84,9 +84,9 @@ public class FormSupplier extends Form {
         });
     }
     /**
-     * Constructor de FormSupplier.
+     * Constructor de FormProveedor.
      */
-    public FormSupplier() {
+    public FormProveedor() {
         initComponents();
         initListeners();
         init();
