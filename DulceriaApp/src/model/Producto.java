@@ -1,7 +1,9 @@
 package model;
 
 import lombok.Data;
+import lombok.Getter;
 
+@Getter
 @Data
 public class Producto {
     private int id;

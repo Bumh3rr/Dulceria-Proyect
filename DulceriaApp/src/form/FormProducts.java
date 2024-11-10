@@ -2,13 +2,11 @@ package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import components.CardProducto;
-import dao.PoolThreads;
-import dao.ProveedorDao;
 import dao.CategoriaDao;
+import dao.PoolThreads;
 import dao.ProductoDao;
 import form.panels.PanelRequestProducto;
 import model.Producto;
-import model.Proveedor;
 import net.miginfocom.swing.MigLayout;
 import system.Form;
 import utils.ResponsiveLayout;
@@ -176,7 +174,7 @@ public class FormProducts extends Form {
         public static LinkedList<Categoria> getCategoriasAll() throws Exception {
             return PoolThreads.getInstance().getExecutorService().submit(() -> {
                 try {
-                    return CategoriaDao.getCategoriasBD();
+                    return dao.CategoriaDao.getCategoriasBD();
                 } catch (Exception e) {
                     throw new Exception(e);
                 }
