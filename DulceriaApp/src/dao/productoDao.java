@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import lombok.Cleanup;
 import model.Producto;
-    
+
 /**
  * productoDao es una clase de objeto de acceso a datos (DAO) que proporciona métodos para interactuar con la tabla PRODUCTO en la base de datos.
  */

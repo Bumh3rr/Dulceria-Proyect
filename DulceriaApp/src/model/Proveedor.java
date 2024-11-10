@@ -69,7 +69,9 @@ public class Proveedor {
             this.date_register.format(DateTimeFormatter.ofPattern("yyyy-MM-dd / hh:mm:ss a")).concat(" / " + WEEKS[this.date_register.getDayOfWeek().getValue() - 1]),
         };
     }
-    
-    
 
+    @Override
+    public String toString() {
+        return "ID: " + this.id + " | " + this.first_name + " " +this.last_name;
+    }
 }

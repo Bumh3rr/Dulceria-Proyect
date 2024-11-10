@@ -6,16 +6,19 @@ import net.miginfocom.swing.MigLayout;
 import raven.extras.AvatarIcon;
 
 import javax.swing.*;
+import java.util.function.Consumer;
 
 public class CardProducto extends JPanel {
 
     private final Producto producto;
+    private  Consumer<Producto> consumer;
 
     private JLabel icon;
     private JButton button;
     private JTextPane description;
 
-    public CardProducto(Producto producto) {
+    public CardProducto(Producto producto, Consumer<Producto> consumer) {
+        this.consumer = consumer;
         this.producto = producto;
         init();
     }
@@ -42,7 +45,7 @@ public class CardProducto extends JPanel {
     }
 
     private JPanel createBody() {
-        JPanel body = new JPanel(new MigLayout("wrap", "[150]", "[][fill]"));
+        JPanel body = new JPanel(new MigLayout("wrap", "[150]", "[][]push[]push"));
         body.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:null");
         JLabel title = new JLabel("Tecnico");
@@ -59,11 +62,10 @@ public class CardProducto extends JPanel {
                 "ID: " + producto.getId()
                         + "\nMarca: " + producto.getMarca() + ""
                         + "\nNombre: " + producto.getNombre()
-                        + "\nDescripcion: " + producto.getDescripcion()
                         + "\nUnidades Disponibles: " + producto.getDescripcion()
-                        + "\nPrecio Venta: " + producto.getPrecio_venta()
-                        + "\nPrecio Compra: " + producto.getPrecio_compra()
+                        + "\nPrecio Venta: " + producto.getPrecio_Venta()
         );
+
 
         button = new JButton("Visualizar") {
             @Override
@@ -71,11 +73,14 @@ public class CardProducto extends JPanel {
                 return true;
             }
         };
+        button.putClientProperty(FlatClientProperties.STYLE, ""
+                + "foreground:#FFFFFF");
 
+        button.addActionListener(e -> consumer.accept(producto));
 
         body.add(title);
         body.add(description);
-
+        body.add(button, "gapy 10,al trail");
         return body;
     }
 

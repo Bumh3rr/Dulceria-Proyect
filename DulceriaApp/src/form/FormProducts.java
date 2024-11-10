@@ -2,7 +2,12 @@ package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import components.CardProducto;
+import dao.PoolThreads;
+import dao.ProveedorDao;
+import dao.productoDao;
+import form.panels.PanelRequestProducto;
 import model.Producto;
+import model.Proveedor;
 import net.miginfocom.swing.MigLayout;
 import system.Form;
 import utils.ResponsiveLayout;
@@ -12,6 +17,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import raven.modal.ModalDialog;
+import raven.modal.component.SimpleModalBorder;
+import utils.ConfigModal;
 
 public class FormProducts extends Form {
 
@@ -69,16 +77,16 @@ public class FormProducts extends Form {
         //Agregar Producto
         buton.addActionListener((e) -> {
             //Instance Panel
-//            PanelRequestTechnician panelRequest = new PanelRequestTechnician(taller, this, Request.INSERTS);
-//
-//            ModalDialog.showModal(FormsManager.getFrame(),
-//                    new SimpleModalBorder(panelRequest, "Agregar Tecnico", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
-//                        if (action == SimpleModalBorder.OK_OPTION) {
-//                            panelRequest.commitInserts(controller);
-//                        } else if (action == SimpleModalBorder.CANCEL_OPTION) {
-//                            controller.close();
-//                        }
-//                    }), Verify.option);
+            PanelRequestProducto panelAdd = new PanelRequestProducto();
+
+            ModalDialog.showModal(SwingUtilities.windowForComponent(this),
+                    new SimpleModalBorder(panelAdd, "Agregar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
+                        if (action == SimpleModalBorder.OK_OPTION) {
+
+                        } else if (action == SimpleModalBorder.CANCEL_OPTION) {
+                            controller.close();
+                        }
+                    }), ConfigModal.getModelShowDefault());
         });
 
         panel.add(buton, "grow 0,al trail");
@@ -118,11 +126,43 @@ public class FormProducts extends Form {
     private void refreshPanelProductos(LinkedList<Producto> list) throws Exception {
         panelProductos.removeAll();
         for (Producto tecnico : list) {
-            panelProductos.add(new CardProducto(tecnico));
+            panelProductos.add(new CardProducto(tecnico, createEventCard()));
         }
         panelProductos.repaint();
         panelProductos.revalidate();
     }
+
+
+    private Consumer<Producto> createEventCard() {
+        return e -> {
+//            // View Info
+//            PanelInfoTechnician panel = new PanelInfoTechnician(e, this);
+//            ModalDialog.showModal(GlassPanePopup.getMainFrame(),
+//                    new SimpleModalBorder(panel, "Información del Tecnico", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
+//                        if (action == SimpleModalBorder.CANCEL_OPTION) {
+//                            controller.consume();
+//                            panel.showDeleteTecnico(controller);
+//                        } else if (action == SimpleModalBorder.CLOSE_OPTION) {
+//                            controller.close();
+//                        }
+//                    }), Verify.option);
+        };
+
+    }
+
+    public static class ProductoRequest{
+
+        public static int addProducto(Producto producto) throws Exception {
+            return PoolThreads.getInstance().getExecutorService().submit(() -> {
+                try {
+                    return productoDao.addProductoBD(producto);
+                } catch (Exception e) {
+                    throw new Exception(e);
+                }
+            }).get();
+        }
+    }
+
 
 }
 
