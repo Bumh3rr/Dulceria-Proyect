@@ -15,6 +15,7 @@ import java.awt.EventQueue;
 import java.text.DecimalFormat;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
+import raven.modal.Drawer;
 import raven.modal.component.ModalBorderAction;
 import raven.modal.component.SimpleModalBorder;
 import javax.swing.*;
@@ -49,7 +50,8 @@ public class PanelRequestProducto extends JPanel {
     private FlatComboBox<Proveedor> inputProveedor;
     private JButton botton;
     private JButton buttonAddCategoria;
-    
+    private JButton buttonAddProveedor;
+
     public PanelRequestProducto() {
         initComponents();
         initListeners();
@@ -75,6 +77,7 @@ public class PanelRequestProducto extends JPanel {
                         }
                     }), ConfigModal.getModelShowDefault());
         });
+        buttonAddProveedor.addActionListener((e)-> Drawer.setSelectedItemClass(FormProveedor.class));
     }
     
     private void initComponents() {
@@ -112,8 +115,9 @@ public class PanelRequestProducto extends JPanel {
         
         inputProveedor = new FlatComboBox<>();
         inputProveedor.setMaximumRowCount(8);
-        
-        buttonAddCategoria = new JButton("Crear Categoria");
+
+        buttonAddProveedor = new JButton("Agregar Proveedor");
+        buttonAddCategoria = new JButton("Agregar Categoria");
         botton = new JButton("Agregar Producto") {
             @Override
             public boolean isDefaultButton() {
@@ -188,7 +192,8 @@ public class PanelRequestProducto extends JPanel {
         panel.add(inputCategoria, "split 2");
         panel.add(buttonAddCategoria, "grow 0");
         panel.add(new JLabel("Proveedor"));
-        panel.add(inputProveedor);
+        panel.add(inputProveedor, "split 2");
+        panel.add(buttonAddProveedor, "grow 0");
         panel.add(botton, "grow 0,gapy 10,al trail");
         
         add(new MyScrollPane(panel));
