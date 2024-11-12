@@ -16,7 +16,6 @@ import raven.modal.ModalDialog;
 import raven.modal.option.BorderOption;
 import system.FormManager;
 /**
- * test
  * DulceriaApp is the main class for the Dulceria application, extending JFrame.
  * It initializes the application window and sets up various UI components and settings.
  */

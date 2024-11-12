@@ -46,9 +46,11 @@ public class PoolConexion {
 //            config.setJdbcUrl("jdbc:mysql://localhost:3306/Dulceria");
 //            config.setUsername("root");
 //            config.setPassword("Manuelromero20");
+
             //config.setJdbcUrl("jdbc:mysql://localhost:3306/Dulceria");
             //config.setUsername("root");
             //config.setPassword("Manuelromero20");
+
             // Configuraciones opcionales
             config.setMaximumPoolSize(2); // Número máximo de conexiones
             config.setMinimumIdle(1); // Número mínimo de conexiones inactivas
