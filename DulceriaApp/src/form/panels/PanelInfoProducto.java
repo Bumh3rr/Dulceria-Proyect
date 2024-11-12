@@ -4,17 +4,25 @@ import com.formdev.flatlaf.FlatClientProperties;
 import components.FieldTextArea;
 import components.MyLabelTitle;
 import components.MyTxtAreaDescrip;
+import dao.pool.PoolThreads;
 import form.FormProducts;
+import form.FormProveedor;
+import form.request.RequestProducto;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import raven.extras.AvatarIcon;
+import raven.modal.Drawer;
+import raven.modal.ModalDialog;
 import raven.modal.component.ModalBorderAction;
 import raven.modal.component.SimpleModalBorder;
+import utils.ConfigModal;
+import utils.Request;
 
 public class PanelInfoProducto extends JPanel {
 
@@ -44,14 +52,34 @@ public class PanelInfoProducto extends JPanel {
         init();
     }
 
+    public void refreshFields() {
+        try {
+            this.producto = RequestProducto.getOneProducto(producto.getId());
+
+            fieldProductNombre.setTextField(producto.getNombre());
+            fieldMarca.setTextField(producto.getMarca());
+            fieldDescription.setTextField(producto.getDescripcion());
+            fieldStock.setTextField(String.valueOf(producto.getStock()));
+            fieldPrecio_Venta.setTextField("$".concat(String.valueOf(producto.getPrecio_Venta())));
+            fieldPrecio_Compra.setTextField("$".concat(String.valueOf(producto.getPrecio_Compra())));
+            fieldIdProveedor.setTextField(String.valueOf(producto.getProveedor().getId()));
+            fieldNombreProveedor.setTextField(producto.getProveedor().getFirst_name());
+            fieldCategoria.setTextField(producto.getCategoria().getTipo());
+
+        } catch (Exception e) {
+            System.out.println(e.fillInStackTrace());
+        }
+
+    }
+
     private void intComponents() {
 
         fieldProductNombre = new FieldTextArea(producto.getNombre());
         fieldMarca = new FieldTextArea(producto.getMarca());
         fieldDescription = new FieldTextArea(producto.getDescripcion());
         fieldStock = new FieldTextArea(String.valueOf(producto.getStock()));
-        fieldPrecio_Venta = new FieldTextArea(String.valueOf(producto.getPrecio_Venta()));
-        fieldPrecio_Compra = new FieldTextArea(String.valueOf(producto.getPrecio_Compra()));
+        fieldPrecio_Venta = new FieldTextArea("$".concat(String.valueOf(producto.getPrecio_Venta())));
+        fieldPrecio_Compra = new FieldTextArea("$".concat(String.valueOf(producto.getPrecio_Compra())));
         fieldIdProveedor = new FieldTextArea(String.valueOf(producto.getProveedor().getId()));
         fieldNombreProveedor = new FieldTextArea(producto.getProveedor().getFirst_name());
         fieldCategoria = new FieldTextArea(producto.getCategoria().getTipo());
@@ -69,7 +97,16 @@ public class PanelInfoProducto extends JPanel {
 
     private void initListeners() {
         buttonUpdate.addActionListener((e) -> {
-            ModalBorderAction.getModalBorderAction(buttonUpdate).doAction(SimpleModalBorder.OK_OPTION);
+            PanelRequestProducto panelAdd = new PanelRequestProducto(Request.INSERTS, producto, this);
+            ModalDialog.showModal(SwingUtilities.windowForComponent(this),
+                    new SimpleModalBorder(panelAdd, "Agregar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
+                        if (action == SimpleModalBorder.OK_OPTION) {
+                            panelAdd.commitInserts(controller);
+                        } else if (action == SimpleModalBorder.CANCEL_OPTION) {
+                            controller.close();
+                        }
+                    }), ConfigModal.getModelShowDefault());
+
         });
 
         buttonDelete.addActionListener((e) -> {
@@ -80,40 +117,8 @@ public class PanelInfoProducto extends JPanel {
         });
     }
 
-//    public void refreshFields() {
-//        try {
-//            this.tecnico = ThreadsPool.getInstance().getExecutorService().submit(() -> {
-//                try {
-//                    return DataOperations.getTecnico(tecnico.getId());
-//                } catch (Exception e) {
-//                    throw new Exception(e);
-//                }
-//            }).get();
-//            fieldFirtsName.setTextField(tecnico.getFirsName());
-//            fieldLastName.setTextField(tecnico.getLastName());
-//            fieldPhone.setTextField("+52 ".concat(tecnico.getPhone()));
-//            fieldState.setTextField(tecnico.getState());
-//            fieldMunicipality.setTextField(tecnico.getMunicipality());
-//            fieldCologne.setTextField(tecnico.getCologne());
-//            fieldDateRegister.setTextField(tecnico.getDateTimeFull(tecnico.getDate_register()));
-//            fieldDateLow.setTextField(tecnico.getDate_low() != null ? tecnico.getDateTimeFull(tecnico.getDate_low()) : "");
-//            fieldZip.setTextField(tecnico.getZip());
-//
-//            SwingUtilities.invokeLater(() -> {
-//                changeStatusLabel(this.tecnico);
-//                buttonActiveOrLow.setText(tecnico.getDate_low() != null ? "Remover Baja" : "Baja");
-//                buttonActiveOrLow.putClientProperty(FlatClientProperties.STYLE, ""
-//                        + ((tecnico.getDate_low() != null) ? "background:#66a73b;" : "background:#FD961A;")
-//                        + "foreground:#FFFFFF;"
-//                        + "font:bold +0");
-//            });
-//
-//        } catch (Exception e) {
-//            System.out.println(e.fillInStackTrace());
-//        }
-//    }
     private void init() {
-        setLayout(new MigLayout("fill,wrap,insets 0 20 20 20 20", "fill,450!"));
+        setLayout(new MigLayout("fill,wrap,insets 0 n 0 n", "fill,450!"));
         add(new JLabel(new AvatarIcon(getClass().getResource("/resources/dulce.png"), 100, 100, 16)), "split 2,grow 0");
         add(createHeader("Producto", "ID: " + producto.getId(), 1));
         add(body());
@@ -127,7 +132,7 @@ public class PanelInfoProducto extends JPanel {
     }
 
     private JComponent body() {
-        JPanel panel = new JPanel(new MigLayout("wrap 2,fillx,insets n", "fill", "fill"));
+        JPanel panel = new JPanel(new MigLayout("wrap 2,fillx,insets 0 n 0 n", "fill", "fill"));
 
         buttonDelete.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:#FF5733;"
@@ -141,28 +146,41 @@ public class PanelInfoProducto extends JPanel {
         buttonClose.putClientProperty(FlatClientProperties.STYLE, ""
                 + "foreground:#FFFFFF");
 
+        JLabel subTitleProduct = new JLabel("DATOS DEL PRODUCTO");
+        subTitleProduct.putClientProperty(FlatClientProperties.STYLE, ""
+                + "font: bold +1;"
+                + "[light]foreground:tint($Label.foreground,30%);");
+
         panel.add(new JSeparator(), "span 2, grow 1");
-        panel.add(new FieldTextArea("Datos del Producto", 4), "span 2,al center");
+        panel.add(subTitleProduct, "span 2,grow 0,wrap 10,al center");
         panel.add(getLabelSubTitle("Nombre:"));
-        panel.add(getLabelSubTitle("Marca:"));
         panel.add(fieldProductNombre);
+        panel.add(getLabelSubTitle("Marca:"));
         panel.add(fieldMarca);
         panel.add(getLabelSubTitle("Descripcion:"));
-        panel.add(getLabelSubTitle("Unidades Disponibles:"));
         panel.add(fieldDescription);
+        panel.add(getLabelSubTitle("Unidades Disponibles:"));
         panel.add(fieldStock);
+        panel.add(getLabelSubTitle("Categoria:"));
+        panel.add(fieldCategoria);
+        panel.add(getLabelSubTitle("Precio Compra:"));
+        panel.add(fieldPrecio_Compra);
+        panel.add(getLabelSubTitle("Precio Venta:"));
+        panel.add(fieldPrecio_Venta, "wrap");
 
-        panel.add(getLabelSubTitle("Categoria:"), "wrap");
-        panel.add(fieldCategoria, "wrap");
+        JLabel subTitleProv = new JLabel("DATOS DEL PROVEEDOR");
+        subTitleProv.putClientProperty(FlatClientProperties.STYLE, ""
+                + "font: bold +1;"
+                + "[light]foreground:tint($Label.foreground,30%);");
 
         panel.add(new JSeparator(), "span 2, grow 1");
-        panel.add(new JLabel("Datos del Proveedor"), "span 2,grow 0,al center");
+        panel.add(subTitleProv, "span 2,grow 0,,wrap 10,al center");
         panel.add(getLabelSubTitle("ID:"));
-        panel.add(getLabelSubTitle("Nombre:"));
         panel.add(fieldIdProveedor);
+        panel.add(getLabelSubTitle("Nombre:"));
         panel.add(fieldNombreProveedor);
-        panel.add(new JSeparator(), "span 2, grow 1");
 
+        panel.add(new JSeparator(), "span 2, grow 1");
         panel.add(createAccions(), "span 2,grow 0,al center");
 
         return panel;
@@ -177,7 +195,7 @@ public class PanelInfoProducto extends JPanel {
     }
 
     private JLabel getLabelSubTitle(String title) {
-        JLabel label = new JLabel(title);
+        JLabel label = new JLabel(title, JLabel.TRAILING);
         label.putClientProperty(FlatClientProperties.STYLE, ""
                 + "[light]foreground:lighten(@foreground,30%);"
                 + "[dark]foreground:darken(@foreground,30%);"
@@ -185,65 +203,4 @@ public class PanelInfoProducto extends JPanel {
 
         return label;
     }
-
-//    public void commitLow(int id, StatusTecnhnican request) {
-//        if (Toast.checkPromiseId(KEY)) {
-//            return;
-//        }
-//
-//        Toast.showPromise(FormsManager.getFrame(), (request.equals(ACTIVO)) ? "Remover Baja" : "Baja", Notify.getInstance().getSelectedOption(),
-//                new ToastPromise(KEY) {
-//            @Override
-//            public void execute(ToastPromise.PromiseCallback toas) {
-//                try {
-//                    toas.update("Verificando");
-//                    if (CommitsTechnician.lowTecnico(id, (request.equals(ACTIVO)) ? null : Timestamp.valueOf(LocalDateTime.now()))) {
-//                        new Thread(() -> form.formOpen()).start();
-//                        refreshFields();
-//                        toas.done(Toast.Type.SUCCESS, "Operación Exitosamente");
-//                    } else {
-//                        toas.done(Toast.Type.ERROR, "Operación fallida");
-//                    }
-//                } catch (Exception e) {
-//                    toas.done(Toast.Type.ERROR, e.getLocalizedMessage());
-//                }
-//            }
-//        });
-//    }
-//    public void showDeleteTecnico(ModalController modalController) {
-//        MessageAlerts.getInstance().showMessage("ELiminar Tecnico", "Sugero que quieres eliminar al Tecnico", MessageAlerts.MessageType.WARNING, MessageAlerts.YES_NO_OPTION, new PopupCallbackAction() {
-//            @Override
-//            public void action(PopupController pc, int i) {
-//                if (i == MessageAlerts.YES_OPTION) {
-//                    commitDelete(modalController, pc, tecnico.getId());
-//                }
-//            }
-//        });
-//    }
-//    public void commitDelete(ModalController modalController, PopupController pc, int id) {
-//        if (Toast.checkPromiseId(KEY)) {
-//            pc.consume();
-//            return;
-//        }
-//
-//        Toast.showPromise(FormsManager.getFrame(), "Eliminando...", Notify.getInstance().getSelectedOption(),
-//                new ToastPromise(KEY) {
-//            @Override
-//            public void execute(ToastPromise.PromiseCallback toas) {
-//                try {
-//                    toas.update("Verificando");
-//                    if (CommitsTechnician.deleteTecnico(id)) {
-//                        new Thread(() -> form.formRefresh()).start();
-//                        pc.closePopup();
-//                        modalController.close();
-//                        toas.done(Toast.Type.SUCCESS, "Tecnico Eliminado Exitosamente");
-//                    } else {
-//                        toas.done(Toast.Type.ERROR, "Operación fallida");
-//                    }
-//                } catch (Exception e) {
-//                    toas.done(Toast.Type.ERROR, e.getLocalizedMessage());
-//                }
-//            }
-//        });
-//    }
 }

@@ -18,9 +18,11 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import raven.modal.Drawer;
 import raven.modal.ModalDialog;
 import raven.modal.component.SimpleModalBorder;
 import utils.ConfigModal;
+import utils.Request;
 
 public class FormProducts extends Form {
 
@@ -52,7 +54,6 @@ public class FormProducts extends Form {
             e.printStackTrace();
         }
     }
-
 
     public FormProducts() {
         initComponents();
@@ -88,12 +89,15 @@ public class FormProducts extends Form {
         //Agregar Producto
         buton.addActionListener((e) -> {
             //Instance Panel
-            PanelRequestProducto panelAdd = new PanelRequestProducto();
+            PanelRequestProducto panelAdd = new PanelRequestProducto(Request.INSERTS);
 
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
                     new SimpleModalBorder(panelAdd, "Agregar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
                         if (action == SimpleModalBorder.OK_OPTION) {
                             panelAdd.commitInserts(controller);
+                        } else if (action == SimpleModalBorder.PROPERTIES) {
+                            Drawer.setSelectedItemClass(FormProveedor.class);
+                            controller.close();
                         } else if (action == SimpleModalBorder.CANCEL_OPTION) {
                             controller.close();
                         }
@@ -105,7 +109,6 @@ public class FormProducts extends Form {
 
         return panel;
     }
-
 
     private JComponent createTechnicalContainers() {
         responsiveLayout = new ResponsiveLayout(ResponsiveLayout.JustifyContent.FIT_CONTENT, new Dimension(-1, -1), 10, 10);
@@ -133,7 +136,6 @@ public class FormProducts extends Form {
         return scrollPane;
     }
 
-
     private void refreshPanelProductos(LinkedList<Producto> list) throws Exception {
         panelProductos.removeAll();
         for (Producto tecnico : list) {
@@ -142,7 +144,6 @@ public class FormProducts extends Form {
         panelProductos.repaint();
         panelProductos.revalidate();
     }
-
 
     private Consumer<Producto> createEventCard() {
         return e -> {
@@ -161,7 +162,4 @@ public class FormProducts extends Form {
 
     }
 
-
 }
-
-

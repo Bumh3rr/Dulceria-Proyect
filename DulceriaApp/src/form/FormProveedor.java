@@ -4,7 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatScrollPane;
 import com.formdev.flatlaf.extras.components.FlatTable;
 import components.Notify;
-import dao.PoolThreads;
+import dao.pool.PoolThreads;
 import dao.ProveedorDao;
 import form.panels.PanelRequestSupplier;
 import java.awt.EventQueue;
