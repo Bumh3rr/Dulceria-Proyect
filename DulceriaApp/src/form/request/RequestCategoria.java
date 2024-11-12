@@ -1,7 +1,7 @@
 package form.request;
 
 import dao.CategoriaDao;
-import dao.PoolThreads;
+import dao.pool.PoolThreads;
 import model.Categoria;
 
 import java.util.LinkedList;

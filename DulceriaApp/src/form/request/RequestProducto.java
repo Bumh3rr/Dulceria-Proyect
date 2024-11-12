@@ -1,6 +1,6 @@
 package form.request;
 
-import dao.PoolThreads;
+import dao.pool.PoolThreads;
 import dao.ProductoDao;
 import model.Producto;
 
@@ -38,6 +38,26 @@ public class RequestProducto {
         return PoolThreads.getInstance().getExecutorService().submit(() -> {
             try {
                 return ProductoDao.getAllProductosBD();
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
+        }).get();
+    }
+    
+    public static Boolean setProducto(Producto producto) throws Exception {
+        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                return null;
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
+        }).get();
+    }
+    
+    public static Producto getOneProducto(int IdProducto) throws Exception {
+        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                return Boolean.TRUE;
             } catch (Exception e) {
                 throw new Exception(e);
             }
