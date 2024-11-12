@@ -2,23 +2,22 @@ package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import components.CardProducto;
-import dao.CategoriaDao;
-import dao.PoolThreads;
-import dao.ProductoDao;
+import form.panels.PanelInfoProducto;
 import form.panels.PanelRequestProducto;
 import form.request.RequestProducto;
+import java.awt.Dimension;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import system.Form;
 import utils.ResponsiveLayout;
-
-
-import javax.swing.*;
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.function.Consumer;
-
-import model.Categoria;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import raven.modal.ModalDialog;
 import raven.modal.component.SimpleModalBorder;
 import utils.ConfigModal;
@@ -148,16 +147,16 @@ public class FormProducts extends Form {
     private Consumer<Producto> createEventCard() {
         return e -> {
 //            // View Info
-//            PanelInfoTechnician panel = new PanelInfoTechnician(e, this);
-//            ModalDialog.showModal(GlassPanePopup.getMainFrame(),
-//                    new SimpleModalBorder(panel, "Información del Tecnico", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
-//                        if (action == SimpleModalBorder.CANCEL_OPTION) {
+            PanelInfoProducto panel = new PanelInfoProducto(e, this);
+            ModalDialog.showModal(SwingUtilities.windowForComponent(this),
+                    new SimpleModalBorder(panel, "Información del Tecnico", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
+                        if (action == SimpleModalBorder.CANCEL_OPTION) {
 //                            controller.consume();
 //                            panel.showDeleteTecnico(controller);
-//                        } else if (action == SimpleModalBorder.CLOSE_OPTION) {
-//                            controller.close();
-//                        }
-//                    }), Verify.option);
+                        } else if (action == SimpleModalBorder.CLOSE_OPTION) {
+                            controller.close();
+                        }
+                    }), ConfigModal.getModelShowDefault());
         };
 
     }

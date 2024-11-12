@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.time.Duration;
 
 /**
- * PoolConexion es una clase singleton que gestiona un pool de conexiones a la base de datos usando HikariCP.
+ * PoolConexion es una clase singleton que gestiona un pool de conexiones a la
+ * base de datos usando HikariCP.
  */
 public class PoolConexion {
 
@@ -28,7 +29,8 @@ public class PoolConexion {
     }
 
     /**
-     * Construye un objeto PoolConexion e inicializa el pool de conexiones HikariCP.
+     * Construye un objeto PoolConexion e inicializa el pool de conexiones
+     * HikariCP.
      *
      * @throws Exception si hay un error al inicializar el pool de conexiones
      */
@@ -36,9 +38,14 @@ public class PoolConexion {
         try {
             HikariConfig config = new HikariConfig();
             // Configuración de la conexión a la base de datos
-            config.setJdbcUrl("jdbc:mysql://usczjlneyqxrdref:EnUbzvDZDJ7Nqt0yHuCY@brgz2hmn59kjulcjaoig-mysql.services.clever-cloud.com:3306/brgz2hmn59kjulcjaoig");
-            config.setUsername("usczjlneyqxrdref");
-            config.setPassword("EnUbzvDZDJ7Nqt0yHuCY");
+//            config.setJdbcUrl("jdbc:mysql://usczjlneyqxrdref:EnUbzvDZDJ7Nqt0yHuCY@brgz2hmn59kjulcjaoig-mysql.services.clever-cloud.com:3306/brgz2hmn59kjulcjaoig");
+//            config.setUsername("usczjlneyqxrdref");
+//            config.setPassword("EnUbzvDZDJ7Nqt0yHuCY");
+
+            //BD Emma MacAir
+            config.setJdbcUrl("jdbc:mysql://localhost:3306/Dulceria");
+            config.setUsername("root");
+            config.setPassword("Manuelromero20");
 
             // Configuraciones opcionales
             config.setMaximumPoolSize(2); // Número máximo de conexiones
@@ -53,9 +60,10 @@ public class PoolConexion {
             throw new Exception("Conexión inestable, verifica tu conexión", e);
         }
     }
+
     /**
-     * Obtiene una conexión del pool de conexiones.
-     *r
+     * Obtiene una conexión del pool de conexiones. r
+     *
      * @return un objeto Connection
      * @throws Exception si hay un error al obtener la conexión
      */
