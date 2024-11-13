@@ -1,16 +1,17 @@
 package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import components.CardProducto;
-import form.panels.PanelInfoProducto;
+import com.formdev.flatlaf.extras.components.FlatButton;
+import components.CardEmpleado;
+import components.Notify;
+import dao.pool.PoolThreads;
+import form.panels.PanelInfoEmpleado;
+import form.panels.PanelRequestEmpleado;
 import form.panels.PanelRequestProducto;
-import form.request.RequestProducto;
+import form.request.RequestEmpleado;
 import java.awt.Dimension;
-import model.Producto;
-import net.miginfocom.swing.MigLayout;
-import system.Form;
-import utils.ResponsiveLayout;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -18,66 +19,80 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import model.Empleado;
+import net.miginfocom.swing.MigLayout;
 import raven.modal.Drawer;
 import raven.modal.ModalDialog;
+import raven.modal.Toast;
 import raven.modal.component.SimpleModalBorder;
+import system.Form;
 import utils.ConfigModal;
+import utils.Promiseld;
 import utils.Request;
+import utils.ResponsiveLayout;
 
-public class FormProducts extends Form {
+public class FormEmpleado extends Form {
 
     private final String KEY = getClass().getName();
-    private LinkedList<Producto> listProductos;
+    private LinkedList<Empleado> listEmpleado;
     private ResponsiveLayout responsiveLayout;
-    private JPanel panelProductos;
+    private JPanel panelEmpleados;
+
+    public FormEmpleado() {
+        initComponents();
+        initListeners();
+        init();
+        refreshEmpleados();
+    }
 
     @Override
     public void formInit() {
-        addListProductos();
+        refreshEmpleados();
     }
 
     @Override
     public void formOpen() {
-        addListProductos();
+        refreshEmpleados();
     }
 
     @Override
     public void formRefresh() {
-        addListProductos();
+        refreshEmpleados();
     }
 
-    public void addListProductos() {
-        try {
-            listProductos = RequestProducto.getAllProductos();
-            refreshPanelProductos(listProductos);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void refreshEmpleados() {
+        if (Promiseld.checkPromiseId(KEY)) {
+            return;
         }
-    }
-
-    public FormProducts() {
-        initComponents();
-        initListeners();
-        init();
+        Promiseld.commit(KEY);
+        PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                listEmpleado = RequestEmpleado.getAllEmpleados();
+                refreshPanelEmpleados(listEmpleado);
+            } catch (Exception ex) {
+                Notify.getInstance().showToast(Toast.Type.ERROR, ex.getMessage());
+                System.out.println(ex.getLocalizedMessage());
+            } finally {
+                Promiseld.terminate(KEY);
+            }
+        });
     }
 
     private void initComponents() {
-        listProductos = new LinkedList<>();
+        listEmpleado = new LinkedList<>();
     }
 
     private void initListeners() {
-
     }
 
     private void init() {
-        setLayout(new MigLayout("wrap,fill,insets 0 n 0 n", "[fill]", "[grow 0][fill]"));
-        add(createHeader("Productos", "En el apartado de Productos puedes gestionar tus Productos", 1));
+        setLayout(new MigLayout("wrap,fill,insets 0", "[fill]", "[grow 0][fill]"));
         add(body());
     }
 
     private JComponent body() {
-        JPanel panel = new JPanel(new MigLayout("fillx,wrap", "[fill]", "[][fill]"));
-        JButton buton = new JButton("Agregar Producto") {
+        JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 0", "[fill]", "[][fill]"));
+        JButton buton = new JButton("Agregar Empleado") {
             @Override
             public boolean isDefaultButton() {
                 return true;
@@ -89,11 +104,11 @@ public class FormProducts extends Form {
         //Agregar Producto
         buton.addActionListener((e) -> {
             //Instance Panel
-            PanelRequestProducto panelAdd = new PanelRequestProducto(Request.INSERTS);
-
+            PanelRequestEmpleado panelAdd = new PanelRequestEmpleado(this, Request.INSERTS);
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
-                    new SimpleModalBorder(panelAdd, "Agregar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
+                    new SimpleModalBorder(panelAdd, "Agregar Empleado", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
                         if (action == SimpleModalBorder.OK_OPTION) {
+                            controller.consume();
                             panelAdd.commitInserts(controller);
                         } else if (action == SimpleModalBorder.PROPERTIES) {
                             Drawer.setSelectedItemClass(FormProveedor.class);
@@ -105,20 +120,20 @@ public class FormProducts extends Form {
         });
 
         panel.add(buton, "grow 0,al trail");
-        panel.add(createTechnicalContainers(), "gapx 0 2");
+        panel.add(createEmpleadosContainers(), "gapx 0 2");
 
         return panel;
     }
 
-    private JComponent createTechnicalContainers() {
+    private JComponent createEmpleadosContainers() {
         responsiveLayout = new ResponsiveLayout(ResponsiveLayout.JustifyContent.FIT_CONTENT, new Dimension(-1, -1), 10, 10);
-        panelProductos = new JPanel(responsiveLayout);
-        panelProductos.putClientProperty(FlatClientProperties.STYLE, ""
+        panelEmpleados = new JPanel(responsiveLayout);
+        panelEmpleados.putClientProperty(FlatClientProperties.STYLE, ""
                 + "[light]background:darken(@background,3%);"
                 + "[dark]background:lighten(@background,3%)");
-        panelProductos.putClientProperty(FlatClientProperties.STYLE, ""
+        panelEmpleados.putClientProperty(FlatClientProperties.STYLE, ""
                 + "border:10,10,10,10;");
-        JScrollPane scrollPane = new JScrollPane(panelProductos);
+        JScrollPane scrollPane = new JScrollPane(panelEmpleados);
         scrollPane.putClientProperty(FlatClientProperties.STYLE, ""
                 + "[light]background:darken(@background,3%);"
                 + "[dark]background:lighten(@background,3%);");
@@ -136,21 +151,21 @@ public class FormProducts extends Form {
         return scrollPane;
     }
 
-    private void refreshPanelProductos(LinkedList<Producto> list) throws Exception {
-        panelProductos.removeAll();
-        for (Producto tecnico : list) {
-            panelProductos.add(new CardProducto(tecnico, createEventCard()));
+    private void refreshPanelEmpleados(LinkedList<Empleado> list) throws Exception {
+        panelEmpleados.removeAll();
+        for (Empleado empleado : list) {
+            panelEmpleados.add(new CardEmpleado(empleado, createEventCard()));
         }
-        panelProductos.repaint();
-        panelProductos.revalidate();
+        panelEmpleados.repaint();
+        panelEmpleados.revalidate();
     }
 
-    private Consumer<Producto> createEventCard() {
+    private Consumer<Empleado> createEventCard() {
         return e -> {
 //            // View Info
-            PanelInfoProducto panel = new PanelInfoProducto(e, this);
+            PanelInfoEmpleado panel = new PanelInfoEmpleado(e, this);
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
-                    new SimpleModalBorder(panel, "Información del Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
+                    new SimpleModalBorder(panel, "Información del Empleado", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
                         if (action == SimpleModalBorder.CLOSE_OPTION) {
                             controller.close();
                         }

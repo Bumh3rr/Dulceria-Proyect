@@ -5,12 +5,11 @@ import com.formdev.flatlaf.extras.components.FlatScrollPane;
 import com.formdev.flatlaf.extras.components.FlatTable;
 import components.Notify;
 import dao.pool.PoolThreads;
-import dao.ProveedorDao;
 import form.panels.PanelRequestSupplier;
+import form.request.ProveedorRequest;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -43,31 +42,8 @@ public class FormProveedor extends Form {
     private Table panelTable;
     private JButton button_view;
     private JButton button_create;
-    /**
-     * Método llamado al abrir el formulario.
-     */
-    @Override
-    public void formOpen() {
-        refreshTabla();
-    }
-    /**
-     * Método llamado para refrescar el formulario.
-     */
-    @Override
-    public void formRefresh() {
-        refreshTabla();
-    }
-    /**
-     * Método llamado para inicializar el formulario.
-     */
-    @Override
-    public void formInit() {
-        refreshTabla();
-    }
-    /**
-     * Refresca la tabla de proveedores.
-     */
-    private void refreshTabla() {
+
+    public void refreshTabla() {
         if (Promiseld.checkPromiseId(KEY)) {
             return;
         }
@@ -78,6 +54,7 @@ public class FormProveedor extends Form {
                 panelTable.setData(listProveedors);
             } catch (Exception ex) {
                 Notify.getInstance().showToast(Toast.Type.ERROR, ex.getMessage());
+                System.out.println(ex.getLocalizedMessage());
             } finally {
                 Promiseld.terminate(KEY);
             }
@@ -115,8 +92,9 @@ public class FormProveedor extends Form {
      * Inicializa el formulario.
      */
     private void init() {
-        setLayout(new MigLayout("wrap,fill,insets n", "[fill]", "[grow 0][fill]"));
-        add(createHeader("Proveedores", "description", 1));
+        setLayout(new MigLayout("wrap,fill,insets 0", "[fill]", "[grow 0][fill]"));
+//        setLayout(new MigLayout("wrap,fill,insets n", "[fill]", "[grow 0][fill]"));
+//        add(createHeader("Proveedores", "description", 1));
         add(body(), "gapx 7 7");
     }
     /**
@@ -283,41 +261,6 @@ public class FormProveedor extends Form {
             }
         }
     }
-    /**
-     * ProveedorRequest es una clase interna que gestiona las solicitudes de proveedores.
-     */
-    public static class ProveedorRequest {
-        /**
-         * Agrega un nuevo proveedor.
-         *
-         * @param proveedor el objeto Proveedor a agregar
-         * @return el ID generado del nuevo proveedor
-         * @throws Exception si hay un error durante la operación
-         */
-        public static int addProveedor(Proveedor proveedor) throws Exception {
-            return PoolThreads.getInstance().getExecutorService().submit(() -> {
-                try {
-                    return ProveedorDao.addProveedorBD(proveedor);
-                } catch (Exception e) {
-                    throw new Exception(e);
-                }
-            }).get();
-        }
-        /**
-         * Recupera todos los proveedores.
-         *
-         * @return una LinkedList de objetos Proveedor
-         * @throws Exception si hay un error durante la operación
-         */
-        public static LinkedList<Proveedor> getAllProveedors() throws Exception {
-            return PoolThreads.getInstance().getExecutorService().submit(() -> {
-                try {
-                    return ProveedorDao.getAllProveedorsBD();
-                } catch (Exception e) {
-                    throw new Exception(e);
-                }
-            }).get();
-        }
-    }
+
 
 }

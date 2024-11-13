@@ -6,8 +6,8 @@ import components.MyJTextField;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
-import dao.pool.PoolThreads;
 import form.FormProveedor;
+import form.request.ProveedorRequest;
 import form.request.RequestCategoria;
 import form.request.RequestProducto;
 import java.awt.EventQueue;
@@ -103,7 +103,6 @@ public class PanelRequestProducto extends JPanel {
     private void initComponents() {
 
         NumberFormatter numberFormatter = new NumberFormatter(NumberFormat.getIntegerInstance());
-//        NumberFormatter numberFormatter = new NumberFormatter(NumberFormat.getIntegerInstance());
         numberFormatter.setValueClass(Integer.class);
         numberFormatter.setMinimum(0);
         numberFormatter.setMaximum(Integer.MAX_VALUE);
@@ -388,7 +387,7 @@ public class PanelRequestProducto extends JPanel {
 
     private void fillBoxProveedores() {
         try {
-            LinkedList<Proveedor> allProveedors = FormProveedor.ProveedorRequest.getAllProveedors();
+            LinkedList<Proveedor> allProveedors = ProveedorRequest.getAllProveedors();
             for (Proveedor allProveedor : allProveedors) {
                 inputProveedor.addItem(allProveedor);
             }

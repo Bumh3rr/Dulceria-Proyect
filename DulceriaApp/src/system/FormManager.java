@@ -1,7 +1,7 @@
 package system;
 
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
-import form.FormProveedor;
+import form.FormProveedoresAndEmpleados;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import raven.modal.Drawer;
@@ -24,7 +24,7 @@ public class FormManager {
 
     public void install(JFrame frame) {
         this.frame = frame;
-        initForm(FormProveedor.class);
+        initForm(FormProveedoresAndEmpleados.class);
     }
 
     private static MainForm getMainForm() {

@@ -9,6 +9,7 @@ import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
 import form.FormProveedor;
+import form.request.ProveedorRequest;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
@@ -256,7 +257,7 @@ public class PanelRequestSupplier extends JPanel {
                     toas.update("Verificando");
                     int insert = insert();
                     if (insert != -1) {
-                        new Thread(() -> form.formOpen()).start();
+                        new Thread(() -> form.refreshTabla()).start();
                         toas.done(Toast.Type.SUCCESS, "Proveedor Agregado Exitoxamente");
                         controller.close();
                     } else {
@@ -289,15 +290,15 @@ public class PanelRequestSupplier extends JPanel {
         String email = inputEmail.getText().isEmpty() ? null : inputEmail.getText().strip();
         String state = EstadosMx.getInstance().getStatesAbbreviation(inputState.getSelectedItem().toString());
         String municipality = (inputMunicipality.getSelectedItem() == null) ? null : inputMunicipality.getSelectedItem().toString();
-        
+
         String street = inputStreet.getText().isEmpty() ? null : inputStreet.getText().strip();
         String zip = inputZip.getValue() == null ? null : inputZip.getText();
         LocalDateTime dateRegister = LocalDateTime.now();
-        
+
         Proveedor proveedor = new Proveedor(firsName, lastName, phone, email, state, municipality, street, zip, dateRegister);
-        
+
         if (proveedor.verifyNotEmpty()) {
-            return FormProveedor.ProveedorRequest.addProveedor(proveedor);
+            return ProveedorRequest.addProveedor(proveedor);
         }
         return -1;
     }
@@ -316,10 +317,18 @@ public class PanelRequestSupplier extends JPanel {
     }
 
     private Boolean verifyInputEmpty(JTextField field, String str) throws Exception {
-        String text = String.valueOf(field.getText().strip());
-        if (text.isEmpty()) {
-            Notify.getInstance().showToast(Toast.Type.WARNING, "Es requerido el campo " + str);
-            return true;
+        try {
+            String text = String.valueOf(field.getText().strip());
+            if (text.isEmpty()) {
+                Notify.getInstance().showToast(Toast.Type.WARNING, "Es requerido el campo " + str);
+                return true;
+            }
+        } catch (Exception e) {
+            JFormattedTextField op = (JFormattedTextField) field;
+            if (op.getValue() == null) {
+                Notify.getInstance().showToast(Toast.Type.WARNING, "Es requerido el campo " + str);
+                return true;
+            }
         }
         return false;
     }

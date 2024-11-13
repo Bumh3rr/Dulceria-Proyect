@@ -3,6 +3,7 @@ package drawer;
 import com.formdev.flatlaf.FlatClientProperties;
 import form.FormProducts;
 import form.FormProveedor;
+import form.FormProveedoresAndEmpleados;
 import java.awt.Insets;
 import java.util.Arrays;
 import javax.swing.JComponent;
@@ -74,9 +75,9 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
         MenuItem items[] = new MenuItem[]{
             new Item.Label("PRINCIPAL"),
             new Item("Ventas", "chart.svg", FormProducts.class),
-            new Item("", "dashboard.svg", FormProducts.class),
+            new Item("Two", "dashboard.svg", FormProveedoresAndEmpleados.class),
             new Item("Productos", "ic_products.svg", FormProducts.class),
-            new Item("Proveedor", "user2.svg", FormProveedor.class),
+            new Item("Proveedor", "user2.svg", FormProveedoresAndEmpleados.class),
             new Item("Acerca De", "about.svg"),
             new Item("Cerrar Sesión", "logout.svg")
 
