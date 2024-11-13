@@ -1,6 +1,8 @@
 package components;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.extras.components.FlatLabel;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import raven.extras.AvatarIcon;
@@ -11,7 +13,7 @@ import java.util.function.Consumer;
 public class CardProducto extends JPanel {
 
     private final Producto producto;
-    private  Consumer<Producto> consumer;
+    private Consumer<Producto> consumer;
 
     private JLabel icon;
     private JButton button;
@@ -60,13 +62,12 @@ public class CardProducto extends JPanel {
                 + "[dark]foreground:shade($Label.foreground,30%)");
         description.setText(
                 "ID: " + producto.getId()
-                        + "\nMarca: " + producto.getMarca() + ""
-                        + "\nNombre: " + producto.getNombre()
-                        + "\nCategoria: " + producto.getCategoria().getTipo()
-                        + "\nUnidades Disponibles: " + producto.getDescripcion()
-                        + "\nPrecio Venta: " + producto.getPrecio_Venta()
+                + "\nMarca: " + producto.getMarca() + ""
+                + "\nNombre: " + producto.getNombre()
+                + "\nCategoria: " + producto.getCategoria().getTipo()
+                + "\nUnidades Disponibles: " + producto.getDescripcion()
+                + "\nPrecio Venta: " + producto.getPrecio_Venta()
         );
-
 
         button = new JButton("Visualizar") {
             @Override
@@ -79,8 +80,18 @@ public class CardProducto extends JPanel {
 
         button.addActionListener(e -> consumer.accept(producto));
 
+        FlatLabel label_status = new FlatLabel();
+        label_status.setText(producto.getEstado().name());
+        label_status.setIcon(new FlatSVGIcon((producto.getEstado().name().equals(Producto.Status.Disponible.name())) ? "resources/icon/ic_active.svg" : "resources/icon/ic_inactive.svg"));
+        label_status.putClientProperty(FlatClientProperties.STYLE, ""
+                + "border:8,8,8,8;"
+                + "arc:$Component.arc;"
+                + ((producto.getEstado().name().equals(Producto.Status.Disponible.name())) ? "background:fade(#1aad2c,10%);" : "background:fade(#F17027,10%);"));
+
         body.add(title);
         body.add(description);
+        body.add(label_status);
+        
         body.add(button, "gapy 10,al trail");
         return body;
     }

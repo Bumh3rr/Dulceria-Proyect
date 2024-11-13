@@ -1,23 +1,30 @@
 package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.components.FlatComboBox;
 import components.CardProducto;
 import form.panels.PanelInfoProducto;
 import form.panels.PanelRequestProducto;
 import form.request.RequestProducto;
 import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.PopupMenu;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import system.Form;
 import utils.ResponsiveLayout;
 import java.util.LinkedList;
+import java.util.Vector;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import model.Categoria;
 import raven.modal.Drawer;
 import raven.modal.ModalDialog;
 import raven.modal.component.SimpleModalBorder;
@@ -30,6 +37,11 @@ public class FormProducts extends Form {
     private LinkedList<Producto> listProductos;
     private ResponsiveLayout responsiveLayout;
     private JPanel panelProductos;
+    private JScrollPane scrollProductos;
+
+    private JButton butonAdd;
+    private FlatComboBox<Object> comboBoxCategoria;
+    private FlatComboBox<Object> comboBoxStatus;
 
     @Override
     public void formInit() {
@@ -63,6 +75,20 @@ public class FormProducts extends Form {
 
     private void initComponents() {
         listProductos = new LinkedList<>();
+        comboBoxCategoria = new FlatComboBox<>();
+        comboBoxCategoria.setModel(new DefaultComboBoxModel<>(new String[]{"All"}));
+        comboBoxCategoria.setMaximumRowCount(8);
+
+        comboBoxStatus = new FlatComboBox<>();
+        comboBoxStatus.setModel(new DefaultComboBoxModel<>(new String[]{"All"}));
+        comboBoxStatus.setMaximumRowCount(8);
+
+        butonAdd = new JButton("Agregar Producto") {
+            @Override
+            public boolean isDefaultButton() {
+                return true;
+            }
+        };
     }
 
     private void initListeners() {
@@ -77,23 +103,18 @@ public class FormProducts extends Form {
 
     private JComponent body() {
         JPanel panel = new JPanel(new MigLayout("fillx,wrap", "[fill]", "[][fill]"));
-        JButton buton = new JButton("Agregar Producto") {
-            @Override
-            public boolean isDefaultButton() {
-                return true;
-            }
-        };
-        buton.putClientProperty(FlatClientProperties.STYLE, ""
+
+        butonAdd.putClientProperty(FlatClientProperties.STYLE, ""
                 + "foreground:#FFFFFF");
 
         //Agregar Producto
-        buton.addActionListener((e) -> {
+        butonAdd.addActionListener((e) -> {
             //Instance Panel
             PanelRequestProducto panelAdd = new PanelRequestProducto(Request.INSERTS);
-
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
                     new SimpleModalBorder(panelAdd, "Agregar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
                         if (action == SimpleModalBorder.OK_OPTION) {
+                            controller.consume();
                             panelAdd.commitInserts(controller);
                         } else if (action == SimpleModalBorder.PROPERTIES) {
                             Drawer.setSelectedItemClass(FormProveedor.class);
@@ -103,10 +124,18 @@ public class FormProducts extends Form {
                         }
                     }), ConfigModal.getModelShowDefault());
         });
-
-        panel.add(buton, "grow 0,al trail");
+        panel.add(createComboxs(),"split 2,al left");
+        panel.add(butonAdd, "grow 0,al trail");
         panel.add(createTechnicalContainers(), "gapx 0 2");
+        return panel;
+    }
 
+    private JComponent createComboxs() {
+        JPanel panel = new JPanel(new MigLayout("fillx", "[fill]", "[][fill]"));
+        panel.add(new JLabel("Categorias:"));
+        panel.add(comboBoxCategoria);
+        panel.add(new JLabel("Estado:"));
+        panel.add(comboBoxStatus);
         return panel;
     }
 
@@ -118,22 +147,22 @@ public class FormProducts extends Form {
                 + "[dark]background:lighten(@background,3%)");
         panelProductos.putClientProperty(FlatClientProperties.STYLE, ""
                 + "border:10,10,10,10;");
-        JScrollPane scrollPane = new JScrollPane(panelProductos);
-        scrollPane.putClientProperty(FlatClientProperties.STYLE, ""
+        scrollProductos = new JScrollPane(panelProductos);
+        scrollProductos.putClientProperty(FlatClientProperties.STYLE, ""
                 + "[light]background:darken(@background,3%);"
                 + "[dark]background:lighten(@background,3%);");
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.getHorizontalScrollBar().setUnitIncrement(10);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-        scrollPane.getHorizontalScrollBar().putClientProperty(FlatClientProperties.STYLE, ""
+        scrollProductos.setBorder(BorderFactory.createEmptyBorder());
+        scrollProductos.getHorizontalScrollBar().setUnitIncrement(10);
+        scrollProductos.getVerticalScrollBar().setUnitIncrement(10);
+        scrollProductos.getHorizontalScrollBar().putClientProperty(FlatClientProperties.STYLE, ""
                 + "trackArc:$ScrollBar.thumbArc;"
                 + "thumbInsets:0,0,0,0;"
                 + "width:5;");
-        scrollPane.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, ""
+        scrollProductos.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, ""
                 + "trackArc:$ScrollBar.thumbArc;"
                 + "thumbInsets:0,0,0,0;"
                 + "width:5;");
-        return scrollPane;
+        return scrollProductos;
     }
 
     private void refreshPanelProductos(LinkedList<Producto> list) throws Exception {
@@ -143,6 +172,7 @@ public class FormProducts extends Form {
         }
         panelProductos.repaint();
         panelProductos.revalidate();
+        EventQueue.invokeLater(() -> scrollProductos.getVerticalScrollBar().setValue(0));
     }
 
     private Consumer<Producto> createEventCard() {

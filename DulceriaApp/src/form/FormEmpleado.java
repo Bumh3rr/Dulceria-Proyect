@@ -1,17 +1,14 @@
 package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.extras.components.FlatButton;
 import components.CardEmpleado;
 import components.Notify;
 import dao.pool.PoolThreads;
 import form.panels.PanelInfoEmpleado;
 import form.panels.PanelRequestEmpleado;
-import form.panels.PanelRequestProducto;
 import form.request.RequestEmpleado;
 import java.awt.Dimension;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;

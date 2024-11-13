@@ -5,7 +5,6 @@ import dao.ProveedorDao;
 import dao.pool.PoolThreads;
 import java.sql.Timestamp;
 import java.util.LinkedList;
-import java.util.List;
 import model.Empleado;
 
 public class RequestEmpleado {

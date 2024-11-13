@@ -12,17 +12,19 @@ public class Producto {
     private String marca;
     private String descripcion;
     private int stock;
+    private Status estado;
     private double precio_Compra;
     private double precio_Venta;
     private Categoria categoria;
     private Proveedor proveedor;
 
-    public Producto(int id, String nombre, String marca, String descripcion, int stock, double precio_Compra, double precio_Venta, Categoria categoria, Proveedor proveedor) {
+    public Producto(int id, String nombre, String marca, String descripcion, int stock, Status estado, double precio_Compra, double precio_Venta, Categoria categoria, Proveedor proveedor) {
         this.id = id;
         this.nombre = nombre;
         this.marca = marca;
         this.descripcion = descripcion;
         this.stock = stock;
+        this.estado = estado;
         this.precio_Compra = precio_Compra;
         this.precio_Venta = precio_Venta;
         this.categoria = categoria;
@@ -39,24 +41,9 @@ public class Producto {
         this.categoria = categoria;
         this.proveedor = proveedor;
     }
-
-    public boolean verifyNotEmpty() {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            return false;
-        }
-        if (marca == null || marca.trim().isEmpty()) {
-            return false;
-        }
-        if (stock <= 0) {
-            return false;
-        }
-        if (precio_Venta <= 0) {
-            return false;
-        }
-        if (precio_Compra <= 0) {
-            return false;
-        }
-        return true;
+    
+    public enum Status{
+        Disponible,Agotado
     }
 
 }
