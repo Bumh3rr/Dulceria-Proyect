@@ -91,4 +91,62 @@ public class ProductoDao {
         }
         return list;
     }
+    public static Producto getProductoById(int idProducto) throws Exception {
+        String query = "SELECT * FROM PRODUCTO AS p " +
+                "JOIN CATEGORIA AS c ON c.id_Categoria = p.CATEGORIA_id_Categoria " +
+                "JOIN PROVEEDOR AS prov ON prov.id_Proveedor = p.PROVEEDOR_id_Proveedor " +
+                "WHERE p.id_Prod = ?";
+
+        @Cleanup
+        Connection connection = PoolConexion.getInstance().getConnection();
+        @Cleanup
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setInt(1, idProducto);
+        @Cleanup
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return new Producto(
+                    rs.getInt("p.id_Prod"),
+                    rs.getString("p.nombre_Prod"),
+                    rs.getString("p.marca"),
+                    rs.getString("p.descripcion"),
+                    rs.getInt("p.stock_Disp"),
+                    rs.getDouble("p.precio_Compra"),
+                    rs.getDouble("p.precio_Venta"),
+                    new Categoria(rs.getInt("c.id_Categoria"),
+                            rs.getString("c.tipo")),
+                    new Proveedor(
+                            rs.getInt("prov.id_Proveedor"),
+                            rs.getString("prov.nombre"),
+                            rs.getString("prov.apellido"),
+                            rs.getString("prov.telefono"),
+                            rs.getString("prov.correo")
+                    )
+            );
+        }
+        return null;
+    }
+
+    public static Boolean updateProductoBD(Producto producto) throws Exception {
+        String query = "UPDATE PRODUCTO SET nombre_Prod = ?, marca = ?, descripcion = ?, stock_Disp = ?, precio_Compra = ?, precio_Venta = ?, PROVEEDOR_id_Proveedor = ?, CATEGORIA_id_Categoria = ? WHERE id_Prod = ?";
+
+        @Cleanup
+        Connection connection = PoolConexion.getInstance().getConnection();
+        @Cleanup
+        PreparedStatement ps = connection.prepareStatement(query);
+
+
+        ps.setString(1, producto.getNombre());
+        ps.setString(2, producto.getMarca());
+        ps.setString(3, producto.getDescripcion());
+        ps.setInt(4, producto.getStock());
+        ps.setDouble(5, producto.getPrecio_Compra());
+        ps.setDouble(6, producto.getPrecio_Venta());
+        ps.setInt(7, producto.getProveedor().getId());
+        ps.setInt(8, producto.getCategoria().getId());
+        ps.setInt(9, producto.getId());
+
+        return ps.executeUpdate() > 0;
+    }
 }
