@@ -39,6 +39,7 @@ public class RequestProducto {
             try {
                 return ProductoDao.getAllProductosBD();
             } catch (Exception e) {
+                //git
                 throw new Exception(e);
             }
         }).get();
