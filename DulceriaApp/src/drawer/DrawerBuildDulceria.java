@@ -1,6 +1,7 @@
 package drawer;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import dao.pool.PoolConexion;
 import form.FormProducts;
 import form.FormProveedor;
 import form.FormProveedoresAndEmpleados;
@@ -74,11 +75,8 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
         MenuOption simpleMenuOption = new MenuOption();
         MenuItem items[] = new MenuItem[]{
             new Item.Label("PRINCIPAL"),
-            new Item("Ventas", "chart.svg", FormProducts.class),
-            new Item("Two", "dashboard.svg", FormProveedoresAndEmpleados.class),
             new Item("Productos", "ic_products.svg", FormProducts.class),
             new Item("Proveedor", "user2.svg", FormProveedoresAndEmpleados.class),
-            new Item("Acerca De", "about.svg"),
             new Item("Cerrar Sesión", "logout.svg")
 
         };
@@ -99,7 +97,14 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
                 System.out.println("Drawer menu selected " + Arrays.toString(index));
                 Class<?> itemClass = action.getItem().getItemClass();
                 int i = index[0];
-                if (i == 6) {
+                if (i == 2) {
+                    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                        try {
+                            PoolConexion.getInstance().closePool();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }));
                     System.exit(0);
                 }
                 if (itemClass == null || !Form.class.isAssignableFrom(itemClass)) {

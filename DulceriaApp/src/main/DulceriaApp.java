@@ -5,6 +5,7 @@ import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 import components.Notify;
+import dao.pool.PoolConexion;
 import drawer.DrawerBuildDulceria;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -15,6 +16,7 @@ import raven.modal.Drawer;
 import raven.modal.ModalDialog;
 import raven.modal.option.BorderOption;
 import system.FormManager;
+
 /**
  * DulceriaApp is the main class for the Dulceria application, extending JFrame.
  * It initializes the application window and sets up various UI components and settings.
@@ -59,7 +61,13 @@ public class DulceriaApp extends JFrame {
         if (SystemInfo.isMacFullWindowContentSupported) {
             getRootPane().putClientProperty("apple.awt.transparentTitleBar", true);
         }
-
+        new Thread(() -> {
+            try {
+                PoolConexion.getInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
     }
     /**
      * DulceriaApp is the main class for the Dulceria application, extending JFrame.

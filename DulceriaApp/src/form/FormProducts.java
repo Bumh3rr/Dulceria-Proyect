@@ -3,8 +3,15 @@ package form;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import components.CardProducto;
+import components.Notify;
+import dao.pool.PoolThreads;
 import form.panels.PanelInfoProducto;
 import form.panels.PanelRequestProducto;
+import form.panels.PanelSearchProducto;
+import form.panels.SimpleInputForms;
+import form.panels.SimpleInputForms2;
+import form.request.ProveedorRequest;
+import form.request.RequestCategoria;
 import form.request.RequestProducto;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -14,6 +21,7 @@ import net.miginfocom.swing.MigLayout;
 import system.Form;
 import utils.ResponsiveLayout;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
@@ -27,8 +35,13 @@ import javax.swing.SwingUtilities;
 import model.Categoria;
 import raven.modal.Drawer;
 import raven.modal.ModalDialog;
+import raven.modal.Toast;
 import raven.modal.component.SimpleModalBorder;
+import raven.modal.option.BorderOption;
+import raven.modal.option.Location;
+import raven.modal.option.Option;
 import utils.ConfigModal;
+import utils.Promiseld;
 import utils.Request;
 
 public class FormProducts extends Form {
@@ -40,6 +53,7 @@ public class FormProducts extends Form {
     private JScrollPane scrollProductos;
 
     private JButton butonAdd;
+    private JButton butonSearch;
     private FlatComboBox<Object> comboBoxCategoria;
     private FlatComboBox<Object> comboBoxStatus;
 
@@ -59,12 +73,22 @@ public class FormProducts extends Form {
     }
 
     public void addListProductos() {
-        try {
-            listProductos = RequestProducto.getAllProductos();
-            refreshPanelProductos(listProductos);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (Promiseld.checkPromiseId(KEY)) {
+            return;
         }
+        Promiseld.commit(KEY);
+        PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                listProductos = RequestProducto.getAllProductos();
+                refreshPanelProductos(listProductos);
+                comboBoxCategoria.setModel(new DefaultComboBoxModel<>(getCategoriasForComboBox()));
+                comboBoxStatus.setModel(new DefaultComboBoxModel<>(getStatusForComboBox()));
+            } catch (Exception ex) {
+                Notify.getInstance().showToast(Toast.Type.ERROR, ex.getMessage());
+            } finally {
+                Promiseld.terminate(KEY);
+            }
+        });
     }
 
     public FormProducts() {
@@ -76,13 +100,11 @@ public class FormProducts extends Form {
     private void initComponents() {
         listProductos = new LinkedList<>();
         comboBoxCategoria = new FlatComboBox<>();
-        comboBoxCategoria.setModel(new DefaultComboBoxModel<>(new String[]{"All"}));
         comboBoxCategoria.setMaximumRowCount(8);
 
         comboBoxStatus = new FlatComboBox<>();
-        comboBoxStatus.setModel(new DefaultComboBoxModel<>(new String[]{"All"}));
         comboBoxStatus.setMaximumRowCount(8);
-
+        butonSearch = new JButton("Buscar Producto");
         butonAdd = new JButton("Agregar Producto") {
             @Override
             public boolean isDefaultButton() {
@@ -92,7 +114,40 @@ public class FormProducts extends Form {
     }
 
     private void initListeners() {
+        comboBoxCategoria.addActionListener((e) -> aplicarFiltro());
+        comboBoxStatus.addActionListener((e) -> aplicarFiltro());
 
+        butonSearch.addActionListener((e) -> searchProducto());
+    }
+
+    private void aplicarFiltro() {
+        try {
+            Categoria categoriaSelect = comboBoxCategoria.getSelectedItem() instanceof Categoria
+                    ? (Categoria) comboBoxCategoria.getSelectedItem() : null;
+            Producto.Status estadoSelect = comboBoxStatus.getSelectedItem() instanceof Producto.Status
+                    ? (Producto.Status) comboBoxStatus.getSelectedItem() : null;
+
+            listProductos = RequestProducto.getProductsByCategoriaAndEstado(categoriaSelect, estadoSelect);
+            refreshPanelProductos(listProductos);
+        } catch (Exception ex) {
+            System.out.println(ex.getLocalizedMessage());
+        }
+    }
+
+    private Object[] getCategoriasForComboBox() throws Exception {
+        LinkedList<Categoria> categorias = RequestCategoria.getCategoriasAll();
+        List<Object> items = new LinkedList<>();
+        items.add("All");
+        items.addAll(categorias);
+        return items.toArray();
+    }
+
+    private Object[] getStatusForComboBox() {
+        List<Object> items = new LinkedList<>();
+        items.add("All");
+        items.add(Producto.Status.Disponible);
+        items.add(Producto.Status.Agotado);
+        return items.toArray();
     }
 
     private void init() {
@@ -102,7 +157,7 @@ public class FormProducts extends Form {
     }
 
     private JComponent body() {
-        JPanel panel = new JPanel(new MigLayout("fillx,wrap", "[fill]", "[][fill]"));
+        JPanel panel = new JPanel(new MigLayout("fillx,wrap", "[fill]"));
 
         butonAdd.putClientProperty(FlatClientProperties.STYLE, ""
                 + "foreground:#FFFFFF");
@@ -124,18 +179,20 @@ public class FormProducts extends Form {
                         }
                     }), ConfigModal.getModelShowDefault());
         });
-        panel.add(createComboxs(),"split 2,al left");
+
+        panel.add(createComboxs(), "split 2,grow 0,al left");
         panel.add(butonAdd, "grow 0,al trail");
         panel.add(createTechnicalContainers(), "gapx 0 2");
         return panel;
     }
 
     private JComponent createComboxs() {
-        JPanel panel = new JPanel(new MigLayout("fillx", "[fill]", "[][fill]"));
+        JPanel panel = new JPanel(new MigLayout("fillx,insets 3", "[fill,grow 0][][fill,grow 0][]"));
         panel.add(new JLabel("Categorias:"));
-        panel.add(comboBoxCategoria);
+        panel.add(comboBoxCategoria, "w 150!");
         panel.add(new JLabel("Estado:"));
-        panel.add(comboBoxStatus);
+        panel.add(comboBoxStatus, "w 150!");
+        panel.add(butonSearch,"grow 0");
         return panel;
     }
 
@@ -177,9 +234,9 @@ public class FormProducts extends Form {
 
     private Consumer<Producto> createEventCard() {
         return e -> {
-//            // View Info
+            // View Info
             PanelInfoProducto panel = new PanelInfoProducto(e, this);
-            ModalDialog.showModal(SwingUtilities.windowForComponent(this),
+            ModalDialog.showModal(this,
                     new SimpleModalBorder(panel, "Información del Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
                         if (action == SimpleModalBorder.CLOSE_OPTION) {
                             controller.close();
@@ -188,5 +245,24 @@ public class FormProducts extends Form {
         };
 
     }
+
+    private void searchProducto() {
+        final String id = "input";
+        PanelSearchProducto panel = new PanelSearchProducto();
+        ModalDialog.showModal(this, new SimpleModalBorder(
+                panel, "Busqueda de Producto", SimpleModalBorder.DEFAULT_OPTION,
+                (controller, action) -> {
+                    if (action == SimpleModalBorder.OK_OPTION) {
+                        controller.consume();
+                        panel.searchProducto();
+                    }else if(action  == SimpleModalBorder.CANCEL_OPTION){
+                        controller.close();
+                    }
+                }), ConfigModal.getModelShowDefault(), id);
+    }
+    
+    
+
+    
 
 }

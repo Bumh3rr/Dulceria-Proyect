@@ -5,6 +5,7 @@ import dao.ProductoDao;
 import model.Producto;
 
 import java.util.LinkedList;
+import model.Categoria;
 
 /**
  * Clase RequestProducto que maneja las solicitudes relacionadas con los productos.
@@ -60,6 +61,16 @@ public class RequestProducto {
         return PoolThreads.getInstance().getExecutorService().submit(() -> {
             try {
                 return ProductoDao.getProductoById(idProducto);
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
+        }).get();
+    }
+    
+    public static LinkedList<Producto> getProductsByCategoriaAndEstado(Categoria categoria,Producto.Status estado) throws Exception {
+        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                return ProductoDao.getProductsByCategoriaAndEstadoBD(categoria,estado);
             } catch (Exception e) {
                 throw new Exception(e);
             }

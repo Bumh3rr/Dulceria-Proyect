@@ -20,33 +20,36 @@ public class RequestEmpleado {
     }
     
     public static Empleado getOneProducto(int idEmpleado) throws Exception {
-        return PoolThreads.getInstance().getExecutorService().submit(() -> {
-            try {
-                return ProveedorDao.addProveedorBD(proveedor);
-            } catch (Exception e) {
-                throw new Exception(e);
-            }
-        }).get();
+//        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+//            try {
+//                return ProveedorDao.addProveedorBD(proveedor);
+//            } catch (Exception e) {
+//                throw new Exception(e);
+//            }
+//        }).get();
+        return null;
     }
     
     public static Boolean setEmpleado(Empleado empleado) throws Exception {
-        return PoolThreads.getInstance().getExecutorService().submit(() -> {
-            try {
-                return ProveedorDao.addProveedorBD(proveedor);
-            } catch (Exception e) {
-                throw new Exception(e);
-            }
-        }).get();
+//        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+//            try {
+//                return ProveedorDao.addProveedorBD(proveedor);
+//            } catch (Exception e) {
+//                throw new Exception(e);
+//            }
+//        }).get();
+        return false;
     }
     
     public static Boolean setDateLowEmpleado(int idEmpleado,Timestamp dateTime) throws Exception {
-        return PoolThreads.getInstance().getExecutorService().submit(() -> {
-            try {
-                return ProveedorDao.addProveedorBD(proveedor);
-            } catch (Exception e) {
-                throw new Exception(e);
-            }
-        }).get();
+//        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+//            try {
+//                return ProveedorDao.addProveedorBD(proveedor);
+//            } catch (Exception e) {
+//                throw new Exception(e);
+//            }
+//        }).get();
+        return false;
     }
 
     public static LinkedList<Empleado> getAllEmpleados()throws Exception{

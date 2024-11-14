@@ -27,5 +27,14 @@ public class ConfigModal {
                 .setAnimationEnabled(true)
                 .setOpacity(0.2f);
     }
+    public static Option getModelShowDefaultwwwwww() {
+        Option setOpacity = ModalDialog.createOption()
+                .setCloseOnPressedEscape(true)
+                .setBackgroundClickType(Option.BackgroundClickType.BLOCK)
+                .setAnimationEnabled(true)
+                .setOpacity(0.2f);
+        setOpacity.getLayoutOption().setOnTop(true);
+        return setOpacity;
+    }
 
 }
