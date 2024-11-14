@@ -56,7 +56,7 @@ public class FormProveedoresAndEmpleados extends Form {
 
     private void init() {
         setLayout(new MigLayout("fillx,wrap,insets 7 15 7 15", "[fill]", "[][fill,grow]"));
-        add(super.createHeader("Custom Table", "A table is a user interface component that displays a collection of records in a structured, tabular format. It allows users to view, sort, and manage data or other resources.", 1));
+        add(super.createHeader("Custom Table", "PUTOOO EMMA Y OSVY, LOS ANO Y LOS ODIO (NO JATE).", 1));
         add(createTab(), "grow,push,gapx 7 7");
     }
 

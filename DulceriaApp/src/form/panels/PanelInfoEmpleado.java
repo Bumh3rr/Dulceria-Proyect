@@ -26,6 +26,9 @@ import raven.modal.toast.ToastPromise;
 import utils.ConfigModal;
 import utils.Request;
 
+/**
+ * PanelInfoEmpleado es un JPanel personalizado que muestra la información de un empleado.
+ */
 public class PanelInfoEmpleado extends JPanel {
 
     private Empleado empleado;
@@ -51,6 +54,12 @@ public class PanelInfoEmpleado extends JPanel {
     private JButton buttonActiveOrLow;
     private JButton buttonClose;
 
+    /**
+     * Constructor de PanelInfoEmpleado.
+     *
+     * @param empleado El objeto Empleado con la información a mostrar.
+     * @param form El formulario asociado a este panel.
+     */
     public PanelInfoEmpleado(Empleado empleado, FormEmpleado form) {
         this.empleado = empleado;
         this.form = form;
@@ -60,6 +69,9 @@ public class PanelInfoEmpleado extends JPanel {
         init();
     }
 
+    /**
+     * Refresca los campos del panel con la información actualizada del empleado.
+     */
     public void refreshFields() {
         try {
             this.empleado = RequestEmpleado.getOneProducto(empleado.getIdEmpleado());
@@ -83,6 +95,9 @@ public class PanelInfoEmpleado extends JPanel {
 
     }
 
+    /**
+     * Inicializa los componentes del panel.
+     */
     private void intComponents() {
         label_status = new JLabel();
 
@@ -98,7 +113,7 @@ public class PanelInfoEmpleado extends JPanel {
         fieldComis = new FieldTextArea(String.valueOf(empleado.getComision()));
         fieldDateRegister = new FieldTextArea(empleado.getFecha_registro().toString());
         fieldDateLow = new FieldTextArea(empleado.getFecha_baja() != null ? empleado.getFecha_baja().toString() : null);
-        
+
         buttonUpdate = new JButton("Actualizar");
         buttonActiveOrLow = new JButton((empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? "Baja" : "Remover Baja");
         buttonClose = new JButton("Cerrar") {
@@ -110,6 +125,9 @@ public class PanelInfoEmpleado extends JPanel {
 
     }
 
+    /**
+     * Inicializa los listeners de los componentes.
+     */
     private void initListeners() {
         buttonUpdate.addActionListener((e) -> {
             PanelRequestEmpleado panelAdd = new PanelRequestEmpleado(empleado, this, Request.UPDATE);
@@ -132,6 +150,9 @@ public class PanelInfoEmpleado extends JPanel {
         });
     }
 
+    /**
+     * Configura el diseño y propiedades del panel.
+     */
     private void init() {
         setLayout(new MigLayout("fill,wrap,insets 0 20 20 20 20", "fill,450:550"));
         add(new JLabel(new AvatarIcon(PanelInfoEmpleado.class.getResource("/resources/lgo.png"), 100, 100, 16)), "split 2,grow 0");
@@ -139,6 +160,13 @@ public class PanelInfoEmpleado extends JPanel {
         add(body());
     }
 
+    /**
+     * Crea el encabezado del panel.
+     *
+     * @param title El título del encabezado.
+     * @param size El tamaño del encabezado.
+     * @return Un componente JComponent que representa el encabezado.
+     */
     public JComponent createHeader(String title, int size) {
         JPanel panel = new JPanel(new MigLayout("fill,wrap,insets 5 10 5 10", "[fill]"));
         panel.add(new MyLabelTitle(title, JLabel.LEFT, (4 - size)));
@@ -147,6 +175,11 @@ public class PanelInfoEmpleado extends JPanel {
         return panel;
     }
 
+    /**
+     * Crea el cuerpo del panel con los campos de información del empleado.
+     *
+     * @return Un componente JComponent que representa el cuerpo del panel.
+     */
     private JComponent body() {
         JPanel panel = new JPanel(new MigLayout("wrap 2,fillx,insets n", "fill", "fill"));
 
@@ -202,6 +235,11 @@ public class PanelInfoEmpleado extends JPanel {
         return panel;
     }
 
+    /**
+     * Crea el panel de acciones con los botones de actualización, activación/baja y cierre.
+     *
+     * @return Un componente JComponent que representa el panel de acciones.
+     */
     private JComponent createAccions() {
         JPanel panel = new JPanel(new MigLayout("fill,insets n", "fill"));
         panel.add(buttonUpdate);
@@ -210,6 +248,12 @@ public class PanelInfoEmpleado extends JPanel {
         return panel;
     }
 
+    /**
+     * Crea un JLabel con el subtítulo especificado.
+     *
+     * @param title El texto del subtítulo.
+     * @return Un JLabel con el subtítulo.
+     */
     private JLabel getLabelSubTitle(String title) {
         JLabel label = new JLabel(title);
         label.putClientProperty(FlatClientProperties.STYLE, ""
@@ -220,6 +264,12 @@ public class PanelInfoEmpleado extends JPanel {
         return label;
     }
 
+    /**
+     * Realiza la baja o activación del empleado.
+     *
+     * @param id El ID del empleado.
+     * @param request El estado solicitado para el empleado.
+     */
     public void commitLow(int id, Empleado.Status request) {
         if (Toast.checkPromiseId(KEY)) {
             return;
@@ -227,24 +277,29 @@ public class PanelInfoEmpleado extends JPanel {
 
         Toast.showPromise(SwingUtilities.windowForComponent(this), (empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? "Baja" : "Remover Baja", Notify.getInstance().getSelectedOption(),
                 new ToastPromise(KEY) {
-            @Override
-            public void execute(ToastPromise.PromiseCallback toas) {
-                try {
-                    toas.update("Verificando");
-                    if (RequestEmpleado.setDateLowEmpleado(id, (empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? null : Timestamp.valueOf(LocalDateTime.now()))) {
-                        new Thread(() -> form.formOpen()).start();
-                        refreshFields();
-                        toas.done(Toast.Type.SUCCESS, "Operación Exitosamente");
-                    } else {
-                        toas.done(Toast.Type.ERROR, "Operación fallida");
+                    @Override
+                    public void execute(ToastPromise.PromiseCallback toas) {
+                        try {
+                            toas.update("Verificando");
+                            if (RequestEmpleado.setDateLowEmpleado(id, (empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? null : Timestamp.valueOf(LocalDateTime.now()))) {
+                                new Thread(() -> form.formOpen()).start();
+                                refreshFields();
+                                toas.done(Toast.Type.SUCCESS, "Operación Exitosamente");
+                            } else {
+                                toas.done(Toast.Type.ERROR, "Operación fallida");
+                            }
+                        } catch (Exception e) {
+                            toas.done(Toast.Type.ERROR, e.getLocalizedMessage());
+                        }
                     }
-                } catch (Exception e) {
-                    toas.done(Toast.Type.ERROR, e.getLocalizedMessage());
-                }
-            }
-        });
+                });
     }
 
+    /**
+     * Cambia el estado del JLabel que muestra el estado del empleado.
+     *
+     * @param empleado El objeto Empleado con la información del estado.
+     */
     public void changeStatusLabel(Empleado empleado) {
         label_status.setText((empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? "Activo" : "Inactivo");
         label_status.setIcon(new FlatSVGIcon((empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? "resources/icon/ic_active.svg" : "resources/icon/ic_inactive.svg"));
