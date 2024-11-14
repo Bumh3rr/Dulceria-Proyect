@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+
 import form.request.RequestCategoria;
 import model.Categoria;
 import net.miginfocom.swing.MigLayout;
