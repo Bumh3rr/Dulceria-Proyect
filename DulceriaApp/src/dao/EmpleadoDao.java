@@ -66,4 +66,38 @@ public class EmpleadoDao {
         }
         return list;
     }
+    
+    public static Empleado getOneEmpleadosBD(int id) throws Exception {
+        String query = "SELECT * FROM EMPLEADO where idEmpleado= ?";
+
+        @Cleanup
+        Connection connection = PoolConexion.getInstance().getConnection();
+        @Cleanup
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setInt(1, id);
+
+        @Cleanup
+        ResultSet resultSet = ps.executeQuery();
+        if (resultSet.next()) {
+            return new Empleado(resultSet.getInt("idEmpleado"),
+                    resultSet.getString("nombre"),
+                    resultSet.getString("apellidos"),
+                    resultSet.getString("telefono"),
+                    resultSet.getString("direccion"),
+                    resultSet.getString("rfc"),
+                    Empleado.Puesto.valueOf(resultSet.getString("puesto")),
+                    Empleado.Status.valueOf(resultSet.getString("estado")),
+                    resultSet.getDouble("sueldo"),
+                    resultSet.getDouble("venta_semanal"),
+                    resultSet.getDouble("comision"),
+                    resultSet.getTimestamp("fecha_registro").toLocalDateTime(),
+                    resultSet.getObject("fecha_baja")!= null ? resultSet.getTimestamp("fecha_baja").toLocalDateTime() : null);
+        }
+        return null;
+    }
+    
+    
+    
+    
+    
 }

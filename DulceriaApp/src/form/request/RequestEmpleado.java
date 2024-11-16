@@ -19,15 +19,15 @@ public class RequestEmpleado {
         }).get();
     }
     
-    public static Empleado getOneProducto(int idEmpleado) throws Exception {
-//        return PoolThreads.getInstance().getExecutorService().submit(() -> {
-//            try {
-//                return ProveedorDao.addProveedorBD(proveedor);
-//            } catch (Exception e) {
-//                throw new Exception(e);
-//            }
-//        }).get();
-        return null;
+    public static Empleado getOneEmpledo(int idEmpleado) throws Exception {
+        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                return EmpleadoDao.getOneEmpleadosBD(idEmpleado);
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
+        }).get();
+       
     }
     
     public static Boolean setEmpleado(Empleado empleado) throws Exception {

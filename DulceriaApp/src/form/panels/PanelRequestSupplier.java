@@ -286,7 +286,7 @@ public class PanelRequestSupplier extends JPanel {
 
         String firsName = inputFirtsName.getText().strip();
         String lastName = inputLastName.getText().strip();
-        String phone = inputPhone.getValue() == null ? null : inputPhone.getText();
+        String phone = inputPhone.getValue().toString();
         String email = inputEmail.getText().isEmpty() ? null : inputEmail.getText().strip();
         String state = EstadosMx.getInstance().getStatesAbbreviation(inputState.getSelectedItem().toString());
         String municipality = (inputMunicipality.getSelectedItem() == null) ? null : inputMunicipality.getSelectedItem().toString();
@@ -295,12 +295,8 @@ public class PanelRequestSupplier extends JPanel {
         String zip = inputZip.getValue() == null ? null : inputZip.getText();
         LocalDateTime dateRegister = LocalDateTime.now();
 
-        Proveedor proveedor = new Proveedor(firsName, lastName, phone, email, state, municipality, street, zip, dateRegister);
-
-        if (proveedor.verifyNotEmpty()) {
-            return ProveedorRequest.addProveedor(proveedor);
-        }
-        return -1;
+        return ProveedorRequest
+                .addProveedor(new Proveedor(firsName, lastName, phone, email, state, municipality, street, zip, dateRegister));
     }
 
     private Boolean toastIsEmptyCampos() throws Exception {
@@ -310,7 +306,8 @@ public class PanelRequestSupplier extends JPanel {
         if (verifyInputEmpty(inputLastName, "Apellidos")) {
             return true;
         }
-        if (verifyInputEmpty(inputPhone, "Telefono")) {
+        if (inputPhone.getValue() == null) {
+            Notify.getInstance().showToast(Toast.Type.WARNING, "Es requerido el campo Telefono");
             return true;
         }
         return false;

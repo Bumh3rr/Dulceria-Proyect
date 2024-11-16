@@ -74,7 +74,7 @@ public class PanelInfoEmpleado extends JPanel {
      */
     public void refreshFields() {
         try {
-            this.empleado = RequestEmpleado.getOneProducto(empleado.getIdEmpleado());
+            this.empleado = RequestEmpleado.getOneEmpledo(empleado.getIdEmpleado());
 
             fieldID.setTextField(String.valueOf(empleado.getIdEmpleado()));
             fieldFirtsName.setTextField(empleado.getNombre());

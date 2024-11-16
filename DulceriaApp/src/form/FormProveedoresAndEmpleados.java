@@ -45,7 +45,6 @@ public class FormProveedoresAndEmpleados extends Form {
     public FormProveedoresAndEmpleados() {
         initComponents();
         init();
-
     }
 
     private void initComponents() {

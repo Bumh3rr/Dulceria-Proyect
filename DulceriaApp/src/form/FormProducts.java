@@ -44,8 +44,12 @@ import utils.ConfigModal;
 import utils.Promiseld;
 import utils.Request;
 
+/**
+ * Clase que representa el formulario de productos.
+ */
 public class FormProducts extends Form {
 
+    // Clave única para identificar la clase.
     private final String KEY = getClass().getName();
     private LinkedList<Producto> listProductos;
     private ResponsiveLayout responsiveLayout;
@@ -57,21 +61,33 @@ public class FormProducts extends Form {
     private FlatComboBox<Object> comboBoxCategoria;
     private FlatComboBox<Object> comboBoxStatus;
 
+    /**
+     * Inicializa el formulario.
+     */
     @Override
     public void formInit() {
         addListProductos();
     }
 
+    /**
+     * Abre el formulario.
+     */
     @Override
     public void formOpen() {
         addListProductos();
     }
 
+    /**
+     * Refresca el formulario.
+     */
     @Override
     public void formRefresh() {
         addListProductos();
     }
 
+    /**
+     * Agrega la lista de productos al formulario.
+     */
     public void addListProductos() {
         if (Promiseld.checkPromiseId(KEY)) {
             return;
@@ -91,12 +107,18 @@ public class FormProducts extends Form {
         });
     }
 
+    /**
+     * Constructor de la clase FormProducts.
+     */
     public FormProducts() {
         initComponents();
         initListeners();
         init();
     }
 
+    /**
+     * Inicializa los componentes del formulario.
+     */
     private void initComponents() {
         listProductos = new LinkedList<>();
         comboBoxCategoria = new FlatComboBox<>();
@@ -113,6 +135,9 @@ public class FormProducts extends Form {
         };
     }
 
+    /**
+     * Inicializa los listeners de los componentes.
+     */
     private void initListeners() {
         comboBoxCategoria.addActionListener((e) -> aplicarFiltro());
         comboBoxStatus.addActionListener((e) -> aplicarFiltro());
@@ -120,6 +145,9 @@ public class FormProducts extends Form {
         butonSearch.addActionListener((e) -> searchProducto());
     }
 
+    /**
+     * Aplica el filtro de búsqueda de productos.
+     */
     private void aplicarFiltro() {
         try {
             Categoria categoriaSelect = comboBoxCategoria.getSelectedItem() instanceof Categoria
@@ -134,6 +162,12 @@ public class FormProducts extends Form {
         }
     }
 
+    /**
+     * Obtiene las categorías para el comboBox.
+     *
+     * @return un arreglo de objetos con las categorías
+     * @throws Exception si ocurre un error al obtener las categorías
+     */
     private Object[] getCategoriasForComboBox() throws Exception {
         LinkedList<Categoria> categorias = RequestCategoria.getCategoriasAll();
         List<Object> items = new LinkedList<>();
@@ -142,6 +176,11 @@ public class FormProducts extends Form {
         return items.toArray();
     }
 
+    /**
+     * Obtiene los estados para el comboBox.
+     *
+     * @return un arreglo de objetos con los estados
+     */
     private Object[] getStatusForComboBox() {
         List<Object> items = new LinkedList<>();
         items.add("All");
@@ -150,21 +189,29 @@ public class FormProducts extends Form {
         return items.toArray();
     }
 
+    /**
+     * Inicializa el formulario.
+     */
     private void init() {
         setLayout(new MigLayout("wrap,fill,insets 0 n 0 n", "[fill]", "[grow 0][fill]"));
         add(createHeader("Productos", "En el apartado de Productos puedes gestionar tus Productos", 1));
         add(body());
     }
 
+    /**
+     * Crea el cuerpo del formulario.
+     *
+     * @return el componente JComponent que representa el cuerpo del formulario
+     */
     private JComponent body() {
         JPanel panel = new JPanel(new MigLayout("fillx,wrap", "[fill]"));
 
         butonAdd.putClientProperty(FlatClientProperties.STYLE, ""
                 + "foreground:#FFFFFF");
 
-        //Agregar Producto
+        // Agregar Producto
         butonAdd.addActionListener((e) -> {
-            //Instance Panel
+            // Instancia Panel
             PanelRequestProducto panelAdd = new PanelRequestProducto(Request.INSERTS);
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
                     new SimpleModalBorder(panelAdd, "Agregar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
@@ -186,6 +233,11 @@ public class FormProducts extends Form {
         return panel;
     }
 
+    /**
+     * Crea los comboBoxs del formulario.
+     *
+     * @return el componente JComponent que representa los comboBoxs
+     */
     private JComponent createComboxs() {
         JPanel panel = new JPanel(new MigLayout("fillx,insets 3", "[fill,grow 0][][fill,grow 0][]"));
         panel.add(new JLabel("Categorias:"));
@@ -196,6 +248,11 @@ public class FormProducts extends Form {
         return panel;
     }
 
+    /**
+     * Crea los contenedores técnicos del formulario.
+     *
+     * @return el componente JComponent que representa los contenedores técnicos
+     */
     private JComponent createTechnicalContainers() {
         responsiveLayout = new ResponsiveLayout(ResponsiveLayout.JustifyContent.FIT_CONTENT, new Dimension(-1, -1), 10, 10);
         panelProductos = new JPanel(responsiveLayout);
@@ -222,6 +279,12 @@ public class FormProducts extends Form {
         return scrollProductos;
     }
 
+    /**
+     * Refresca el panel de productos con la lista de productos proporcionada.
+     *
+     * @param list la lista de productos a mostrar
+     * @throws Exception si ocurre un error al refrescar el panel
+     */
     private void refreshPanelProductos(LinkedList<Producto> list) throws Exception {
         panelProductos.removeAll();
         for (Producto tecnico : list) {
@@ -232,9 +295,14 @@ public class FormProducts extends Form {
         EventQueue.invokeLater(() -> scrollProductos.getVerticalScrollBar().setValue(0));
     }
 
+    /**
+     * Crea el evento para las tarjetas de productos.
+     *
+     * @return un consumidor de productos que maneja el evento de la tarjeta
+     */
     private Consumer<Producto> createEventCard() {
         return e -> {
-            // View Info
+            // Ver información
             PanelInfoProducto panel = new PanelInfoProducto(e, this);
             ModalDialog.showModal(this,
                     new SimpleModalBorder(panel, "Información del Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
@@ -246,6 +314,9 @@ public class FormProducts extends Form {
 
     }
 
+    /**
+     * Busca un producto.
+     */
     private void searchProducto() {
         final String id = "input";
         PanelSearchProducto panel = new PanelSearchProducto();
@@ -260,9 +331,4 @@ public class FormProducts extends Form {
                     }
                 }), ConfigModal.getModelShowDefault(), id);
     }
-    
-    
-
-    
-
 }

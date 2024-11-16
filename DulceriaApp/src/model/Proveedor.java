@@ -58,21 +58,7 @@ public class Proveedor {
     public Proveedor(int id) {
         this.id = id;
     }
-    
 
-    public boolean verifyNotEmpty() {
-        if (first_name == null || first_name.trim().isEmpty()) {
-            return false;
-        }
-        if (last_name == null || last_name.trim().isEmpty()) {
-            return false;
-        }
-        if (phone == null || phone.trim().isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-    
     
     public Object[] getUserArray(){
         return new Object[]{

@@ -65,7 +65,7 @@ public class CardProducto extends JPanel {
                 + "\nMarca: " + producto.getMarca() + ""
                 + "\nNombre: " + producto.getNombre()
                 + "\nCategoria: " + producto.getCategoria().getTipo()
-                + "\nUnidades Disponibles: " + producto.getDescripcion()
+                + "\nUnidades Disponibles: " + producto.getStock()
                 + "\nPrecio Venta: " + producto.getPrecio_Venta()
         );
 

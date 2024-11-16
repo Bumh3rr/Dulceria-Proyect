@@ -151,6 +151,7 @@ public class PanelRequestProducto extends JPanel {
         inputPrecioCompra.setFormatterFactory(new DefaultFormatterFactory(decimalFormatter));
         inputPrecioCompra.setValue(Double.MIN_NORMAL);
 
+
         inputPrecioVenta = new JFormattedTextField();
         inputPrecioVenta.setFormatterFactory(new DefaultFormatterFactory(decimalFormatter));
         inputPrecioVenta.setValue(Double.MIN_NORMAL);

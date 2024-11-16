@@ -1,9 +1,13 @@
 package utils;
 
+import form.panels.PanelRequestSupplier;
 import raven.modal.ModalDialog;
+import raven.modal.component.SimpleModalBorder;
 import raven.modal.option.BorderOption;
 import raven.modal.option.Location;
 import raven.modal.option.Option;
+
+import javax.swing.*;
 
 public class ConfigModal {
 
