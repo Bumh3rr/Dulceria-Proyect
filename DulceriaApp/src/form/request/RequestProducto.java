@@ -40,6 +40,7 @@ public class RequestProducto {
             try {
                 return ProductoDao.getAllProductosBD();
             } catch (Exception e) {
+                //gitouh
                 throw new Exception(e);
             }
         }).get();
