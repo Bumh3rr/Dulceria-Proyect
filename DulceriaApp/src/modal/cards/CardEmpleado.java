@@ -1,27 +1,29 @@
-package components;
+package modal.cards;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.FlatLabel;
-import model.Producto;
+import java.util.function.Consumer;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import model.Empleado;
 import net.miginfocom.swing.MigLayout;
 import raven.extras.AvatarIcon;
 
-import javax.swing.*;
-import java.util.function.Consumer;
+public class CardEmpleado extends JPanel {
 
-public class CardProducto extends JPanel {
-
-    private final Producto producto;
-    private Consumer<Producto> consumer;
+    private final Empleado empleado;
+    private final Consumer<Empleado> event;
 
     private JLabel icon;
     private JButton button;
     private JTextPane description;
 
-    public CardProducto(Producto producto, Consumer<Producto> consumer) {
-        this.consumer = consumer;
-        this.producto = producto;
+    public CardEmpleado(Empleado empleado, Consumer<Empleado> event) {
+        this.empleado = empleado;
+        this.event = event;
         init();
     }
 
@@ -41,7 +43,7 @@ public class CardProducto extends JPanel {
         JPanel header = new JPanel(new MigLayout("fill,insets 10 10 0 0", "[fill,center]", "[center]"));
         header.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:null");
-        icon = new JLabel(new AvatarIcon(CardProducto.class.getResource("/resources/dulce.png"), 100, 100, 16));
+        icon = new JLabel(new AvatarIcon(CardEmpleado.class.getResource("/resources/lgo.png"), 100, 100, 16));
         header.add(icon);
         return header;
     }
@@ -50,7 +52,7 @@ public class CardProducto extends JPanel {
         JPanel body = new JPanel(new MigLayout("wrap", "[150]", "[][]push[]push"));
         body.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:null");
-        JLabel title = new JLabel("Producto");
+        JLabel title = new JLabel("Empleado");
         title.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:bold +1;");
         description = new JTextPane();
@@ -61,12 +63,10 @@ public class CardProducto extends JPanel {
                 + "[light]foreground:tint($Label.foreground,30%);"
                 + "[dark]foreground:shade($Label.foreground,30%)");
         description.setText(
-                "ID: " + producto.getId()
-                + "\nMarca: " + producto.getMarca() + ""
-                + "\nNombre: " + producto.getNombre()
-                + "\nCategoria: " + producto.getCategoria().getTipo()
-                + "\nUnidades Disponibles: " + producto.getStock()
-                + "\nPrecio Venta: " + producto.getPrecio_Venta()
+                "ID: " + empleado.getIdEmpleado()
+                + "\nNombre: " + empleado.getNombre()
+                + "\nApellido: " + empleado.getApellido()
+                + "\nPuesto: " + empleado.getPuesto()
         );
 
         button = new JButton("Visualizar") {
@@ -78,20 +78,21 @@ public class CardProducto extends JPanel {
         button.putClientProperty(FlatClientProperties.STYLE, ""
                 + "foreground:#FFFFFF");
 
-        button.addActionListener(e -> consumer.accept(producto));
-
+        button.addActionListener(e -> event.accept(empleado));
+        
         FlatLabel label_status = new FlatLabel();
-        label_status.setText(producto.getEstado().name());
-        label_status.setIcon(new FlatSVGIcon((producto.getEstado().name().equals(Producto.Status.Disponible.name())) ? "resources/icon/ic_active.svg" : "resources/icon/ic_inactive.svg"));
+        label_status.setText(empleado.getEstado().name());
+        label_status.setIcon(new FlatSVGIcon((empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? "resources/icon/ic_active.svg" : "resources/icon/ic_inactive.svg"));
         label_status.putClientProperty(FlatClientProperties.STYLE, ""
                 + "border:8,8,8,8;"
                 + "arc:$Component.arc;"
-                + ((producto.getEstado().name().equals(Producto.Status.Disponible.name())) ? "background:fade(#1aad2c,10%);" : "background:fade(#F17027,10%);"));
-
+                + ((empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? "background:fade(#1aad2c,10%);" : "background:fade(#F17027,10%);"));
+                
+        
         body.add(title);
         body.add(description);
         body.add(label_status);
-        
+
         body.add(button, "gapy 10,al trail");
         return body;
     }

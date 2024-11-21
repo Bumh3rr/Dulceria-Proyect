@@ -1,7 +1,7 @@
 package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import components.CardEmpleado;
+import modal.cards.CardEmpleado;
 import components.Notify;
 import dao.pool.PoolThreads;
 import form.panels.PanelInfoEmpleado;

@@ -5,17 +5,28 @@ import com.formdev.flatlaf.extras.components.FlatComboBox;
 import components.ButtonIcon;
 import components.MyJTextField;
 import components.MyScrollPane;
+import form.request.RequestProducto;
+import modal.CustomModal;
 import model.Empleado;
+import model.Producto;
 import net.miginfocom.swing.MigLayout;
+import raven.modal.ModalDialog;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PanelRequestVenta extends JPanel {
+    public static String ID = "PanelRequestVenta";
+
     private JLabel tituleCliente;
     private JLabel tituleProducto;
     private JLabel tituleDetails;
     private static JLabel label_precioTotal;
     private static JLabel label_cantidadProductos;
+    public static LinkedList<Producto> listProducts;
+    private static PanelAddProductsBuy panelAddProductsBuy;
 
     private FlatComboBox<MethodPayment> comboBoxMethodPayment;
     private FlatComboBox<Empleado> comboBoxEmpleado;
@@ -28,8 +39,12 @@ public class PanelRequestVenta extends JPanel {
         initComponents();
         initListeners();
         init();
+
     }
     private void initComponents() {
+        listProducts = new LinkedList<>();
+        panelAddProductsBuy =new PanelAddProductsBuy();
+
         tituleCliente = new JLabel("Detalles del Cliente");
         tituleProducto =new JLabel("Productos");
         tituleDetails = new JLabel("Detalles de la Venta");
@@ -67,7 +82,10 @@ public class PanelRequestVenta extends JPanel {
 
     }
     private void initListeners() {
-
+        buttonAddProducts.addActionListener(e -> {
+            ModalDialog.pushModal(new CustomModal(panelAddProductsBuy, "Agregar Productos", "resources/icon/ic_buys.svg"),
+                    PanelRequestVenta.ID);
+        });
     }
 
 

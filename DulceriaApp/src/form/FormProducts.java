@@ -2,7 +2,7 @@ package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
-import components.CardProducto;
+import modal.cards.CardProducto;
 import components.Notify;
 import dao.pool.PoolThreads;
 import form.panels.PanelInfoProducto;
@@ -280,8 +280,8 @@ public class FormProducts extends Form {
      */
     private void refreshPanelProductos(LinkedList<Producto> list) throws Exception {
         panelProductos.removeAll();
-        for (Producto tecnico : list) {
-            panelProductos.add(new CardProducto(tecnico, createEventCard()));
+        for (Producto producto : list) {
+            panelProductos.add(new CardProducto(producto, createEventCard()));
         }
         panelProductos.repaint();
         panelProductos.revalidate();

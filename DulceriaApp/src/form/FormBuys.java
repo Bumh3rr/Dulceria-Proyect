@@ -10,7 +10,6 @@ import modal.CustomModal;
 import model.Proveedor;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
-import raven.modal.component.SimpleModalBorder;
 import system.Form;
 
 import javax.swing.*;
@@ -19,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
 public class FormBuys extends Form {
-    public static String ID = "FormBuys";
     private Table panelTable;
     private JButton button_view;
     private JButton button_create;
@@ -80,7 +78,7 @@ public class FormBuys extends Form {
 
     private void showPanelNewBuy() {
         ModalDialog.showModal(this, new CustomModal(new PanelRequestVenta(), "Realizar Venta", "resources/icon/ic_newNote.svg"),
-                ConfigModal.getModelShowModalPush(), ID);
+                ConfigModal.getModelShowModalPush(), PanelRequestVenta.ID);
     }
 
 
