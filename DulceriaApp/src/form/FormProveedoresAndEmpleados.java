@@ -1,6 +1,7 @@
 package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
+
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -10,6 +11,7 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import net.miginfocom.swing.MigLayout;
 import system.Form;
 
@@ -55,7 +57,7 @@ public class FormProveedoresAndEmpleados extends Form {
 
     private void init() {
         setLayout(new MigLayout("fillx,wrap,insets 7 15 7 15", "[fill]", "[][fill,grow]"));
-        add(super.createHeader("Custom Table", "PUTOOO EMMA Y OSVY, LOS ANO Y LOS ODIO (NO JATE).", 1));
+        add(super.createHeader("Gestión de Proveedores y Empleados", "Administra la información de proveedores y empleados de manera sencilla y organizada. Visualiza, agrega y edita los datos según tus necesidades.", 1));
         add(createTab(), "grow,push,gapx 7 7");
     }
 

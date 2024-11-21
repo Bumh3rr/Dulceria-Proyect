@@ -148,13 +148,12 @@ public class FormProveedor extends Form {
         private JScrollPane scrollPane;
         private DefaultTableModel model;
 
-        private String[] columnNames = {"ID", "Nombre", "Apellido", "Telefono", "Correo", "Fecha Registro"};
+        private String[] columnNames = {"ID", "Nombre", "Apellido", "Teléfono", "Correo", "Dirección","Fecha Registro"};
         /**
          * Constructor de Table.
          */
         public Table() {
             initComponentsTable();
-            initListenersTable();
             initTable();
         }
         /**
@@ -165,7 +164,7 @@ public class FormProveedor extends Form {
             scrollPane = new FlatScrollPane();
             model = new DefaultTableModel(columnNames, 0) {
                 boolean[] canEdit = new boolean[]{
-                    false, false, false, false, false, false
+                    false, false, false, false, false, false, false
                 };
 
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -173,25 +172,7 @@ public class FormProveedor extends Form {
                 }
             };
         }
-        /**
-         * Inicializa los listeners de la tabla.
-         */
-        private void initListenersTable() {
-            table.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    int colum = table.columnAtPoint(e.getPoint());
-                    int row = table.rowAtPoint(e.getPoint());
 
-                    if (row >= 0 && colum >= 0) {
-                        EventQueue.invokeLater(() -> {
-                            JOptionPane.showMessageDialog(SwingUtilities.windowForComponent(table),
-                                    "Hola : row" + row + " colum: " + colum);
-                        });
-                    }
-                }
-            });
-        }
         /**
          * Inicializa la tabla.
          */
@@ -205,12 +186,13 @@ public class FormProveedor extends Form {
             table.setModel(model);
 
             //Size fields
-            table.getColumnModel().getColumn(0).setMaxWidth(70);
+            table.getColumnModel().getColumn(0).setMaxWidth(40);
             table.getColumnModel().getColumn(1).setPreferredWidth(90);
             table.getColumnModel().getColumn(2).setPreferredWidth(95);
-            table.getColumnModel().getColumn(3).setPreferredWidth(112);
+            table.getColumnModel().getColumn(3).setPreferredWidth(70);
             table.getColumnModel().getColumn(4).setPreferredWidth(210);
-            table.getColumnModel().getColumn(5).setPreferredWidth(209);
+            table.getColumnModel().getColumn(5).setPreferredWidth(210);
+            table.getColumnModel().getColumn(6).setPreferredWidth(209);
 
             //Center Data
             DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();

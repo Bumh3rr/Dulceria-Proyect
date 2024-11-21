@@ -67,6 +67,7 @@ public class Proveedor {
             this.last_name,
             this.phone,
             this.email,
+            this.state +" / "+ this.municipality +" / "+ this.street +" / "+ this.zip,
             this.date_register.format(DateTimeFormatter.ofPattern("yyyy-MM-dd / hh:mm:ss a")).concat(" / " + WEEKS[this.date_register.getDayOfWeek().getValue() - 1]),
         };
     }

@@ -121,7 +121,6 @@ public class PanelSearchProducto extends JPanel {
             } else {
                 Notify.getInstance().showToast(Toast.Type.ERROR, "No existe el ID");
             }
-
         } catch (Exception ex) {
             Notify.getInstance().showToast(Toast.Type.ERROR, "Dato No valido");
         }
