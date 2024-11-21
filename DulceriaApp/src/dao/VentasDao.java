@@ -1,45 +1,60 @@
 package dao;
 import dao.pool.PoolConexion;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.LinkedList;
+import java.util.List;
 import model.Ventas;
+import com.google.gson.Gson;
+import model.DetalleVenta;
 import lombok.Cleanup;
+import java.sql.CallableStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
 public class VentasDao {
-    public static int addVentaBD(Ventas venta) throws Exception {
-        String query = "INSERT INTO VENTAS(id_Cliente,id_Trab,total_venta,fecha_venta) values(?,?,?,?)";
-        int generatedId = -1;
+
+    public static void registerSale(Ventas venta, List<DetalleVenta> detalles) throws Exception {
+        String query = "{CALL RegisterSale(?, ?, ?, ?, ?)}";
+        Gson gson = new Gson();
+        String detalleJson = gson.toJson(detalles);
+
         @Cleanup
-        Connection connection = PoolConexion.getInstance().getConnection();
-        @Cleanup
-        PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        ps.setInt(1, venta.getId_Cliente());
-        ps.setInt(2, venta.getId_Trab());
-        ps.setDouble(3, venta.getTotal_venta());
-        ps.setObject(4, venta.getFecha_venta());
-        if (ps.executeUpdate() > 0) {
+        Connection conn = PoolConexion.getInstance().getConnection();
+
+        try {
+            // Desactivar el auto-commit para manejar las transacciones manualmente
+            conn.setAutoCommit(false);
+
+            // Definir el procedimiento almacenado
             @Cleanup
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                generatedId = rs.getInt(1);
+            CallableStatement stmt = conn.prepareCall(query);
+
+            // Establecer los parámetros de entrada
+            stmt.setInt(1, venta.getId_Cliente()); // ID del cliente
+            stmt.setInt(2, venta.getId_Trab());    // ID del empleado
+            stmt.setDouble(3, venta.getTotal_venta()); // Total de la venta
+            stmt.setTimestamp(4, new Timestamp(venta.getFecha_venta().getDayOfMonth())); // Fecha de la venta
+            stmt.setString(5, detalleJson); // Detalle de la venta en formato JSON
+
+            // Ejecutar el procedimiento almacenado
+            stmt.execute();
+
+            // Confirmar la transacción
+            conn.commit();
+
+            System.out.println("Venta registrada exitosamente.");
+
+        } catch (SQLException e) {
+            // En caso de error, revertir la transacción
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                    System.out.println("Transacción revertida debido a un error: " + e.getMessage());
+                } catch (SQLException ex) {
+                    System.out.println("Error al revertir la transacción: " + ex.getMessage());
+                }
             }
+            e.printStackTrace();
+            throw new Exception("Error al registrar la venta", e);
         }
-        return generatedId;
-    }
-    public static LinkedList<Ventas> getAllVentasBD() throws Exception {
-        String query = "SELECT * FROM ventas";
-        LinkedList<Ventas> list = new LinkedList<>();
-        @Cleanup
-        Connection connection = PoolConexion.getInstance().getConnection();
-        @Cleanup
-        Statement statement = connection.createStatement();
-        @Cleanup
-        ResultSet resultSet = statement.executeQuery(query);
-        while (resultSet.next()) {
-            list.add(new Ventas(resultSet.getInt("id_venta"), resultSet.getInt("id_Cliente"), resultSet.getInt("id_Trab"), resultSet.getDouble("total_venta"), resultSet.getObject("fecha_venta", java.time.LocalDateTime.class)));
-        }
-        return list;
     }
 }
