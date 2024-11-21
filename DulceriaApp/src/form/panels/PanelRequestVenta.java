@@ -13,6 +13,7 @@ import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class PanelRequestVenta extends JPanel {
     }
     private void initComponents() {
         listProducts = new LinkedList<>();
-        panelAddProductsBuy =new PanelAddProductsBuy();
+        SwingUtilities.invokeLater(() -> panelAddProductsBuy =new PanelAddProductsBuy());
 
         tituleCliente = new JLabel("Detalles del Cliente");
         tituleProducto =new JLabel("Productos");
@@ -79,12 +80,19 @@ public class PanelRequestVenta extends JPanel {
                 super.updateUI();
             }
         };
-
     }
     private void initListeners() {
         buttonAddProducts.addActionListener(e -> {
             ModalDialog.pushModal(new CustomModal(panelAddProductsBuy, "Agregar Productos", "resources/icon/ic_buys.svg"),
                     PanelRequestVenta.ID);
+        });
+        buttonCancelBuy.addActionListener(e -> {
+            ModalDialog.closeModal(PanelRequestVenta.ID);
+            SwingUtilities.invokeLater(() ->{
+                listProducts = new LinkedList<>();
+                panelAddProductsBuy = new PanelAddProductsBuy();
+            });
+
         });
     }
 

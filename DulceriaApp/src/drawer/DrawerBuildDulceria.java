@@ -4,7 +4,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 import dao.pool.PoolConexion;
 import form.FormBuys;
 import form.FormProducts;
-import form.FormProveedor;
 import form.FormProveedoresAndEmpleados;
 import java.awt.Insets;
 import java.util.Arrays;
@@ -76,7 +75,7 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
         MenuOption simpleMenuOption = new MenuOption();
         MenuItem items[] = new MenuItem[]{
             new Item.Label("PRINCIPAL"),
-            new Item("Ventas", "ic_buys.svg", FormBuys.class),
+            new Item("Ventas", "ic_buys.svg",  FormBuys.class),
             new Item("Productos", "ic_products.svg", FormProducts.class),
             new Item("Proveedor", "user2.svg", FormProveedoresAndEmpleados.class),
             new Item("Cerrar Sesión", "logout.svg")
