@@ -23,7 +23,7 @@ import raven.modal.Toast;
 import raven.modal.component.ModalBorderAction;
 import raven.modal.component.SimpleModalBorder;
 import raven.modal.toast.ToastPromise;
-import utils.ConfigModal;
+import modal.ConfigModal;
 import utils.Request;
 
 /**

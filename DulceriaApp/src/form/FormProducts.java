@@ -2,27 +2,23 @@ package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
-import components.CardProducto;
+import modal.cards.CardProducto;
 import components.Notify;
 import dao.pool.PoolThreads;
 import form.panels.PanelInfoProducto;
 import form.panels.PanelRequestProducto;
 import form.panels.PanelSearchProducto;
-import form.panels.SimpleInputForms;
-import form.panels.SimpleInputForms2;
-import form.request.ProveedorRequest;
 import form.request.RequestCategoria;
 import form.request.RequestProducto;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.PopupMenu;
+
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import system.Form;
 import utils.ResponsiveLayout;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -37,10 +33,7 @@ import raven.modal.Drawer;
 import raven.modal.ModalDialog;
 import raven.modal.Toast;
 import raven.modal.component.SimpleModalBorder;
-import raven.modal.option.BorderOption;
-import raven.modal.option.Location;
-import raven.modal.option.Option;
-import utils.ConfigModal;
+import modal.ConfigModal;
 import utils.Promiseld;
 import utils.Request;
 
@@ -287,8 +280,8 @@ public class FormProducts extends Form {
      */
     private void refreshPanelProductos(LinkedList<Producto> list) throws Exception {
         panelProductos.removeAll();
-        for (Producto tecnico : list) {
-            panelProductos.add(new CardProducto(tecnico, createEventCard()));
+        for (Producto producto : list) {
+            panelProductos.add(new CardProducto(producto, createEventCard()));
         }
         panelProductos.repaint();
         panelProductos.revalidate();

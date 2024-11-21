@@ -28,10 +28,8 @@ import raven.modal.ModalDialog;
 import raven.modal.Toast;
 import raven.modal.listener.ModalController;
 import raven.modal.toast.ToastPromise;
-import utils.ConfigModal;
+import modal.ConfigModal;
 import utils.Request;
-import static utils.Request.INSERTS;
-import static utils.Request.UPDATE;
 
 public class PanelRequestProducto extends JPanel {
 
