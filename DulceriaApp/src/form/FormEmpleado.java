@@ -23,7 +23,7 @@ import raven.modal.ModalDialog;
 import raven.modal.Toast;
 import raven.modal.component.SimpleModalBorder;
 import system.Form;
-import utils.ConfigModal;
+import modal.ConfigModal;
 import utils.Promiseld;
 import utils.Request;
 import utils.ResponsiveLayout;

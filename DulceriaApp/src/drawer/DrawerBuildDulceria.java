@@ -2,6 +2,7 @@ package drawer;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import dao.pool.PoolConexion;
+import form.FormBuys;
 import form.FormProducts;
 import form.FormProveedor;
 import form.FormProveedoresAndEmpleados;
@@ -75,10 +76,10 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
         MenuOption simpleMenuOption = new MenuOption();
         MenuItem items[] = new MenuItem[]{
             new Item.Label("PRINCIPAL"),
+            new Item("Ventas", "ic_buys.svg", FormBuys.class),
             new Item("Productos", "ic_products.svg", FormProducts.class),
             new Item("Proveedor", "user2.svg", FormProveedoresAndEmpleados.class),
             new Item("Cerrar Sesión", "logout.svg")
-
         };
 
         simpleMenuOption.setMenuStyle(new MenuStyle() {
@@ -97,7 +98,7 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
                 System.out.println("Drawer menu selected " + Arrays.toString(index));
                 Class<?> itemClass = action.getItem().getItemClass();
                 int i = index[0];
-                if (i == 2) {
+                if (i == 3) {
                     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                         try {
                             PoolConexion.getInstance().closePool();

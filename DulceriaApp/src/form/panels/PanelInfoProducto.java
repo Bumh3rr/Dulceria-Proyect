@@ -13,14 +13,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
-import model.Empleado;
+
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import raven.extras.AvatarIcon;
 import raven.modal.ModalDialog;
 import raven.modal.component.ModalBorderAction;
 import raven.modal.component.SimpleModalBorder;
-import utils.ConfigModal;
+import modal.ConfigModal;
 import utils.Request;
 
 public class PanelInfoProducto extends JPanel {

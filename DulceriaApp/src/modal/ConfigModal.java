@@ -1,13 +1,9 @@
-package utils;
+package modal;
 
-import form.panels.PanelRequestSupplier;
 import raven.modal.ModalDialog;
-import raven.modal.component.SimpleModalBorder;
 import raven.modal.option.BorderOption;
 import raven.modal.option.Location;
 import raven.modal.option.Option;
-
-import javax.swing.*;
 
 public class ConfigModal {
 
@@ -31,14 +27,12 @@ public class ConfigModal {
                 .setAnimationEnabled(true)
                 .setOpacity(0.2f);
     }
-    public static Option getModelShowDefaultwwwwww() {
-        Option setOpacity = ModalDialog.createOption()
-                .setCloseOnPressedEscape(true)
+    public static Option getModelShowModalPush() {
+        return ModalDialog.createOption()
+                .setCloseOnPressedEscape(false)
                 .setBackgroundClickType(Option.BackgroundClickType.BLOCK)
-                .setAnimationEnabled(true)
-                .setOpacity(0.2f);
-        setOpacity.getLayoutOption().setOnTop(true);
-        return setOpacity;
+                .setAnimationEnabled(false)
+                .setOpacity(0.6f);
     }
 
 }
