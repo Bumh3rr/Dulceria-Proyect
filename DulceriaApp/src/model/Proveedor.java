@@ -58,21 +58,7 @@ public class Proveedor {
     public Proveedor(int id) {
         this.id = id;
     }
-    
 
-    public boolean verifyNotEmpty() {
-        if (first_name == null || first_name.trim().isEmpty()) {
-            return false;
-        }
-        if (last_name == null || last_name.trim().isEmpty()) {
-            return false;
-        }
-        if (phone == null || phone.trim().isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-    
     
     public Object[] getUserArray(){
         return new Object[]{
@@ -81,6 +67,7 @@ public class Proveedor {
             this.last_name,
             this.phone,
             this.email,
+            this.state +" / "+ this.municipality +" / "+ this.street +" / "+ this.zip,
             this.date_register.format(DateTimeFormatter.ofPattern("yyyy-MM-dd / hh:mm:ss a")).concat(" / " + WEEKS[this.date_register.getDayOfWeek().getValue() - 1]),
         };
     }

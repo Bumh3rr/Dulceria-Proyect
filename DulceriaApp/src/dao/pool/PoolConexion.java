@@ -52,13 +52,14 @@ public class PoolConexion {
             //config.setPassword("Manuelromero20");
 
             // Configuraciones opcionales
-            config.setMaximumPoolSize(2); // Número máximo de conexiones
-            config.setMinimumIdle(1); // Número mínimo de conexiones inactivas
-            config.setIdleTimeout(Duration.ofSeconds(20).toMillis()); // Tiempo de inactividad en milisegundos
+            config.setMaximumPoolSize(3); // Número máximo de conexiones
+            config.setMinimumIdle(0); // Número mínimo de conexiones inactivas
+            config.setIdleTimeout(Duration.ofSeconds(30).toMillis()); // Tiempo de inactividad en milisegundos
             config.setConnectionTimeout(Duration.ofSeconds(5).toMillis()); // Tiempo de espera de conexión en milisegundos
             config.setLeakDetectionThreshold(Duration.ofSeconds(15).toMillis()); // Umbral de detección de fugas en milisegundos
 
             dataSource = new HikariDataSource(config);
+            dataSource.setLoginTimeout(Duration.ofMinutes(2).toSecondsPart());
 
         } catch (Exception e) {
             throw new Exception("Conexión inestable, verifica tu conexión", e);
@@ -78,5 +79,12 @@ public class PoolConexion {
             throw new Exception("Conexión fallida", e);
         }
     }
+
+    public  void closePool() {
+        if (dataSource != null && !dataSource.isClosed()) {
+            dataSource.close();
+        }
+    }
+
 
 }

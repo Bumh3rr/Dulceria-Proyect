@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="DulceriaApp">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/dist/DulceriaApp.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

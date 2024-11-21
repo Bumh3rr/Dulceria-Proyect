@@ -1,12 +1,11 @@
 package form.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import components.FieldTextArea;
 import components.MyLabelTitle;
 import components.MyTxtAreaDescrip;
-import dao.pool.PoolThreads;
 import form.FormProducts;
-import form.FormProveedor;
 import form.request.RequestProducto;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -14,10 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
+import model.Empleado;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import raven.extras.AvatarIcon;
-import raven.modal.Drawer;
 import raven.modal.ModalDialog;
 import raven.modal.component.ModalBorderAction;
 import raven.modal.component.SimpleModalBorder;
@@ -29,6 +28,7 @@ public class PanelInfoProducto extends JPanel {
     private FormProducts form;
     private Producto producto;
     private final String KEY = getClass().getName();
+    private JLabel estado;
 
     private FieldTextArea fieldProductNombre;
     private FieldTextArea fieldMarca;
@@ -41,7 +41,6 @@ public class PanelInfoProducto extends JPanel {
     private FieldTextArea fieldCategoria;
 
     private JButton buttonUpdate;
-    private JButton buttonDelete;
     private JButton buttonClose;
 
     public PanelInfoProducto(Producto producto, FormProducts form) {
@@ -66,6 +65,8 @@ public class PanelInfoProducto extends JPanel {
             fieldNombreProveedor.setTextField(producto.getProveedor().getFirst_name());
             fieldCategoria.setTextField(producto.getCategoria().getTipo());
 
+            changeStatusLabel(this.producto);
+            
         } catch (Exception e) {
             System.out.println(e.fillInStackTrace());
         }
@@ -73,7 +74,8 @@ public class PanelInfoProducto extends JPanel {
     }
 
     private void intComponents() {
-
+        estado = new JLabel();
+        
         fieldProductNombre = new FieldTextArea(producto.getNombre());
         fieldMarca = new FieldTextArea(producto.getMarca());
         fieldDescription = new FieldTextArea(producto.getDescripcion());
@@ -85,7 +87,6 @@ public class PanelInfoProducto extends JPanel {
         fieldCategoria = new FieldTextArea(producto.getCategoria().getTipo());
 
         buttonUpdate = new JButton("Actualizar");
-        buttonDelete = new JButton("Eliminar");
         buttonClose = new JButton("Cerrar") {
             @Override
             public boolean isDefaultButton() {
@@ -97,24 +98,23 @@ public class PanelInfoProducto extends JPanel {
 
     private void initListeners() {
         buttonUpdate.addActionListener((e) -> {
-            PanelRequestProducto panelAdd = new PanelRequestProducto(Request.INSERTS, producto, this);
+            PanelRequestProducto panelAdd = new PanelRequestProducto(Request.UPDATE, producto, this);
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
-                    new SimpleModalBorder(panelAdd, "Agregar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
+                    new SimpleModalBorder(panelAdd, "Actualizar Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
                         if (action == SimpleModalBorder.OK_OPTION) {
-                            panelAdd.commitInserts(controller);
+                            controller.consume();
+                            panelAdd.commitUpdate(controller);
                         } else if (action == SimpleModalBorder.CANCEL_OPTION) {
                             controller.close();
                         }
-                    }), ConfigModal.getModelShowDefault());
+                    }), ConfigModal.getModelShowRigth());
 
         });
 
-        buttonDelete.addActionListener((e) -> {
-            ModalBorderAction.getModalBorderAction(buttonDelete).doAction(SimpleModalBorder.CANCEL_OPTION);
-        });
         buttonClose.addActionListener((e) -> {
             ModalBorderAction.getModalBorderAction(buttonClose).doAction(SimpleModalBorder.CLOSE_OPTION);
         });
+
     }
 
     private void init() {
@@ -128,16 +128,14 @@ public class PanelInfoProducto extends JPanel {
         JPanel panel = new JPanel(new MigLayout("fill,wrap,insets 5 10 5 10", "[fill]"));
         panel.add(new MyLabelTitle(title, JLabel.LEFT, (4 - size)));
         panel.add(new MyTxtAreaDescrip(description), "grow 0");
+        changeStatusLabel(this.producto);
+        panel.add(estado, "grow 0");
         return panel;
     }
 
     private JComponent body() {
         JPanel panel = new JPanel(new MigLayout("wrap 2,fillx,insets 0 n 0 n", "fill", "fill"));
 
-        buttonDelete.putClientProperty(FlatClientProperties.STYLE, ""
-                + "background:#FF5733;"
-                + "foreground:#FFFFFF;"
-                + "font:bold +0");
         buttonUpdate.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:#FDC211;"
                 + "foreground:#FFFFFF;"
@@ -189,7 +187,6 @@ public class PanelInfoProducto extends JPanel {
     private JComponent createAccions() {
         JPanel panel = new JPanel(new MigLayout("fill,insets n", "fill"));
         panel.add(buttonUpdate);
-        panel.add(buttonDelete);
         panel.add(buttonClose);
         return panel;
     }
@@ -202,5 +199,14 @@ public class PanelInfoProducto extends JPanel {
                 + "font:13");
 
         return label;
+    }
+
+    public void changeStatusLabel(Producto producto) {
+        estado.setText(producto.getEstado().name());
+        estado.setIcon(new FlatSVGIcon((producto.getEstado().name().equals(Producto.Status.Disponible.name())) ? "resources/icon/ic_active.svg" : "resources/icon/ic_inactive.svg"));
+        estado.putClientProperty(FlatClientProperties.STYLE, ""
+                + "border:8,8,8,8;"
+                + "arc:$Component.arc;"
+                + ((producto.getEstado().name().equals(Producto.Status.Disponible.name())) ? "background:fade(#1aad2c,10%);" : "background:fade(#F17027,10%);"));
     }
 }
