@@ -283,57 +283,6 @@ public class PanelRequestEmpleado extends JPanel {
         return RequestEmpleado.addEmpleado(new Empleado(nombre, apellido, telefono, direccion, rfc, puesto, estado, sueldo, dateRegister));
     }
 
-    public void commitUpdate(ModalController controller) {
-        if (Toast.checkPromiseId(KEY)) {
-            controller.consume();
-            return;
-        }
-
-        Toast.showPromise(SwingUtilities.windowForComponent(this), "Actualización", Notify.getInstance().getSelectedOptionTop(),
-                new ToastPromise(KEY) {
-            @Override
-            public void execute(ToastPromise.PromiseCallback toas) {
-                try {
-                    toas.update("Verificando");
-                    if (update()) {
-                        new Thread(() -> formInfo.refreshFields()).start();
-                        toas.done(Toast.Type.SUCCESS, "Producto Actualizado Exitoxamente");
-                        controller.close();
-                    } else {
-                        toas.done(Toast.Type.ERROR, "Operación fallida");
-                    }
-
-                } catch (Exception e) {
-                    if (e.getMessage().contains("Data too long")) {
-                        toas.done(Toast.Type.WARNING, "Has Revasado el Limite de Caracteres\n"
-                                + e.getCause().toString());
-                    } else {
-                        toas.done(Toast.Type.ERROR, "Hubo un problema al Actualizar los datos del Empleado en la Base de datos"
-                                + "\nCausa: " + e.getCause().toString());
-                    }
-                    controller.consume();
-                }
-            }
-        });
-    }
-
-    private Boolean update() throws Exception {
-        Toast.closeAll();
-        if (toastIsEmptyCampos()) {
-            return false;
-        }
-        
-        empleado.setNombre(!inputNombre.getText().isEmpty() ? inputNombre.getText() : null);
-        empleado.setApellido(!inputApellido.getText().isEmpty() ? inputApellido.getText() : null);
-        empleado.setTelefono(inputPhone.getText());
-        empleado.setDireccion(inputDireccion.getText().isEmpty() ? null : inputDireccion.getText());
-        empleado.setRfc(inputRFC.getText().isEmpty() ? null : inputRFC.getText());
-        empleado.setPuesto(Empleado.Puesto.valueOf(inputPuesto.getSelectedItem().toString()));
-        empleado.setSueldo(inputSueldo.getValue() == null ? 0.00 : Double.valueOf(inputSueldo.getValue().toString()));
-
-        return RequestEmpleado.setEmpleado(empleado);
-    }
-
     private Boolean toastIsEmptyCampos() throws Exception {
         if (verifyInputEmpty(inputNombre, "Nombre")) {
             return true;

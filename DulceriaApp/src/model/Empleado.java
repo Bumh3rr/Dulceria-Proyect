@@ -48,6 +48,17 @@ public class Empleado {
         this.fecha_registro = fecha_registro;
     }
 
+    public Empleado(int idEmpleado, String nombre, String apellido) {
+        this.idEmpleado = idEmpleado;
+        this.nombre = nombre;
+        this.apellido = apellido;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + idEmpleado + " | Nombre: " + nombre + " " + apellido;
+    }
+
     public enum Status {
         Activo, Inactivo
     }

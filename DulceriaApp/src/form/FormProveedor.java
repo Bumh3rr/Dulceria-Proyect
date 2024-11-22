@@ -7,14 +7,11 @@ import components.Notify;
 import dao.pool.PoolThreads;
 import form.panels.PanelRequestSupplier;
 import form.request.ProveedorRequest;
-import java.awt.EventQueue;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,7 +25,7 @@ import raven.modal.ModalDialog;
 import raven.modal.Toast;
 import raven.modal.component.SimpleModalBorder;
 import system.Form;
-import utils.ConfigModal;
+import modal.ConfigModal;
 import utils.Promiseld;
 import utils.Request;
 /**

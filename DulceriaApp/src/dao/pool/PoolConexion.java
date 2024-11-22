@@ -38,18 +38,15 @@ public class PoolConexion {
         try {
             HikariConfig config = new HikariConfig();
             // Configuración de la conexión a la base de datos
-            config.setJdbcUrl("jdbc:mysql://usczjlneyqxrdref:EnUbzvDZDJ7Nqt0yHuCY@brgz2hmn59kjulcjaoig-mysql.services.clever-cloud.com:3306/brgz2hmn59kjulcjaoig");
-            config.setUsername("usczjlneyqxrdref");
-            config.setPassword("EnUbzvDZDJ7Nqt0yHuCY");
+//            config.setJdbcUrl("jdbc:mysql://usczjlneyqxrdref:EnUbzvDZDJ7Nqt0yHuCY@brgz2hmn59kjulcjaoig-mysql.services.clever-cloud.com:3306/brgz2hmn59kjulcjaoig");
+//            config.setUsername("usczjlneyqxrdref");
+//            config.setPassword("EnUbzvDZDJ7Nqt0yHuCY");
 
             //BD Emma MacAir
-//            config.setJdbcUrl("jdbc:mysql://localhost:3306/Dulceria");
-//            config.setUsername("root");
-//            config.setPassword("Manuelromero20");
+            config.setJdbcUrl("jdbc:mysql://localhost:3306/Dulceria");
+            config.setUsername("root");
+            config.setPassword("Manuelromero20");
 
-            //config.setJdbcUrl("jdbc:mysql://localhost:3306/Dulceria");
-            //config.setUsername("root");
-            //config.setPassword("Manuelromero20");
 
             // Configuraciones opcionales
             config.setMaximumPoolSize(3); // Número máximo de conexiones

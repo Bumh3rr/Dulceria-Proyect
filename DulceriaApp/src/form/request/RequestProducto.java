@@ -10,7 +10,7 @@ import model.Categoria;
 /**
  * Clase RequestProducto que maneja las solicitudes relacionadas con los productos.
  */
-public class RequestProducto {
+public class  RequestProducto {
 
     /**
      * Agrega un producto a la base de datos.
@@ -40,11 +40,21 @@ public class RequestProducto {
             try {
                 return ProductoDao.getAllProductosBD();
             } catch (Exception e) {
-                //gitouh
                 throw new Exception(e);
             }
         }).get();
     }
+
+    public static LinkedList<Producto> getAllProductosSimple() throws Exception {
+        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                return ProductoDao.getAllProductosSimpleBD();
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
+        }).get();
+    }
+
 
     public static Boolean setProducto(Producto producto) throws Exception {
         return PoolThreads.getInstance().getExecutorService().submit(() -> {

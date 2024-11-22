@@ -61,6 +61,7 @@ public class ProductoDao {
      * @throws Exception si hay un error durante la operación de la base de
      * datos
      */
+
     public static LinkedList<Producto> getAllProductosBD() throws Exception {
         String query = "SELECT * FROM PRODUCTO AS p "
                 + "JOIN CATEGORIA AS c ON c.id_Categoria = p.CATEGORIA_id_Categoria "
@@ -96,6 +97,34 @@ public class ProductoDao {
         return list;
     }
 
+    public static LinkedList<Producto> getAllProductosSimpleBD() throws Exception {
+        String query = "SELECT * FROM PRODUCTO AS p "
+                + "JOIN CATEGORIA AS c ON c.id_Categoria = p.CATEGORIA_id_Categoria "
+                + "JOIN PROVEEDOR AS prov ON prov.id_Proveedor = p.PROVEEDOR_id_Proveedor "
+                + "ORDER BY p.id_Prod DESC";
+
+        LinkedList<Producto> list = new LinkedList<>();
+        @Cleanup
+        Connection connection = PoolConexion.getInstance().getConnection();
+        @Cleanup
+        ResultSet rs = connection.prepareStatement(query).executeQuery();
+
+        while (rs.next()) {
+            list.add(new Producto(
+                    rs.getInt("p.id_Prod"),
+                    rs.getString("p.nombre_Prod"),
+                    rs.getString("p.marca"),
+                    rs.getString("p.descripcion"),
+                    rs.getInt("p.stock_Disp"),
+                    (rs.getBoolean("p.disponibilidad") ? Producto.Status.Disponible : Producto.Status.Agotado),
+                    rs.getDouble("p.precio_Compra"),
+                    rs.getDouble("p.precio_Venta"),
+                    new Categoria(rs.getInt("c.id_Categoria"),
+                            rs.getString("c.tipo")), null)
+            );
+        }
+        return list;
+    }
     public static LinkedList<Producto> getProductsByCategoriaAndEstadoBD(Categoria categoria, Producto.Status estado) throws Exception {
         StringBuilder query = new StringBuilder("SELECT * FROM PRODUCTO AS p "
                 + "JOIN CATEGORIA AS c ON c.id_Categoria = p.CATEGORIA_id_Categoria "

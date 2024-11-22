@@ -1,7 +1,7 @@
 package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import components.CardEmpleado;
+import modal.cards.CardEmpleado;
 import components.Notify;
 import dao.pool.PoolThreads;
 import form.panels.PanelInfoEmpleado;
@@ -23,7 +23,7 @@ import raven.modal.ModalDialog;
 import raven.modal.Toast;
 import raven.modal.component.SimpleModalBorder;
 import system.Form;
-import utils.ConfigModal;
+import modal.ConfigModal;
 import utils.Promiseld;
 import utils.Request;
 import utils.ResponsiveLayout;

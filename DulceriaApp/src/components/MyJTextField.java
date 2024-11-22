@@ -1,5 +1,7 @@
 package components;
 
+import com.formdev.flatlaf.extras.components.FlatTextField;
+
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -12,7 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
-public class MyJTextField extends JTextField {
+public class MyJTextField extends FlatTextField {
 
     private final JPopupMenu popupMenu = new JPopupMenu();
 

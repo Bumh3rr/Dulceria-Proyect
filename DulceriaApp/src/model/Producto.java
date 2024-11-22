@@ -41,9 +41,20 @@ public class Producto {
         this.categoria = categoria;
         this.proveedor = proveedor;
     }
+
+    public Object[] toObject() {
+        return new Object[]{id, nombre, stock, estado, precio_Compra, precio_Venta, categoria, proveedor};
+    }
     
     public enum Status{
         Disponible,Agotado
+    }
+
+
+    public  record ProductoSelect(int id,String nombre,int countSelect,double precio_Venta,double precioTotal) {
+        public Object[] toObject() {
+            return new Object[]{id, nombre, countSelect, precio_Venta, precioTotal};
+        }
     }
 
 }

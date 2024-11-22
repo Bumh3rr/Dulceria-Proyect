@@ -38,7 +38,7 @@ public class DulceriaApp extends JFrame {
         Notify.install(this);
         Drawer.installDrawer(this, new DrawerBuildDulceria());
         FormManager.getInstance().install(this);
-        setSize(new Dimension(1366, 768));
+        setSize(new Dimension(1440, 823));
         setLocationRelativeTo(null);
 
         ModalDialog.getDefaultOption()
