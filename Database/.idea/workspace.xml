@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ecac2fc8-33f2-4e37-bcf0-c054d98017c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../DulceriaApp/src/components/FieldSearch.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DulceriaApp/src/form/panels/PanelAddProductsBuy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DulceriaApp/src/modal/cards/CardProductBuy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/components/CardEmpleado$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/components/CardEmpleado.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/components/CardProducto$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/components/CardProducto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/dao/pool/PoolConexion.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/dao/pool/PoolConexion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$Table$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$Table$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$Table.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$Table.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormEmpleado.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormEmpleado.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormProducts.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormProducts.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$MethodPayment.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$MethodPayment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/system/FormManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/system/FormManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/components/CardEmpleado.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/modal/cards/CardEmpleado.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/components/CardProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/modal/cards/CardProducto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/form/FormBuys.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/form/FormBuys.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/form/FormEmpleado.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/form/FormEmpleado.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/form/FormProducts.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/form/FormProducts.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/form/panels/PanelRequestVenta.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/form/panels/PanelRequestVenta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/system/FormManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/system/FormManager.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2p9BWuWFlNG387J9U3Av1f0bX5n" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenDatabaseViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "patch",
+    "last_opened_file_path": "/Users/bumh3r",
+    "settings.editor.selected.configurable": "database.data.csv.formats"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
