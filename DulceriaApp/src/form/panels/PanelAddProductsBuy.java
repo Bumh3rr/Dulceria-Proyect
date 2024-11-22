@@ -1,20 +1,19 @@
 package form.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.extras.components.FlatSpinner;
+import com.formdev.flatlaf.extras.components.FlatScrollPane;
+import com.formdev.flatlaf.extras.components.FlatTable;
 import components.FieldSearch;
 import components.MyScrollPane;
 import form.request.RequestProducto;
-import modal.ConfigModal;
 import modal.cards.CardProductBuy;
-import modal.cards.CardProducto;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
-import raven.modal.component.SimpleModalBorder;
 import utils.ResponsiveLayout;
-
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.function.Consumer;
@@ -32,13 +31,15 @@ public class PanelAddProductsBuy extends JPanel {
     private JPanel panelProductos;
     private JScrollPane scrollProductos;
 
+    private Table panelTable;
+
     public PanelAddProductsBuy() {
         initComponents();
         initListeners();
         initUI();
 
         try {
-            listProducts =  RequestProducto.getAllProductos();
+            listProducts = RequestProducto.getAllProductos();
             refreshPanelProductos(listProducts);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -55,6 +56,7 @@ public class PanelAddProductsBuy extends JPanel {
             public boolean isDefaultButton() {
                 return true;
             }
+
             @Override
             public void updateUI() {
                 putClientProperty(FlatClientProperties.STYLE, ""
@@ -62,12 +64,17 @@ public class PanelAddProductsBuy extends JPanel {
                 super.updateUI();
             }
         };
-    }
+        panelTable = new Table();
 
+    }
 
     private void initListeners() {
         buttonShowProductsAll.addActionListener(e -> {
 
+        });
+
+        buttonBack.addActionListener((e)->{
+            ModalDialog.popModel(PanelRequestVenta.ID);
         });
 
     }
@@ -75,37 +82,26 @@ public class PanelAddProductsBuy extends JPanel {
     private void initUI() {
         setLayout(new MigLayout("fill,insets 0 n n n"));
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets n,width 850:1300", "fill", "[]20[]"));
-        panel.add(createPanelSeach(),"");
-        panel.add(createProductsContainers(),"h 500!");
-        panel.add(createDetails());
+        panel.add(createPanelSeach(), "");
+        panel.add(createProductsContainers(), "h 250!");
+        panel.add(panelTable,"grow");
         panel.add(buttonBack, "grow 0,al trail");
         add(new MyScrollPane(panel));
         updateUI();
         revalidate();
     }
 
-    private JComponent createDetails() {
-        JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 10", "fill", "[]20[]"));
-        panel.putClientProperty(FlatClientProperties.STYLE, ""
-                + "background:null");
-        panel.add(new JLabel("Detalles de la Venta"), "wrap,al lead");
-        panel.add(new JLabel("Productos Seleccionados"), "wrap,al lead");
-        panel.add(new JLabel("Total a Pagar"), "wrap,al lead");
-        return panel;
-    }
-
     private JComponent createPanelSeach() {
-        JPanel panel = new JPanel(new MigLayout("fillx, insets 3","[grow,fill]5[grow 0][grow 0]",""));
+        JPanel panel = new JPanel(new MigLayout("fillx, insets 3", "[grow,fill]5[grow 0][grow 0]", ""));
         panel.add(inputSearch);
         panel.add(buttonSearch);
         panel.add(buttonShowProductsAll);
         return panel;
     }
 
-
     private JComponent createProductsContainers() {
-        responsiveLayout = new ResponsiveLayout(ResponsiveLayout.JustifyContent.START, new Dimension(-1, -1), 10, 10);
-        responsiveLayout.setColumn(7);
+        responsiveLayout = new ResponsiveLayout(ResponsiveLayout.JustifyContent.FIT_CONTENT, new Dimension(-1, -1), 10, 10);
+//        responsiveLayout.setColumn(5);
         panelProductos = new JPanel(responsiveLayout);
         panelProductos.putClientProperty(FlatClientProperties.STYLE, ""
                 + "[light]background:darken(@background,3%);"
@@ -140,17 +136,116 @@ public class PanelAddProductsBuy extends JPanel {
         EventQueue.invokeLater(() -> scrollProductos.getVerticalScrollBar().setValue(0));
     }
 
-    private Consumer<Producto> createEventCard() {
+    private Consumer<Producto.ProductoSelect> createEventCard() {
         return e -> {
-            // Ver información
-//            PanelInfoProducto panel = new PanelInfoProducto(e, this);
-//            ModalDialog.showModal(this,
-//                    new SimpleModalBorder(panel, "Información del Producto", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
-//                        if (action == SimpleModalBorder.CLOSE_OPTION) {
-//                            controller.close();
-//                        }
-//                    }), ConfigModal.getModelShowDefault());
+           PanelRequestVenta.listProductsSelect.add(e);
+            panelTable.setData(PanelRequestVenta.listProductsSelect);
         };
-
     }
+
+
+    public static class Table extends JPanel {
+
+        private JTable table;
+        private JScrollPane scrollPane;
+        private DefaultTableModel model;
+        private String[] columnNames = {"ID Producto", "Nombre", "Cantidad", "Preció venta", "Precio Total"};
+
+        /**
+         * Constructor de Table.
+         */
+        public Table() {
+            initComponentsTable();
+            initTable();
+        }
+
+        /**
+         * Inicializa los componentes de la tabla.
+         */
+        private void initComponentsTable() {
+            table = new FlatTable();
+            scrollPane = new FlatScrollPane();
+            model = new DefaultTableModel(columnNames, 0) {
+                boolean[] canEdit = new boolean[]{
+                        false, false, false, false, false
+                };
+
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit[columnIndex];
+                }
+            };
+        }
+
+        /**
+         * Inicializa la tabla.
+         */
+        private void initTable() {
+            setLayout(new MigLayout("wrap,fillx,insets n", "fill","grow 0"));
+            putClientProperty(FlatClientProperties.STYLE, ""
+                    + "arc:16;"
+                    + "background:$Table.background");
+
+            scrollPane.setBorder(BorderFactory.createEmptyBorder());
+            table.setModel(model);
+
+            //Size fields
+            table.getColumnModel().getColumn(0).setMaxWidth(60);
+            table.getColumnModel().getColumn(1).setPreferredWidth(90);
+            table.getColumnModel().getColumn(2).setPreferredWidth(60);
+            table.getColumnModel().getColumn(3).setPreferredWidth(50);
+            table.getColumnModel().getColumn(4).setPreferredWidth(50);
+
+
+            //Center Data
+            DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
+            defaultTableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+            for (int i = 0; i < table.getColumnCount(); i++) {
+                table.getColumnModel().getColumn(i).setCellRenderer(defaultTableCellRenderer);
+            }
+
+            //Styles
+            table.getTableHeader().putClientProperty(FlatClientProperties.STYLE, ""
+                    + "height:30;"
+                    + "hoverBackground:null;"
+                    + "pressedBackground:fade($Component.accentColor,5%);"
+                    + "separatorColor:$TableHeader.background;");
+            table.putClientProperty(FlatClientProperties.STYLE, ""
+                    + "rowHeight:40;"
+                    + "showHorizontalLines:true;"
+                    + "intercellSpacing:0,1;"
+                    + "selectionArc:20;"
+                    + "cellFocusColor:$TableHeader.hoverBackground;"
+                    + "selectionBackground:fade($Component.accentColor,10%);"
+                    + "selectionInactiveBackground:$TableHeader.hoverBackground;"
+                    + "selectionForeground:$Table.foreground;");
+
+            scrollPane.setViewportView(table);
+
+            add(scrollPane);
+            updateUI();
+            revalidate();
+        }
+
+        /**
+         * Establece los datos de la tabla.
+         *
+         * @param listProductos una lista de objetos Producto.ProductoSelect
+         */
+        public void setData(LinkedList<Producto.ProductoSelect> listProductos) {
+            cleanData();
+            for (Producto.ProductoSelect productos : listProductos) {
+                model.addRow(productos.toObject());
+            }
+        }
+
+        /**
+         * Limpia los datos de la tabla.
+         */
+        public void cleanData() {
+            while (model.getRowCount() > 0) {
+                model.removeRow(0);
+            }
+        }
+    }
+
 }

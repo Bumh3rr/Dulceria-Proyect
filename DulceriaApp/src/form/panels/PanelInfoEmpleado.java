@@ -265,37 +265,6 @@ public class PanelInfoEmpleado extends JPanel {
     }
 
     /**
-     * Realiza la baja o activación del empleado.
-     *
-     * @param id El ID del empleado.
-     * @param request El estado solicitado para el empleado.
-     */
-    public void commitLow(int id, Empleado.Status request) {
-        if (Toast.checkPromiseId(KEY)) {
-            return;
-        }
-
-        Toast.showPromise(SwingUtilities.windowForComponent(this), (empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? "Baja" : "Remover Baja", Notify.getInstance().getSelectedOption(),
-                new ToastPromise(KEY) {
-                    @Override
-                    public void execute(ToastPromise.PromiseCallback toas) {
-                        try {
-                            toas.update("Verificando");
-                            if (RequestEmpleado.setDateLowEmpleado(id, (empleado.getEstado().name().equals(Empleado.Status.Activo.name())) ? null : Timestamp.valueOf(LocalDateTime.now()))) {
-                                new Thread(() -> form.formOpen()).start();
-                                refreshFields();
-                                toas.done(Toast.Type.SUCCESS, "Operación Exitosamente");
-                            } else {
-                                toas.done(Toast.Type.ERROR, "Operación fallida");
-                            }
-                        } catch (Exception e) {
-                            toas.done(Toast.Type.ERROR, e.getLocalizedMessage());
-                        }
-                    }
-                });
-    }
-
-    /**
      * Cambia el estado del JLabel que muestra el estado del empleado.
      *
      * @param empleado El objeto Empleado con la información del estado.

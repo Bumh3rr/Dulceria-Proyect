@@ -5,6 +5,8 @@ import com.formdev.flatlaf.extras.components.FlatComboBox;
 import components.ButtonIcon;
 import components.MyJTextField;
 import components.MyScrollPane;
+import components.Notify;
+import form.request.RequestEmpleado;
 import form.request.RequestProducto;
 import modal.CustomModal;
 import model.Empleado;
@@ -21,6 +23,7 @@ import java.util.List;
 public class PanelRequestVenta extends JPanel {
     public static String ID = "PanelRequestVenta";
 
+    private LinkedList<Empleado> listaEmpleado;
     private JLabel tituleCliente;
     private JLabel tituleProducto;
     private JLabel tituleDetails;
@@ -28,6 +31,7 @@ public class PanelRequestVenta extends JPanel {
     private static JLabel label_cantidadProductos;
     public static LinkedList<Producto> listProducts;
     private static PanelAddProductsBuy panelAddProductsBuy;
+    public static LinkedList<Producto.ProductoSelect> listProductsSelect;
 
     private FlatComboBox<MethodPayment> comboBoxMethodPayment;
     private FlatComboBox<Empleado> comboBoxEmpleado;
@@ -36,14 +40,28 @@ public class PanelRequestVenta extends JPanel {
     private JButton buttonAddBuy;
     private JButton buttonCancelBuy;
 
+
+
     public PanelRequestVenta() {
         initComponents();
         initListeners();
         init();
-
+        addItemsEmpleados();
     }
+
+    private void addItemsEmpleados() {
+        try {
+            listaEmpleado = RequestEmpleado.getAllEmpleadosSimple();
+            for (Empleado empleado : listaEmpleado){
+                comboBoxEmpleado.addItem(empleado);
+            }
+        }catch (Exception e){
+        }
+    }
+
     private void initComponents() {
-        listProducts = new LinkedList<>();
+        listProductsSelect =new LinkedList<>();
+        listaEmpleado =new LinkedList<>();
         SwingUtilities.invokeLater(() -> panelAddProductsBuy =new PanelAddProductsBuy());
 
         tituleCliente = new JLabel("Detalles del Cliente");
@@ -95,8 +113,6 @@ public class PanelRequestVenta extends JPanel {
 
         });
     }
-
-
     private void init() {
         setLayout(new MigLayout("fillx,wrap,insets 0"));
         add(cardBuy(), "al center");

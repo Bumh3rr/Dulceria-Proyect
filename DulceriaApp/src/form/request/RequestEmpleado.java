@@ -29,33 +29,19 @@ public class RequestEmpleado {
         }).get();
        
     }
-    
-    public static Boolean setEmpleado(Empleado empleado) throws Exception {
-//        return PoolThreads.getInstance().getExecutorService().submit(() -> {
-//            try {
-//                return ProveedorDao.addProveedorBD(proveedor);
-//            } catch (Exception e) {
-//                throw new Exception(e);
-//            }
-//        }).get();
-        return false;
-    }
-    
-    public static Boolean setDateLowEmpleado(int idEmpleado,Timestamp dateTime) throws Exception {
-//        return PoolThreads.getInstance().getExecutorService().submit(() -> {
-//            try {
-//                return ProveedorDao.addProveedorBD(proveedor);
-//            } catch (Exception e) {
-//                throw new Exception(e);
-//            }
-//        }).get();
-        return false;
-    }
-
     public static LinkedList<Empleado> getAllEmpleados()throws Exception{
         return PoolThreads.getInstance().getExecutorService().submit(() -> {
             try {
                 return EmpleadoDao.getAllEmpleadosBD();
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
+        }).get();
+    }
+    public static LinkedList<Empleado> getAllEmpleadosSimple()throws Exception{
+        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                return EmpleadoDao.getAllEmpleadosSimpleBD();
             } catch (Exception e) {
                 throw new Exception(e);
             }
