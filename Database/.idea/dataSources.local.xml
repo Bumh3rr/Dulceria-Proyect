@@ -14,8 +14,9 @@
         <introspection-scope>
           <node kind="schema">
             <name qname="@" />
-            <name qname="prueba" />
             <name qname="Dulceria" />
+            <name qname="FlipFlopTool" />
+            <name qname="prueba" />
           </node>
         </introspection-scope>
       </schema-mapping>

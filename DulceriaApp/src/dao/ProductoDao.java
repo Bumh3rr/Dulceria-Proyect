@@ -101,6 +101,7 @@ public class ProductoDao {
         String query = "SELECT * FROM PRODUCTO AS p "
                 + "JOIN CATEGORIA AS c ON c.id_Categoria = p.CATEGORIA_id_Categoria "
                 + "JOIN PROVEEDOR AS prov ON prov.id_Proveedor = p.PROVEEDOR_id_Proveedor "
+                + "WHERE p.disponibilidad = 1 "
                 + "ORDER BY p.id_Prod DESC";
 
         LinkedList<Producto> list = new LinkedList<>();

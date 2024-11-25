@@ -1,21 +1,23 @@
 package dao;
+
 import dao.pool.PoolConexion;
+
 import java.sql.Connection;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import model.Ventas;
+
+import model.Venta;
 import com.google.gson.Gson;
 import model.DetalleVenta;
 import lombok.Cleanup;
+
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class VentasDao {
 
-    public static void registerSale(Ventas venta, List<DetalleVenta> detalles) throws Exception {
-        String query = "{CALL RegisterSale(?, ?, ?, ?, ?)}";
+    public static Boolean registerSaleBD(Venta venta, List<DetalleVenta> detalles) throws Exception {
+        String query = "{CALL RegisterSale( ?, ?, ?, ?, ?)}";
         Gson gson = new Gson();
         String detalleJson = gson.toJson(detalles);
 
@@ -31,10 +33,10 @@ public class VentasDao {
             CallableStatement stmt = conn.prepareCall(query);
 
             // Establecer los parámetros de entrada
-            stmt.setInt(1, venta.getId_Cliente()); // ID del cliente
-            stmt.setInt(2, venta.getId_Trab());    // ID del empleado
-            stmt.setDouble(3, venta.getTotal_venta()); // Total de la venta
-            stmt.setTimestamp(4, new Timestamp(venta.getFecha_venta().getDayOfMonth())); // Fecha de la venta
+            stmt.setInt(1, venta.getId_Empleado());    // ID del empleado
+            stmt.setDouble(2, venta.getTotal_venta()); // Total de la venta
+            stmt.setTimestamp(3, Timestamp.valueOf(venta.getFecha_venta())); // Fecha de la venta
+            stmt.setString(4, venta.getMethodPayment()); // Detalle de la venta en formato JSON
             stmt.setString(5, detalleJson); // Detalle de la venta en formato JSON
 
             // Ejecutar el procedimiento almacenado
@@ -44,7 +46,7 @@ public class VentasDao {
             conn.commit();
 
             System.out.println("Venta registrada exitosamente.");
-
+            return true;
         } catch (SQLException e) {
             // En caso de error, revertir la transacción
             if (conn != null) {

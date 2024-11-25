@@ -6,40 +6,48 @@ import components.ButtonIcon;
 import components.MyJTextField;
 import components.MyScrollPane;
 import components.Notify;
+import dao.pool.PoolThreads;
 import form.request.RequestEmpleado;
-import form.request.RequestProducto;
+import form.request.RequestVenta;
 import modal.CustomModal;
-import model.Empleado;
-import model.Producto;
+import model.*;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
+import raven.modal.Toast;
+import raven.modal.listener.ModalController;
+import raven.modal.toast.ToastPromise;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.SwingUtilities;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
+import javax.swing.JSeparator;
 import java.awt.*;
-import java.util.ArrayList;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class PanelRequestVenta extends JPanel {
     public static String ID = "PanelRequestVenta";
+    private final String KEY = getClass().getName();
 
-    private LinkedList<Empleado> listaEmpleado;
-    private JLabel tituleCliente;
     private JLabel tituleProducto;
     private JLabel tituleDetails;
-    private static JLabel label_precioTotal;
-    private static JLabel label_cantidadProductos;
-    public static LinkedList<Producto> listProducts;
+    private JLabel label_precioTotal;
+    private JLabel label_cantidadProductos;
+
     private static PanelAddProductsBuy panelAddProductsBuy;
     public static LinkedList<Producto.ProductoSelect> listProductsSelect;
 
     private FlatComboBox<MethodPayment> comboBoxMethodPayment;
     private FlatComboBox<Empleado> comboBoxEmpleado;
-    private MyJTextField inputNameCliente;
     private ButtonIcon buttonAddProducts;
     private JButton buttonAddBuy;
     private JButton buttonCancelBuy;
-
 
 
     public PanelRequestVenta() {
@@ -50,33 +58,34 @@ public class PanelRequestVenta extends JPanel {
     }
 
     private void addItemsEmpleados() {
-        try {
-            listaEmpleado = RequestEmpleado.getAllEmpleadosSimple();
-            for (Empleado empleado : listaEmpleado){
-                comboBoxEmpleado.addItem(empleado);
+        PoolThreads.getInstance().getExecutorService().execute(() -> {
+            try {
+                LinkedList<Empleado> listaEmpleado = RequestEmpleado.getAllEmpleadosSimple();
+                for (Empleado empleado : listaEmpleado) {
+                    comboBoxEmpleado.addItem(empleado);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-        }catch (Exception e){
-        }
+        });
     }
 
     private void initComponents() {
-        listProductsSelect =new LinkedList<>();
-        listaEmpleado =new LinkedList<>();
-        SwingUtilities.invokeLater(() -> panelAddProductsBuy =new PanelAddProductsBuy());
+        listProductsSelect = new LinkedList<>();
+        panelAddProductsBuy = new PanelAddProductsBuy();
 
-        tituleCliente = new JLabel("Detalles del Cliente");
-        tituleProducto =new JLabel("Productos");
+        tituleProducto = new JLabel("Productos");
         tituleDetails = new JLabel("Detalles de la Venta");
-        inputNameCliente = new MyJTextField();
 
-        comboBoxMethodPayment =new FlatComboBox<>();
+        comboBoxMethodPayment = new FlatComboBox<>();
         comboBoxMethodPayment.setModel(new DefaultComboBoxModel<>(MethodPayment.values()));
-        comboBoxEmpleado =new FlatComboBox<>();
+        comboBoxEmpleado = new FlatComboBox<>();
+
         label_cantidadProductos = new JLabel("0");
         label_precioTotal = new JLabel("0.00");
 
-        buttonAddProducts = new ButtonIcon("Agregar Productos","resources/icon/ic_buys.svg",0.4f, 3);
-        buttonCancelBuy = new JButton("Cancelar Venta"){
+        buttonAddProducts = new ButtonIcon("Agregar Productos", "resources/icon/ic_buys.svg", 0.4f, 3);
+        buttonCancelBuy = new JButton("Cancelar Venta") {
             @Override
             public void updateUI() {
                 putClientProperty(FlatClientProperties.STYLE, ""
@@ -86,11 +95,12 @@ public class PanelRequestVenta extends JPanel {
                 super.updateUI();
             }
         };
-        buttonAddBuy = new JButton("Realizar Venta"){
+        buttonAddBuy = new JButton("Realizar Venta") {
             @Override
             public boolean isDefaultButton() {
                 return true;
             }
+
             @Override
             public void updateUI() {
                 putClientProperty(FlatClientProperties.STYLE, ""
@@ -99,20 +109,39 @@ public class PanelRequestVenta extends JPanel {
             }
         };
     }
+
+
+    private Consumer<Boolean> createMethodBack() {
+        return e -> {
+            if (e) {
+                label_precioTotal.setText(new DecimalFormat("#,###.00").format(listProductsSelect.stream().mapToDouble(Producto.ProductoSelect::precioTotal).sum()));
+                label_cantidadProductos.setText(String.valueOf(listProductsSelect.stream().mapToInt(Producto.ProductoSelect::countSelect).sum()));
+            }
+        };
+    }
+
     private void initListeners() {
         buttonAddProducts.addActionListener(e -> {
-            ModalDialog.pushModal(new CustomModal(panelAddProductsBuy, "Agregar Productos", "resources/icon/ic_buys.svg"),
+            ModalDialog.pushModal(new CustomModal(panelAddProductsBuy,
+                            "Agregar Productos", "resources/icon/ic_buys.svg", PanelRequestVenta.ID, createMethodBack()),
                     PanelRequestVenta.ID);
         });
+
+
         buttonCancelBuy.addActionListener(e -> {
             ModalDialog.closeModal(PanelRequestVenta.ID);
-            SwingUtilities.invokeLater(() ->{
-                listProducts = new LinkedList<>();
+            SwingUtilities.invokeLater(() -> {
+                listProductsSelect = new LinkedList<>();
                 panelAddProductsBuy = new PanelAddProductsBuy();
             });
 
         });
+
+        buttonAddBuy.addActionListener((e) -> commitSale());
+
     }
+
+
     private void init() {
         setLayout(new MigLayout("fillx,wrap,insets 0"));
         add(cardBuy(), "al center");
@@ -125,22 +154,11 @@ public class PanelRequestVenta extends JPanel {
         panel.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:null");
 
-        tituleCliente.putClientProperty(FlatClientProperties.STYLE, ""
-                + "font:bold +3");
         tituleProducto.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:bold +3");
         tituleDetails.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:bold +3");
 
-        inputNameCliente.setPlaceholderText("Nombre del Cliente (Opcional)");
-        inputNameCliente.putClientProperty(FlatClientProperties.STYLE, ""
-                + "showClearButton:true");
-
-        panel.add(tituleCliente, "wrap,al lead,gapy 10");
-        panel.add(getLabel("Nombre:"));
-        panel.add(inputNameCliente);
-
-        panel.add(new JSeparator(), "span 2,gapy 5,grow 1");
         panel.add(tituleProducto, "wrap,gapy 5,al lead");
         panel.add(getLabel("Productos:"));
         panel.add(buttonAddProducts);
@@ -164,8 +182,68 @@ public class PanelRequestVenta extends JPanel {
         return new JLabel(text, JLabel.RIGHT);
     }
 
+    private Boolean toastIsEmptyCampos() throws Exception {
+        if (listProductsSelect.isEmpty()) {
+            Notify.getInstance().showToast(Toast.Type.WARNING, "No se han seleccionado productos para la venta.");
+            return true;
+        }
+        return false;
+    }
 
-    public static enum MethodPayment {
+
+    public void commitSale() {
+        if (Toast.checkPromiseId(KEY)) {
+            return;
+        }
+
+        Toast.showPromise(SwingUtilities.windowForComponent(this), "Agregar", Notify.getInstance().getSelectedOption(),
+                new ToastPromise(KEY) {
+                    @Override
+                    public void execute(ToastPromise.PromiseCallback toas) {
+                        try {
+                            toas.update("Verificando");
+                            if (createSale()) {
+                                toas.done(Toast.Type.SUCCESS, "Venta Realizada con Éxito");
+                                ModalDialog.closeModal(PanelRequestVenta.ID);
+                            } else {
+                                toas.done(Toast.Type.ERROR, "Operación fallida");
+                            }
+                        } catch (Exception e) {
+                            if (e.getMessage().contains("Data too long")) {
+                                toas.done(Toast.Type.WARNING, "Has Revasado el Limite de Caracteres\n"
+                                        + e.getLocalizedMessage());
+                            } else {
+                                toas.done(Toast.Type.ERROR, "Hubo un problema al Proveedor ala base de datos"
+                                        + "\nCausa: " + e.getLocalizedMessage());
+                            }
+                        }
+                    }
+                });
+    }
+
+    private Boolean createSale() throws Exception {
+        Toast.closeAll();
+        if (toastIsEmptyCampos()) {
+            return false;
+        }
+        Empleado empleado = (Empleado) comboBoxEmpleado.getSelectedItem();
+        MethodPayment methodPayment = (MethodPayment) comboBoxMethodPayment.getSelectedItem();
+
+        System.out.println(empleado);
+        System.out.println(methodPayment);
+
+        double venta_total = listProductsSelect.stream().mapToDouble(Producto.ProductoSelect::precioTotal).sum();
+
+        Venta venta = new Venta(venta_total, empleado.getIdEmpleado(), LocalDateTime.now(), methodPayment.getValue());
+
+        List<DetalleVenta> list = listProductsSelect.stream().map(productoSelect ->
+                new DetalleVenta(productoSelect.id(), productoSelect.countSelect(), productoSelect.precio_Venta(), productoSelect.precioTotal())).toList();
+        return RequestVenta.registerSale(venta, list);
+
+    }
+
+
+    public enum MethodPayment {
         EFECTIVO("Efectivo"),
         TARJETA("Tarjeta"),
         TRANSFERENCIA("Transferencia");
@@ -178,6 +256,11 @@ public class PanelRequestVenta extends JPanel {
 
         public String getValue() {
             return value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
         }
     }
 }

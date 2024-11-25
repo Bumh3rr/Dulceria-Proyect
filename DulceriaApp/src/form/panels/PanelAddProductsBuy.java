@@ -5,27 +5,27 @@ import com.formdev.flatlaf.extras.components.FlatScrollPane;
 import com.formdev.flatlaf.extras.components.FlatTable;
 import components.FieldSearch;
 import components.MyScrollPane;
+import dao.pool.PoolThreads;
 import form.request.RequestProducto;
 import modal.cards.CardProductBuy;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
 import utils.ResponsiveLayout;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
-import static form.panels.PanelRequestVenta.listProducts;
+import static form.panels.PanelRequestVenta.listProductsSelect;
+
 
 public class PanelAddProductsBuy extends JPanel {
-    private FieldSearch inputSearch;
-    private JButton buttonBack;
-
-    private JButton buttonShowProductsAll;
-    private JButton buttonSearch;
 
     private ResponsiveLayout responsiveLayout;
     private JPanel panelProductos;
@@ -35,73 +35,40 @@ public class PanelAddProductsBuy extends JPanel {
 
     public PanelAddProductsBuy() {
         initComponents();
-        initListeners();
         initUI();
+        addProductos();
+    }
 
-        try {
-            listProducts = RequestProducto.getAllProductos();
-            refreshPanelProductos(listProducts);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    private void addProductos() {
+        PoolThreads.getInstance().getExecutorService().execute(() -> {
+            try {
+                LinkedList<Producto> list = RequestProducto.getAllProductosSimple();
+                refreshPanelProductos(list);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
 
     private void initComponents() {
-        buttonShowProductsAll = new JButton("Show All");
-        inputSearch = new FieldSearch();
-        buttonBack = new JButton("Volver");
-        buttonSearch = new JButton("Buscar") {
-            @Override
-            public boolean isDefaultButton() {
-                return true;
-            }
-
-            @Override
-            public void updateUI() {
-                putClientProperty(FlatClientProperties.STYLE, ""
-                        + "foreground:#FFFFFF;");
-                super.updateUI();
-            }
-        };
         panelTable = new Table();
-
     }
 
-    private void initListeners() {
-        buttonShowProductsAll.addActionListener(e -> {
-
-        });
-
-        buttonBack.addActionListener((e)->{
-            ModalDialog.popModel(PanelRequestVenta.ID);
-        });
-
-    }
 
     private void initUI() {
-        setLayout(new MigLayout("fill,insets 0 n n n"));
-        JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets n,width 850:1300", "fill", "[]20[]"));
-        panel.add(createPanelSeach(), "");
-        panel.add(createProductsContainers(), "h 250!");
-        panel.add(panelTable,"grow");
-        panel.add(buttonBack, "grow 0,al trail");
+        setLayout(new MigLayout("fillx,insets 0 n n n", "fill"));
+        JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets n,width 850:1200", "fill"));
+        panel.add(createProductsContainers(), "h 320!");
+        panel.add(panelTable, "grow,h 200:220");
         add(new MyScrollPane(panel));
-        updateUI();
         revalidate();
+        updateUI();
     }
 
-    private JComponent createPanelSeach() {
-        JPanel panel = new JPanel(new MigLayout("fillx, insets 3", "[grow,fill]5[grow 0][grow 0]", ""));
-        panel.add(inputSearch);
-        panel.add(buttonSearch);
-        panel.add(buttonShowProductsAll);
-        return panel;
-    }
 
     private JComponent createProductsContainers() {
         responsiveLayout = new ResponsiveLayout(ResponsiveLayout.JustifyContent.FIT_CONTENT, new Dimension(-1, -1), 10, 10);
-//        responsiveLayout.setColumn(5);
         panelProductos = new JPanel(responsiveLayout);
         panelProductos.putClientProperty(FlatClientProperties.STYLE, ""
                 + "[light]background:darken(@background,3%);"
@@ -131,15 +98,17 @@ public class PanelAddProductsBuy extends JPanel {
         for (Producto producto : list) {
             panelProductos.add(new CardProductBuy(producto, createEventCard()));
         }
-        panelProductos.repaint();
         panelProductos.revalidate();
         EventQueue.invokeLater(() -> scrollProductos.getVerticalScrollBar().setValue(0));
+        panelProductos.updateUI();
+        updateUI();
     }
 
     private Consumer<Producto.ProductoSelect> createEventCard() {
         return e -> {
-           PanelRequestVenta.listProductsSelect.add(e);
-            panelTable.setData(PanelRequestVenta.listProductsSelect);
+            listProductsSelect.remove(listProductsSelect.stream().filter(productoSelect -> productoSelect.id() == e.id()).findFirst().orElse(null));
+            listProductsSelect.add(e);
+            panelTable.setData(listProductsSelect);
         };
     }
 
@@ -180,7 +149,7 @@ public class PanelAddProductsBuy extends JPanel {
          * Inicializa la tabla.
          */
         private void initTable() {
-            setLayout(new MigLayout("wrap,fillx,insets n", "fill","grow 0"));
+            setLayout(new MigLayout("wrap,fillx,insets n", "fill"));
             putClientProperty(FlatClientProperties.STYLE, ""
                     + "arc:16;"
                     + "background:$Table.background");

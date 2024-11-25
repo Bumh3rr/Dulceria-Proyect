@@ -7,15 +7,22 @@ import com.formdev.flatlaf.extras.components.FlatTable;
 import form.panels.PanelRequestVenta;
 import modal.ConfigModal;
 import modal.CustomModal;
+import model.Producto;
 import model.Proveedor;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
 import system.Form;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JComponent;
+import javax.swing.BorderFactory;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class FormBuys extends Form {
     private Table panelTable;
@@ -31,20 +38,19 @@ public class FormBuys extends Form {
     private void initComponents() {
         panelTable = new Table();
         button_view = new JButton("Visualizar Venta");
-        button_create = new JButton("Realizar Venta"){
+        button_create = new JButton("Realizar Venta") {
             @Override
             public boolean isDefaultButton() {
                 return true;
             }
         };
     }
+
     private void initListeners() {
         button_create.addActionListener(e -> {
             showPanelNewBuy();
         });
     }
-
-
 
     private void init() {
         setLayout(new MigLayout("fillx,wrap,insets 7 15 7 15", "[fill]"));
@@ -64,28 +70,23 @@ public class FormBuys extends Form {
     }
 
     private JComponent createButtonsAcciones() {
-            JPanel panel = new JPanel(new MigLayout("fill", "fill"));
-            panel.putClientProperty(FlatClientProperties.STYLE, ""
-                    + "background:null");
-            button_create.putClientProperty(FlatClientProperties.STYLE, ""
-                    + "foreground:#FFFFFF");
-            panel.add(button_view);
-            panel.add(button_create);
-            return panel;
-        }
-
-
+        JPanel panel = new JPanel(new MigLayout("fill", "fill"));
+        panel.putClientProperty(FlatClientProperties.STYLE, ""
+                + "background:null");
+        button_create.putClientProperty(FlatClientProperties.STYLE, ""
+                + "foreground:#FFFFFF");
+        panel.add(button_view);
+        panel.add(button_create);
+        return panel;
+    }
 
     private void showPanelNewBuy() {
-        ModalDialog.showModal(this, new CustomModal(new PanelRequestVenta(), "Realizar Venta", "resources/icon/ic_newNote.svg"),
+        ModalDialog.showModal(this,
+                new CustomModal(new PanelRequestVenta(), "Realizar Venta", "resources/icon/ic_newNote.svg"),
                 ConfigModal.getModelShowModalPush(), PanelRequestVenta.ID);
     }
 
-
-
-
     public static class Table extends JPanel {
-
         private JTable table;
         private JScrollPane scrollPane;
         private DefaultTableModel model;

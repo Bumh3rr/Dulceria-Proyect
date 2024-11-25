@@ -38,25 +38,24 @@ public class PoolConexion {
         try {
             HikariConfig config = new HikariConfig();
             // Configuración de la conexión a la base de datos
-//            config.setJdbcUrl("jdbc:mysql://usczjlneyqxrdref:EnUbzvDZDJ7Nqt0yHuCY@brgz2hmn59kjulcjaoig-mysql.services.clever-cloud.com:3306/brgz2hmn59kjulcjaoig");
-//            config.setUsername("usczjlneyqxrdref");
-//            config.setPassword("EnUbzvDZDJ7Nqt0yHuCY");
+            config.setJdbcUrl("jdbc:mysql://usczjlneyqxrdref:EnUbzvDZDJ7Nqt0yHuCY@brgz2hmn59kjulcjaoig-mysql.services.clever-cloud.com:3306/brgz2hmn59kjulcjaoig");
+            config.setUsername("usczjlneyqxrdref");
+            config.setPassword("EnUbzvDZDJ7Nqt0yHuCY");
 
             //BD Emma MacAir
-            config.setJdbcUrl("jdbc:mysql://localhost:3306/Dulceria");
-            config.setUsername("root");
-            config.setPassword("Manuelromero20");
+//            config.setJdbcUrl("jdbc:mysql://localhost:3306/Dulceria");
+//            config.setUsername("root");
+//            config.setPassword("Manuelromero20@");
 
 
             // Configuraciones opcionales
-            config.setMaximumPoolSize(3); // Número máximo de conexiones
+            config.setMaximumPoolSize(4); // Número máximo de conexiones
             config.setMinimumIdle(0); // Número mínimo de conexiones inactivas
             config.setIdleTimeout(Duration.ofSeconds(30).toMillis()); // Tiempo de inactividad en milisegundos
             config.setConnectionTimeout(Duration.ofSeconds(5).toMillis()); // Tiempo de espera de conexión en milisegundos
             config.setLeakDetectionThreshold(Duration.ofSeconds(15).toMillis()); // Umbral de detección de fugas en milisegundos
 
             dataSource = new HikariDataSource(config);
-            dataSource.setLoginTimeout(Duration.ofMinutes(2).toSecondsPart());
 
         } catch (Exception e) {
             throw new Exception("Conexión inestable, verifica tu conexión", e);

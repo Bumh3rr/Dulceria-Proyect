@@ -16,7 +16,6 @@ public class CardProductBuy extends JPanel {
     private JButton button;
     private FlatSpinner spinner;
     private JTextPane description;
-//    private Producto.ProductoSelect productoSelect;
 
     public CardProductBuy(Producto producto, Consumer<Producto.ProductoSelect> consumer) {
         this.producto = producto;
@@ -98,8 +97,6 @@ public class CardProductBuy extends JPanel {
     }
 
     private int getCountProductSelect() {
-      String product = (spinner.getModel().getValue().toString());
-      System.out.println(product.concat("iiiidddd: " + producto.getId()));
         return Integer.parseInt(spinner.getValue().toString());
     }
 

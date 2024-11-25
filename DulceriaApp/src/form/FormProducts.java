@@ -134,7 +134,6 @@ public class FormProducts extends Form {
     private void initListeners() {
         comboBoxCategoria.addActionListener((e) -> aplicarFiltro());
         comboBoxStatus.addActionListener((e) -> aplicarFiltro());
-
         butonSearch.addActionListener((e) -> searchProducto());
     }
 
@@ -189,6 +188,9 @@ public class FormProducts extends Form {
         setLayout(new MigLayout("wrap,fill,insets 0 n 0 n", "[fill]", "[grow 0][fill]"));
         add(createHeader("Productos", "En el apartado de Productos puedes gestionar tus Productos", 1));
         add(body());
+        repaint();
+        updateUI();
+        revalidate();
     }
 
     /**
@@ -284,6 +286,7 @@ public class FormProducts extends Form {
             panelProductos.add(new CardProducto(producto, createEventCard()));
         }
         panelProductos.repaint();
+        panelProductos.updateUI();
         panelProductos.revalidate();
         EventQueue.invokeLater(() -> scrollProductos.getVerticalScrollBar().setValue(0));
     }

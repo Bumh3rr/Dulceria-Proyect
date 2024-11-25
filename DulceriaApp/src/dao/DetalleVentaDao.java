@@ -8,6 +8,7 @@ import dao.pool.PoolConexion;
     import java.util.LinkedList;
     import lombok.Cleanup;
 public class DetalleVentaDao {
+
     public static int addDetalleVentaBD(DetalleVenta detalleVenta) throws Exception {
         String query = "INSERT INTO DETALLE_VENTA( id_Venta,id_Prod,cantidad_Prod, precio_venta, total_Venta) values(?,?,?,?,?)";
         int generatedId = -1;
@@ -31,19 +32,19 @@ public class DetalleVentaDao {
         return generatedId;
     }
 
-    public static LinkedList<DetalleVenta> getAllDetalleVentaBD() throws Exception {
-        String query = "SELECT * FROM detalle_venta";
-        LinkedList<DetalleVenta> list = new LinkedList<>();
-        @Cleanup
-        Connection connection = PoolConexion.getInstance().getConnection();
-        @Cleanup
-        Statement statement = connection.createStatement();
-        @Cleanup
-        ResultSet resultSet = statement.executeQuery(query);
-        while (resultSet.next()) {
-            list.add(new DetalleVenta(resultSet.getInt("id_detalle"), resultSet.getInt("id_venta"), resultSet.getInt("id_producto"), resultSet.getInt("cantidad"), resultSet.getDouble("precio_venta"), resultSet.getDouble("total")));
-        }
-        return list;
-    }
+//    public static LinkedList<DetalleVenta> getAllDetalleVentaBD() throws Exception {
+//        String query = "SELECT * FROM detalle_venta";
+//        LinkedList<DetalleVenta> list = new LinkedList<>();
+//        @Cleanup
+//        Connection connection = PoolConexion.getInstance().getConnection();
+//        @Cleanup
+//        Statement statement = connection.createStatement();
+//        @Cleanup
+//        ResultSet resultSet = statement.executeQuery(query);
+//        while (resultSet.next()) {
+//            list.add(new DetalleVenta(resultSet.getInt("id_detalle"), resultSet.getInt("id_venta"), resultSet.getInt("id_producto"), resultSet.getInt("cantidad"), resultSet.getDouble("precio_venta"), resultSet.getDouble("total")));
+//        }
+//        return list;
+//    }
 
 }

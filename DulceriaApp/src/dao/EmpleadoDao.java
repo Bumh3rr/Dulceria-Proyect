@@ -68,18 +68,19 @@ public class EmpleadoDao {
     }
 
     public static LinkedList<Empleado> getAllEmpleadosSimpleBD() throws Exception {
-        String query = "SELECT idEmpleado,nombre,apellidos FROM EMPLEADO";
+        String query = "SELECT idEmpleado,nombre,apellidos FROM EMPLEADO WHERE puesto = 'VENDEDOR'";
         LinkedList<Empleado> list = new LinkedList<>();
         @Cleanup
         Connection connection = PoolConexion.getInstance().getConnection();
         @Cleanup
         Statement statement = connection.createStatement();
         @Cleanup
-        ResultSet resultSet = statement.executeQuery(query);
-        while (resultSet.next()) {
-            list.add(new Empleado(resultSet.getInt("idEmpleado"),
-                    resultSet.getString("nombre"),
-                    resultSet.getString("apellidos")));
+        ResultSet rs = statement.executeQuery(query);
+        while (rs.next()) {
+            list.add(new Empleado(
+                    rs.getInt("idEmpleado"),
+                    rs.getString("nombre"),
+                    rs.getString("apellidos")));
         }
         return list;
     }
