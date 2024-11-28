@@ -6,4 +6,4 @@
 
 # Forms
 * Proveedores
-![FormProveedores](https://github.com/Bumh3rr/Dulceria-Proyect/blob/main/FormProveedores.png)
+![FormProveedores](https://github.com/Bumh3rr/Dulceria-Proyect/blob/main/images/FormProveedores.png)
