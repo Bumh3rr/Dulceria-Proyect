@@ -1,14 +1,16 @@
-
 package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatScrollPane;
 import com.formdev.flatlaf.extras.components.FlatTable;
+import components.Notify;
+import dao.pool.PoolThreads;
 import form.panels.PanelRequestVenta;
+import form.request.RequestProducto;
+import form.request.RequestVenta;
+import java.util.LinkedList;
 import modal.ConfigModal;
 import modal.CustomModal;
-import model.Producto;
-import model.Proveedor;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
 import system.Form;
@@ -20,14 +22,46 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComponent;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import java.util.List;
-import java.util.function.Consumer;
+import model.Venta;
+import raven.modal.Toast;
+import utils.Promiseld;
 
 public class FormBuys extends Form {
+
+    private final String KEY = "FormBuys";
     private Table panelTable;
     private JButton button_view;
     private JButton button_create;
+    private LinkedList<Venta> listSale;
+
+    @Override
+    public void formInit() {
+        addListSale();
+    }
+
+    @Override
+    public void formRefresh() {
+        addListSale();
+    }
+
+    public void addListSale() {
+        if (Promiseld.checkPromiseId(KEY)) {
+            return;
+        }
+        Promiseld.commit(KEY);
+        PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                listSale = RequestVenta.getSaleAll();
+                panelTable.setData(listSale);
+            } catch (Exception ex) {
+                Notify.getInstance().showToast(Toast.Type.ERROR, ex.getMessage());
+            } finally {
+                Promiseld.terminate(KEY);
+            }
+        });
+    }
 
     public FormBuys() {
         initComponents();
@@ -47,9 +81,7 @@ public class FormBuys extends Form {
     }
 
     private void initListeners() {
-        button_create.addActionListener(e -> {
-            showPanelNewBuy();
-        });
+        button_create.addActionListener(e -> showPanelNewBuy());
     }
 
     private void init() {
@@ -87,11 +119,12 @@ public class FormBuys extends Form {
     }
 
     public static class Table extends JPanel {
+
         private JTable table;
         private JScrollPane scrollPane;
         private DefaultTableModel model;
 
-        private String[] columnNames = {"ID Venta", "Nombre Cliente", "Venta Total $", "Fecha Venta"};
+        private String[] columnNames = {"ID Venta", "Venta Total $", "Método de Pago", "Fecha Venta"};
 
         /**
          * Constructor de Table.
@@ -109,7 +142,7 @@ public class FormBuys extends Form {
             scrollPane = new FlatScrollPane();
             model = new DefaultTableModel(columnNames, 0) {
                 boolean[] canEdit = new boolean[]{
-                        false, false, false, false
+                    false, false, false, false
                 };
 
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -135,7 +168,6 @@ public class FormBuys extends Form {
             table.getColumnModel().getColumn(1).setPreferredWidth(90);
             table.getColumnModel().getColumn(2).setPreferredWidth(60);
             table.getColumnModel().getColumn(3).setPreferredWidth(50);
-
 
             //Center Data
             DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
@@ -167,21 +199,13 @@ public class FormBuys extends Form {
             revalidate();
         }
 
-        /**
-         * Establece los datos de la tabla.
-         *
-         * @param proveedor una lista de objetos Proveedor
-         */
-        public void setData(List<Proveedor> proveedor) {
+        public void setData(LinkedList<Venta> ventas) {
             cleanData();
-            for (Proveedor proveedors : proveedor) {
-                model.addRow(proveedors.getUserArray());
+            for (Venta venta : ventas) {
+                model.addRow(venta.getVentaArray());
             }
         }
 
-        /**
-         * Limpia los datos de la tabla.
-         */
         public void cleanData() {
             while (model.getRowCount() > 0) {
                 model.removeRow(0);

@@ -11,6 +11,7 @@ import model.DetalleVenta;
 import lombok.Cleanup;
 
 import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -44,7 +45,7 @@ public class VentasDao {
 
             // Confirmar la transacción
             conn.commit();
-            
+
             return true;
         } catch (SQLException e) {
             // En caso de error, revertir la transacción
@@ -61,13 +62,24 @@ public class VentasDao {
         }
     }
     
-//    public LinkedList<Venta> getSaleAll(){
-//        
-//    }
-    
-    //hola
-    
-    
-    
-    
+    public static LinkedList<Venta> getSaleAllBD()throws Exception{
+       String query = "SELECT * FROM VENTAS";
+
+        LinkedList<Venta> list = new LinkedList<>();
+        @Cleanup
+        Connection connection = PoolConexion.getInstance().getConnection();
+        @Cleanup
+        ResultSet rs = connection.prepareStatement(query).executeQuery();
+
+        while (rs.next()) {
+            
+            list.add(new Venta(
+                    rs.getInt("id_Venta"),
+                    rs.getDouble("total_Venta"), 
+                    rs.getString("metodo_pago"),
+                   rs.getTimestamp("fecha_Venta").toLocalDateTime()));
+        }
+        return list;
+    }
+
 }
