@@ -13,6 +13,7 @@ import lombok.Cleanup;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.LinkedList;
 
 public class VentasDao {
 
@@ -39,17 +40,25 @@ public class VentasDao {
             stmt.setString(4, venta.getMethodPayment()); // Detalle de la venta en formato JSON
             stmt.setString(5, detalleJson); // Detalle de la venta en formato JSON
 
-            // Ejecutar el procedimiento almacenado
             stmt.execute();
 
             // Confirmar la transacción
             conn.commit();
-
+            
             return true;
         } catch (SQLException e) {
             conn.rollback();
             throw new Exception("Error al registrar la venta", e);
         }
     }
+    
+//    public LinkedList<Venta> getSaleAll(){
+//        
+//    }
+    
+    
+    
+    
+    
+    
 }
-
