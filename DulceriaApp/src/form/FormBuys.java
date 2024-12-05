@@ -7,7 +7,6 @@ import com.formdev.flatlaf.extras.components.FlatTable;
 import form.panels.PanelRequestVenta;
 import modal.ConfigModal;
 import modal.CustomModal;
-import model.Producto;
 import model.Proveedor;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
@@ -22,9 +21,9 @@ import javax.swing.JComponent;
 import javax.swing.BorderFactory;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class FormBuys extends Form {
+
     private Table panelTable;
     private JButton button_view;
     private JButton button_create;
@@ -91,7 +90,7 @@ public class FormBuys extends Form {
         private JScrollPane scrollPane;
         private DefaultTableModel model;
 
-        private String[] columnNames = {"ID Venta", "Nombre Cliente", "Venta Total $", "Fecha Venta"};
+        private String[] columnNames = {"ID Venta", "Venta Total $", "Método de Pago", "Fecha Venta"};
 
         /**
          * Constructor de Table.
