@@ -1,22 +1,18 @@
 package model;
 
 import java.text.DecimalFormat;
-
 import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import static model.Proveedor.WEEKS;
 
 @Data
 public class Venta {
-
     private int id_venta;
     private int cantidad_total_productos;
     private Empleado empleado;
     private Double total_venta;
-    private String methodPayment;
+    String methodPayment;
     private LocalDateTime fecha_venta;
 
     public Venta(Empleado empleado, int cantidad_total_productos, Double total_venta, String methodPayment, LocalDateTime fecha_venta) {
