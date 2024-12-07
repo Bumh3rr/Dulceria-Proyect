@@ -8,8 +8,8 @@ import dao.pool.PoolThreads;
 import form.panels.PanelInfoProducto;
 import form.panels.PanelRequestProducto;
 import form.panels.PanelSearchProducto;
-import form.request.RequestCategoria;
-import form.request.RequestProducto;
+import dao.request.RequestCategoria;
+import dao.request.RequestProducto;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 

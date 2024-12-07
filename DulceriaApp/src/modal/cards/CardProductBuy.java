@@ -89,7 +89,7 @@ public class CardProductBuy extends JPanel {
         JPanel panel = new JPanel(new MigLayout("fillx,insets 0", "fill", "fill"));
         panel.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:null");
-        JLabel titule = new JLabel("ID: " + producto.getId(), new FlatSVGIcon("resources/ic_candyAdd.svg", 0.4f), SwingConstants.LEFT);
+        JLabel titule = new JLabel("ID: " + producto.getId(), new FlatSVGIcon("resources/icon/ic_candyAdd.svg", 0.4f), SwingConstants.LEFT);
         titule.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:bold 0;");
         panel.add(titule);

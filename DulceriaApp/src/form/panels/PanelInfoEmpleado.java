@@ -4,11 +4,9 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import components.FieldTextArea;
 import components.MyLabelTitle;
-import components.Notify;
 import form.FormEmpleado;
-import form.request.RequestEmpleado;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import dao.request.RequestEmpleado;
+
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -19,10 +17,8 @@ import model.Empleado;
 import net.miginfocom.swing.MigLayout;
 import raven.extras.AvatarIcon;
 import raven.modal.ModalDialog;
-import raven.modal.Toast;
 import raven.modal.component.ModalBorderAction;
 import raven.modal.component.SimpleModalBorder;
-import raven.modal.toast.ToastPromise;
 import modal.ConfigModal;
 import utils.Request;
 

@@ -6,8 +6,8 @@ import components.ButtonIcon;
 import components.MyScrollPane;
 import components.Notify;
 import dao.pool.PoolThreads;
-import form.request.RequestEmpleado;
-import form.request.RequestVenta;
+import dao.request.RequestEmpleado;
+import dao.request.RequestVenta;
 import modal.CustomModal;
 import model.*;
 import net.miginfocom.swing.MigLayout;
@@ -209,7 +209,7 @@ public class PanelRequestVenta extends JPanel {
                                 toas.done(Toast.Type.WARNING, "Has Revasado el Limite de Caracteres\n"
                                         + e.getLocalizedMessage());
                             } else {
-                                toas.done(Toast.Type.ERROR, "Hubo un problema al Proveedor ala base de datos"
+                                toas.done(Toast.Type.ERROR, "Hubo un problema al realizar la venta"
                                         + "\nCausa: " + e.getLocalizedMessage());
                             }
                         }
@@ -225,15 +225,18 @@ public class PanelRequestVenta extends JPanel {
         Empleado empleado = (Empleado) comboBoxEmpleado.getSelectedItem();
         MethodPayment methodPayment = (MethodPayment) comboBoxMethodPayment.getSelectedItem();
         double venta_total = listProductsSelect.stream().mapToDouble(Producto.ProductoSelect::precioTotal).sum();
+        int cantidad_total_productos = listProductsSelect.stream().mapToInt(Producto.ProductoSelect::countSelect).sum();
+
         Venta venta = new Venta(
+                empleado,
+                cantidad_total_productos,
                 venta_total, 
-                empleado.getIdEmpleado(), 
-                LocalDateTime.now(), 
-                methodPayment.getValue());
+                methodPayment.getValue(),
+                LocalDateTime.now());
 
         List<DetalleVenta> list = listProductsSelect.stream().map(productoSelect ->
-                new DetalleVenta(productoSelect.id(), productoSelect.countSelect(), productoSelect.precio_Venta(), productoSelect.precioTotal())).toList();
-       
+                new DetalleVenta(productoSelect.id(), productoSelect.precioTotal(),productoSelect.countSelect())).toList();
+
         return RequestVenta.registerSale(venta, list);
     }
 

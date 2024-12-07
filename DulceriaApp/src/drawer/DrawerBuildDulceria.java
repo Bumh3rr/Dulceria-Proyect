@@ -7,7 +7,8 @@ import form.FormProducts;
 import form.FormProveedoresAndEmpleados;
 import java.awt.Insets;
 import java.util.Arrays;
-import javax.swing.JComponent;
+import javax.swing.*;
+
 import raven.extras.AvatarIcon;
 import raven.modal.drawer.DrawerPanel;
 import raven.modal.drawer.data.Item;
@@ -44,9 +45,7 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
      */
     @Override
     public SimpleFooterData getSimpleFooterData() {
-        return new SimpleFooterData()
-                .setTitle("")
-                .setDescription("V");
+        return new SimpleFooterData();
     }
 
     /**
@@ -56,14 +55,12 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
      */
     @Override
     public SimpleHeaderData getSimpleHeaderData() {
-        AvatarIcon icon = new AvatarIcon(DrawerBuildDulceria.class.getResource("/resources/logo_default.png"), 50, 50, 3.5f);
+        AvatarIcon icon = new AvatarIcon(DrawerBuildDulceria.class.getResource("/resources/logo_DulceriaApp.jpg"), 50, 50, 3.5f);
         icon.setType(AvatarIcon.Type.MASK_SQUIRCLE);
         icon.setBorder(2, 2);
-
+        icon.setBorderColor(new AvatarIcon.BorderColor(UIManager.getColor("Component.accentColor"), 0.75f));
         return new SimpleHeaderData()
-                .setIcon(icon)
-                .setTitle("Dulceria App")
-                .setDescription("");
+                .setIcon(icon);
 
     }
     /**
@@ -187,8 +184,7 @@ public class DrawerBuildDulceria extends SimpleDrawerBuilder {
      */
     private static String getDrawerBackgroundStyle() {
         return ""
-                + "[light]background:tint($Panel.background,100%);"
-                + "[dark]background:tint($Panel.background,5%);";
+                + "[light]background:tint($Panel.background,100%)";
     }
 
 }

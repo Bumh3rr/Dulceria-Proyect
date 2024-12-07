@@ -5,15 +5,20 @@ import com.formdev.flatlaf.extras.components.FlatScrollPane;
 import com.formdev.flatlaf.extras.components.FlatTable;
 import components.Notify;
 import dao.pool.PoolThreads;
+import dao.request.RequestDetalleVenta;
+import form.panels.PanelInfoVenta;
 import form.panels.PanelRequestVenta;
-import form.request.RequestProducto;
-import form.request.RequestVenta;
+import dao.request.RequestVenta;
+
 import java.util.LinkedList;
+
 import modal.ConfigModal;
 import modal.CustomModal;
+import model.DetalleVenta;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
 import system.Form;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,10 +27,11 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComponent;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableCellRenderer;
+
 import model.Venta;
 import raven.modal.Toast;
+import system.FormManager;
 import utils.Promiseld;
 
 public class FormBuys extends Form {
@@ -82,7 +88,9 @@ public class FormBuys extends Form {
 
     private void initListeners() {
         button_create.addActionListener(e -> showPanelNewBuy());
+        button_view.addActionListener(e -> methodViewInfoBuy());
     }
+
 
     private void init() {
         setLayout(new MigLayout("fillx,wrap,insets 7 15 7 15", "[fill]"));
@@ -102,7 +110,7 @@ public class FormBuys extends Form {
     }
 
     private JComponent createButtonsAcciones() {
-        JPanel panel = new JPanel(new MigLayout("fill", "fill"));
+        JPanel panel = new JPanel(new MigLayout("fill"));
         panel.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:null");
         button_create.putClientProperty(FlatClientProperties.STYLE, ""
@@ -118,13 +126,35 @@ public class FormBuys extends Form {
                 ConfigModal.getModelShowModalPush(), PanelRequestVenta.ID);
     }
 
-    public static class Table extends JPanel {
+
+    private void methodViewInfoBuy() {
+        try {
+            int row = panelTable.table.getSelectedRow();
+            if (row == -1) {
+                Notify.getInstance().showToast(Toast.Type.WARNING,"Seleccione una venta para visualizar");
+                return;
+            }
+
+            Venta venta = listSale.get(row);
+            LinkedList<DetalleVenta.DetalleVentaSub> detalles = RequestDetalleVenta.getDetallesVentaAll(venta.getId_venta());
+
+            ModalDialog.showModal(this,
+                    new CustomModal(FormManager.getPanelInfoVenta(venta, detalles), "Detalles de Venta", "resources/icon/ic_info.svg"),
+                    ConfigModal.getModelShowDefault(),PanelRequestVenta.ID);
+
+        } catch (Exception e) {
+            Notify.getInstance().showToast(Toast.Type.ERROR, e.getLocalizedMessage());
+        }
+    }
+
+
+    private class Table extends JPanel {
 
         private JTable table;
         private JScrollPane scrollPane;
         private DefaultTableModel model;
 
-        private String[] columnNames = {"ID Venta", "Venta Total $", "Método de Pago", "Fecha Venta"};
+        private String[] columnNames = {"ID Venta", "Venta Total $", "Cantidad Total", "Método de Pago", "Fecha Venta"};
 
         /**
          * Constructor de Table.
@@ -142,7 +172,7 @@ public class FormBuys extends Form {
             scrollPane = new FlatScrollPane();
             model = new DefaultTableModel(columnNames, 0) {
                 boolean[] canEdit = new boolean[]{
-                    false, false, false, false
+                        false, false, false, false, false
                 };
 
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -167,7 +197,8 @@ public class FormBuys extends Form {
             table.getColumnModel().getColumn(0).setMaxWidth(60);
             table.getColumnModel().getColumn(1).setPreferredWidth(90);
             table.getColumnModel().getColumn(2).setPreferredWidth(60);
-            table.getColumnModel().getColumn(3).setPreferredWidth(50);
+            table.getColumnModel().getColumn(3).setPreferredWidth(60);
+            table.getColumnModel().getColumn(4).setPreferredWidth(50);
 
             //Center Data
             DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();

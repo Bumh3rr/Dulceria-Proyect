@@ -6,9 +6,9 @@ import components.MyJTextField;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
-import form.request.ProveedorRequest;
-import form.request.RequestCategoria;
-import form.request.RequestProducto;
+import dao.request.RequestProveedor;
+import dao.request.RequestCategoria;
+import dao.request.RequestProducto;
 import java.awt.EventQueue;
 import java.text.DecimalFormat;
 import model.Producto;
@@ -404,7 +404,7 @@ public class PanelRequestProducto extends JPanel {
 
     private void fillBoxProveedores() {
         try {
-            LinkedList<Proveedor> allProveedors = ProveedorRequest.getAllProveedors();
+            LinkedList<Proveedor> allProveedors = RequestProveedor.getAllProveedors();
             for (Proveedor allProveedor : allProveedors) {
                 inputProveedor.addItem(allProveedor);
             }
