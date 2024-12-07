@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 
-import form.request.RequestCategoria;
+import dao.request.RequestCategoria;
 import model.Categoria;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.Toast;

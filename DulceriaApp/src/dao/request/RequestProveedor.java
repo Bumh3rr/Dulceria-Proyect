@@ -1,4 +1,4 @@
-package form.request;
+package dao.request;
 
 import dao.ProveedorDao;
 import dao.pool.PoolThreads;
@@ -9,7 +9,7 @@ import model.Proveedor;
  * ProveedorRequest es una clase interna que gestiona las solicitudes de
  * proveedores.
  */
-public class ProveedorRequest {
+public class RequestProveedor {
 
     /**
      * Agrega un nuevo proveedor.

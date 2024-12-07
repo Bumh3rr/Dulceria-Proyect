@@ -6,7 +6,7 @@ import components.FieldTextArea;
 import components.MyLabelTitle;
 import components.MyTxtAreaDescrip;
 import form.FormProducts;
-import form.request.RequestProducto;
+import dao.request.RequestProducto;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;

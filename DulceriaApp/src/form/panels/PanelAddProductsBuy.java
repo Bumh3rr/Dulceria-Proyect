@@ -3,14 +3,12 @@ package form.panels;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatScrollPane;
 import com.formdev.flatlaf.extras.components.FlatTable;
-import components.FieldSearch;
 import components.MyScrollPane;
 import dao.pool.PoolThreads;
-import form.request.RequestProducto;
+import dao.request.RequestProducto;
 import modal.cards.CardProductBuy;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
-import raven.modal.ModalDialog;
 import utils.ResponsiveLayout;
 
 import javax.swing.*;

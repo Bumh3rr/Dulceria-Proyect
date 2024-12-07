@@ -42,6 +42,10 @@ public class Producto {
         this.proveedor = proveedor;
     }
 
+    public Producto(int id) {
+        this.id = id;
+    }
+
     public Object[] toObject() {
         return new Object[]{id, nombre, stock, estado, precio_Compra, precio_Venta, categoria, proveedor};
     }

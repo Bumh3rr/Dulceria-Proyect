@@ -6,7 +6,7 @@ import components.Notify;
 import dao.pool.PoolThreads;
 import form.panels.PanelInfoEmpleado;
 import form.panels.PanelRequestEmpleado;
-import form.request.RequestEmpleado;
+import dao.request.RequestEmpleado;
 import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.function.Consumer;

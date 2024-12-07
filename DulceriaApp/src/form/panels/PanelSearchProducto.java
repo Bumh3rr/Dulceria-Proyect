@@ -2,21 +2,14 @@ package form.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.formdev.flatlaf.extras.components.FlatFormattedTextField;
-import components.MyJTextField;
-import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
-import form.FormProducts;
-import form.request.RequestProducto;
-import java.text.DecimalFormat;
+import dao.request.RequestProducto;
+
 import java.text.NumberFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
-import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;

@@ -1,16 +1,17 @@
 package dao;
 
 import dao.pool.PoolConexion;
-
 import java.sql.Connection;
 import java.util.List;
 
+import model.Empleado;
 import model.Venta;
 import com.google.gson.Gson;
 import model.DetalleVenta;
 import lombok.Cleanup;
 
 import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -18,9 +19,9 @@ import java.util.LinkedList;
 public class VentasDao {
 
     public static Boolean registerSaleBD(Venta venta, List<DetalleVenta> detalles) throws Exception {
-        String query = "{CALL RegisterSale( ?, ?, ?, ?, ?)}";
-        Gson gson = new Gson();
-        String detalleJson = gson.toJson(detalles);
+        String query = "{CALL RegisterSale( ?, ?, ?, ?, ?, ?)}";
+        String detalleJson = new Gson().toJson(detalles);
+        System.out.println(detalleJson);
 
         @Cleanup
         Connection conn = PoolConexion.getInstance().getConnection();
@@ -34,31 +35,43 @@ public class VentasDao {
             CallableStatement stmt = conn.prepareCall(query);
 
             // Establecer los parámetros de entrada
-            stmt.setInt(1, venta.getId_Empleado());    // ID del empleado
-            stmt.setDouble(2, venta.getTotal_venta()); // Total de la venta
-            stmt.setTimestamp(3, Timestamp.valueOf(venta.getFecha_venta())); // Fecha de la venta
-            stmt.setString(4, venta.getMethodPayment()); // Detalle de la venta en formato JSON
-            stmt.setString(5, detalleJson); // Detalle de la venta en formato JSON
-
+            stmt.setInt(1, venta.getEmpleado().getIdEmpleado());
+            stmt.setInt(2, venta.getCantidad_total_productos());
+            stmt.setDouble(3, venta.getTotal_venta());
+            stmt.setTimestamp(4, Timestamp.valueOf(venta.getFecha_venta()));
+            stmt.setString(5, venta.getMethodPayment());
+            stmt.setString(6, detalleJson);
             stmt.execute();
 
-            // Confirmar la transacción
             conn.commit();
-            
             return true;
         } catch (SQLException e) {
             conn.rollback();
-            throw new Exception("Error al registrar la venta", e);
+            throw new Exception("Error al registrar la venta: " + e.getLocalizedMessage(), e);
         }
     }
-    
-//    public LinkedList<Venta> getSaleAll(){
-//        
-//    }
-    
-    
-    
-    
-    
-    
+
+    public static LinkedList<Venta> getSaleAllBD() throws Exception {
+        String query = "SELECT * FROM View_Venta";
+
+        LinkedList<Venta> list = new LinkedList<>();
+        @Cleanup
+        Connection connection = PoolConexion.getInstance().getConnection();
+        @Cleanup
+        ResultSet rs = connection.prepareStatement(query).executeQuery();
+
+        while (rs.next()) {
+            list.add(new Venta(
+                    rs.getInt("id_Venta"),
+                    new Empleado(rs.getInt("idEmpleado"),
+                            rs.getString("nombre"),
+                            rs.getString("apellidos")),
+                    rs.getInt("cant_productos"),
+                    rs.getDouble("total_Venta"),
+                    rs.getString("metodo_pago"),
+                    rs.getTimestamp("fecha_Venta").toLocalDateTime()));
+        }
+        return list;
+    }
+
 }

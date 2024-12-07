@@ -3,18 +3,16 @@ package form.panels;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import components.ButtonIcon;
-import components.MyJTextField;
 import components.MyScrollPane;
 import components.Notify;
 import dao.pool.PoolThreads;
-import form.request.RequestEmpleado;
-import form.request.RequestVenta;
+import dao.request.RequestEmpleado;
+import dao.request.RequestVenta;
 import modal.CustomModal;
 import model.*;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
 import raven.modal.Toast;
-import raven.modal.listener.ModalController;
 import raven.modal.toast.ToastPromise;
 
 import javax.swing.JPanel;
@@ -23,8 +21,6 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
-import javax.swing.JSeparator;
-import java.awt.*;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -213,7 +209,7 @@ public class PanelRequestVenta extends JPanel {
                                 toas.done(Toast.Type.WARNING, "Has Revasado el Limite de Caracteres\n"
                                         + e.getLocalizedMessage());
                             } else {
-                                toas.done(Toast.Type.ERROR, "Hubo un problema al Proveedor ala base de datos"
+                                toas.done(Toast.Type.ERROR, "Hubo un problema al realizar la venta"
                                         + "\nCausa: " + e.getLocalizedMessage());
                             }
                         }
@@ -228,18 +224,20 @@ public class PanelRequestVenta extends JPanel {
         }
         Empleado empleado = (Empleado) comboBoxEmpleado.getSelectedItem();
         MethodPayment methodPayment = (MethodPayment) comboBoxMethodPayment.getSelectedItem();
-
-        System.out.println(empleado);
-        System.out.println(methodPayment);
-
         double venta_total = listProductsSelect.stream().mapToDouble(Producto.ProductoSelect::precioTotal).sum();
+        int cantidad_total_productos = listProductsSelect.stream().mapToInt(Producto.ProductoSelect::countSelect).sum();
 
-        Venta venta = new Venta(venta_total, empleado.getIdEmpleado(), LocalDateTime.now(), methodPayment.getValue());
+        Venta venta = new Venta(
+                empleado,
+                cantidad_total_productos,
+                venta_total, 
+                methodPayment.getValue(),
+                LocalDateTime.now());
 
         List<DetalleVenta> list = listProductsSelect.stream().map(productoSelect ->
-                new DetalleVenta(productoSelect.id(), productoSelect.countSelect(), productoSelect.precio_Venta(), productoSelect.precioTotal())).toList();
-        return RequestVenta.registerSale(venta, list);
+                new DetalleVenta(productoSelect.id(), productoSelect.precioTotal(),productoSelect.countSelect())).toList();
 
+        return RequestVenta.registerSale(venta, list);
     }
 
 

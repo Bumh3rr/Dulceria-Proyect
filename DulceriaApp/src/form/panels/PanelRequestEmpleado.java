@@ -9,7 +9,7 @@ import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
 import form.FormEmpleado;
-import form.request.RequestEmpleado;
+import dao.request.RequestEmpleado;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -32,8 +32,6 @@ import raven.modal.component.SimpleModalBorder;
 import raven.modal.listener.ModalController;
 import raven.modal.toast.ToastPromise;
 import utils.Request;
-import static utils.Request.INSERTS;
-import static utils.Request.UPDATE;
 
 public class PanelRequestEmpleado extends JPanel {
 

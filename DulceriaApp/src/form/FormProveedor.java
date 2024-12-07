@@ -6,7 +6,7 @@ import com.formdev.flatlaf.extras.components.FlatTable;
 import components.Notify;
 import dao.pool.PoolThreads;
 import form.panels.PanelRequestSupplier;
-import form.request.ProveedorRequest;
+import dao.request.RequestProveedor;
 
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -37,7 +37,6 @@ public class FormProveedor extends Form {
     private List<Proveedor> listProveedors;
 
     private Table panelTable;
-    private JButton button_view;
     private JButton button_create;
 
     public void refreshTabla() {
@@ -47,7 +46,7 @@ public class FormProveedor extends Form {
         Promiseld.commit(KEY);
         PoolThreads.getInstance().getExecutorService().submit(() -> {
             try {
-                listProveedors = ProveedorRequest.getAllProveedors();
+                listProveedors = RequestProveedor.getAllProveedors();
                 panelTable.setData(listProveedors);
             } catch (Exception ex) {
                 Notify.getInstance().showToast(Toast.Type.ERROR, ex.getMessage());
@@ -70,11 +69,17 @@ public class FormProveedor extends Form {
      */
     private void initComponents() {
         panelTable = new Table();
-        button_view = new JButton("Visualizar");
         button_create = new JButton("Agregar") {
             @Override
             public boolean isDefaultButton() {
                 return true;
+            }
+
+            @Override
+            public void updateUI() {
+                putClientProperty(FlatClientProperties.STYLE,"" +
+                       "foreground:#FFF");
+                super.updateUI();
             }
         };
 
@@ -90,9 +95,9 @@ public class FormProveedor extends Form {
      */
     private void init() {
         setLayout(new MigLayout("wrap,fill,insets 0", "[fill]", "[grow 0][fill]"));
-//        setLayout(new MigLayout("wrap,fill,insets n", "[fill]", "[grow 0][fill]"));
-//        add(createHeader("Proveedores", "description", 1));
         add(body(), "gapx 7 7");
+        updateUI();
+        revalidate();
     }
     /**
      * Crea el cuerpo del formulario.
@@ -103,23 +108,8 @@ public class FormProveedor extends Form {
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 0"));
         panel.putClientProperty(FlatClientProperties.STYLE, ""
                 + "background:null");
-        panel.add(headerButtons(), "al trail");
+        panel.add(button_create, "al trail");
         panel.add(panelTable, "grow, push");
-        return panel;
-    }
-    /**
-     * Crea los botones del encabezado.
-     *
-     * @return un componente JComponent que representa los botones del encabezado
-     */
-    private JComponent headerButtons() {
-        JPanel panel = new JPanel(new MigLayout("fill", "fill"));
-        panel.putClientProperty(FlatClientProperties.STYLE, ""
-                + "background:null");
-        button_create.putClientProperty(FlatClientProperties.STYLE, ""
-                + "foreground:#FFFFFF");
-        panel.add(button_view);
-        panel.add(button_create);
         return panel;
     }
     /**

@@ -4,7 +4,12 @@ import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import form.FormBuys;
 import form.FormProveedoresAndEmpleados;
 import java.awt.EventQueue;
+import java.util.LinkedList;
 import javax.swing.JFrame;
+
+import form.panels.PanelInfoVenta;
+import model.DetalleVenta;
+import model.Venta;
 import raven.modal.Drawer;
 import raven.modal.Toast;
 import utils.UndoRedo;
@@ -18,6 +23,7 @@ public class FormManager {
     protected static final UndoRedo<Form> FORMS = new UndoRedo<>();
     private static FormManager instance;
     private static MainForm mainForm;
+    private static PanelInfoVenta panelInfoVenta;
     private JFrame frame;
 
     /**
@@ -52,6 +58,14 @@ public class FormManager {
             mainForm = new MainForm();
         }
         return mainForm;
+    }
+
+    public static PanelInfoVenta getPanelInfoVenta(Venta venta, LinkedList<DetalleVenta.DetalleVentaSub> detalles) {
+        if (panelInfoVenta == null) {
+            panelInfoVenta = new PanelInfoVenta();
+        }
+        panelInfoVenta.setVenta(venta, detalles);
+        return panelInfoVenta;
     }
 
     /**

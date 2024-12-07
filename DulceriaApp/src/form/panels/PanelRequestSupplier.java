@@ -9,7 +9,7 @@ import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
 import form.FormProveedor;
-import form.request.ProveedorRequest;
+import dao.request.RequestProveedor;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
@@ -295,7 +295,7 @@ public class PanelRequestSupplier extends JPanel {
         String zip = inputZip.getValue() == null ? null : inputZip.getText();
         LocalDateTime dateRegister = LocalDateTime.now();
 
-        return ProveedorRequest
+        return RequestProveedor
                 .addProveedor(new Proveedor(firsName, lastName, phone, email, state, municipality, street, zip, dateRegister));
     }
 
