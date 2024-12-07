@@ -1,6 +1,6 @@
 # Dulceria-Proyect
 
-- [x] IDE: Netbeans
+- [x] IDE: Netbeansb & Intellij DEA
 - [x] JDK: 17
 - [x] LenguejeBD: MySQL
 
