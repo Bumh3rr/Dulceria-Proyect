@@ -1,3 +1,4 @@
+
 package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
@@ -35,39 +36,9 @@ import system.FormManager;
 import utils.Promiseld;
 
 public class FormBuys extends Form {
-
-    private final String KEY = "FormBuys";
     private Table panelTable;
     private JButton button_view;
     private JButton button_create;
-    private LinkedList<Venta> listSale;
-
-    @Override
-    public void formInit() {
-        addListSale();
-    }
-
-    @Override
-    public void formRefresh() {
-        addListSale();
-    }
-
-    public void addListSale() {
-        if (Promiseld.checkPromiseId(KEY)) {
-            return;
-        }
-        Promiseld.commit(KEY);
-        PoolThreads.getInstance().getExecutorService().submit(() -> {
-            try {
-                listSale = RequestVenta.getSaleAll();
-                panelTable.setData(listSale);
-            } catch (Exception ex) {
-                Notify.getInstance().showToast(Toast.Type.ERROR, ex.getMessage());
-            } finally {
-                Promiseld.terminate(KEY);
-            }
-        });
-    }
 
     public FormBuys() {
         initComponents();
@@ -200,6 +171,7 @@ public class FormBuys extends Form {
             table.getColumnModel().getColumn(3).setPreferredWidth(60);
             table.getColumnModel().getColumn(4).setPreferredWidth(50);
 
+
             //Center Data
             DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
             defaultTableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -230,13 +202,21 @@ public class FormBuys extends Form {
             revalidate();
         }
 
-        public void setData(LinkedList<Venta> ventas) {
+        /**
+         * Establece los datos de la tabla.
+         *
+         * @param proveedor una lista de objetos Proveedor
+         */
+        public void setData(List<Proveedor> proveedor) {
             cleanData();
-            for (Venta venta : ventas) {
-                model.addRow(venta.getVentaArray());
+            for (Proveedor proveedors : proveedor) {
+                model.addRow(proveedors.getUserArray());
             }
         }
 
+        /**
+         * Limpia los datos de la tabla.
+         */
         public void cleanData() {
             while (model.getRowCount() > 0) {
                 model.removeRow(0);

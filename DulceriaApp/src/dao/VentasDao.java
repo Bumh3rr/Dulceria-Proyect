@@ -11,7 +11,6 @@ import model.DetalleVenta;
 import lombok.Cleanup;
 
 import java.sql.CallableStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.LinkedList;

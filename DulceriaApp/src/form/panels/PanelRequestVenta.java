@@ -3,6 +3,7 @@ package form.panels;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import components.ButtonIcon;
+import components.MyJTextField;
 import components.MyScrollPane;
 import components.Notify;
 import dao.pool.PoolThreads;
@@ -13,6 +14,7 @@ import model.*;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.ModalDialog;
 import raven.modal.Toast;
+import raven.modal.listener.ModalController;
 import raven.modal.toast.ToastPromise;
 
 import javax.swing.JPanel;
@@ -21,6 +23,8 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
+import javax.swing.JSeparator;
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -224,6 +228,10 @@ public class PanelRequestVenta extends JPanel {
         }
         Empleado empleado = (Empleado) comboBoxEmpleado.getSelectedItem();
         MethodPayment methodPayment = (MethodPayment) comboBoxMethodPayment.getSelectedItem();
+
+        System.out.println(empleado);
+        System.out.println(methodPayment);
+
         double venta_total = listProductsSelect.stream().mapToDouble(Producto.ProductoSelect::precioTotal).sum();
         int cantidad_total_productos = listProductsSelect.stream().mapToInt(Producto.ProductoSelect::countSelect).sum();
 
@@ -238,6 +246,7 @@ public class PanelRequestVenta extends JPanel {
                 new DetalleVenta(productoSelect.id(), productoSelect.precioTotal(),productoSelect.countSelect())).toList();
 
         return RequestVenta.registerSale(venta, list);
+
     }
 
 
