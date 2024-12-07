@@ -4,35 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ecac2fc8-33f2-4e37-bcf0-c054d98017c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6e1152b9-7c32-4eab-9608-18f788980717.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6e1152b9-7c32-4eab-9608-18f788980717.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/dao/pool/PoolConexion.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/dao/pool/PoolConexion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$Table$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$Table$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$Table.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys$Table.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormBuys.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormProducts.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/FormProducts.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelAddProductsBuy$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelAddProductsBuy$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelAddProductsBuy$Table$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelAddProductsBuy$Table$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelAddProductsBuy$Table.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelAddProductsBuy$Table.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelAddProductsBuy.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelAddProductsBuy.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$MethodPayment.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta$MethodPayment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/form/panels/PanelRequestVenta.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/modal/CustomModal.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/modal/CustomModal.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/modal/cards/CardProductBuy$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/modal/cards/CardProductBuy$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/modal/cards/CardProductBuy.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/out/production/DulceriaApp/modal/cards/CardProductBuy.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/dao/pool/PoolConexion.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/dao/pool/PoolConexion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/form/FormBuys.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/form/FormBuys.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/form/FormProducts.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/form/FormProducts.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/form/panels/PanelAddProductsBuy.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/form/panels/PanelAddProductsBuy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/form/panels/PanelRequestVenta.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/form/panels/PanelRequestVenta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/modal/CustomModal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/modal/CustomModal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DulceriaApp/src/modal/cards/CardProductBuy.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DulceriaApp/src/modal/cards/CardProductBuy.java" afterDir="false" />
-    </list>
+    <list default="true" id="ecac2fc8-33f2-4e37-bcf0-c054d98017c8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,7 +27,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "final",
     "last_opened_file_path": "/Users/bumh3r",
     "settings.editor.selected.configurable": "database.data.csv.formats"
   },
