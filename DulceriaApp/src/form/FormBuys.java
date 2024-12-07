@@ -147,9 +147,6 @@ public class FormBuys extends Form {
         }
     }
 
-
-    //Hola
-
     private class Table extends JPanel {
 
         private JTable table;
