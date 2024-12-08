@@ -11,8 +11,18 @@ import java.util.LinkedList;
 import lombok.Cleanup;
 import model.Empleado;
 
+/**
+ * Clase EmpleadoDao que maneja las operaciones de base de datos para los empleados.
+ */
 public class EmpleadoDao {
 
+    /**
+     * Agrega un nuevo empleado a la base de datos.
+     *
+     * @param empleado El objeto Empleado que contiene los datos del nuevo empleado.
+     * @return true si el empleado fue agregado exitosamente, false en caso contrario.
+     * @throws Exception Si ocurre un error durante la operación de base de datos.
+     */
     public static Boolean addEmpleadoBD(Empleado empleado) throws Exception {
         String query = "INSERT INTO EMPLEADO(nombre,apellidos,telefono,direccion,rfc,puesto,estado,sueldo,fecha_registro) values(?,?,?,?,?,?,?,?,?)";
         int generatedId = -1;
@@ -40,6 +50,12 @@ public class EmpleadoDao {
         return generatedId > 0;
     }
 
+    /**
+     * Obtiene todos los empleados de la base de datos.
+     *
+     * @return Una lista enlazada de objetos Empleado que contienen los datos de todos los empleados.
+     * @throws Exception Si ocurre un error durante la operación de base de datos.
+     */
     public static LinkedList<Empleado> getAllEmpleadosBD() throws Exception {
         String query = "SELECT * FROM EMPLEADO";
         LinkedList<Empleado> list = new LinkedList<>();
@@ -67,6 +83,12 @@ public class EmpleadoDao {
         return list;
     }
 
+    /**
+     * Obtiene todos los empleados con información simplificada de la base de datos.
+     *
+     * @return Una lista enlazada de objetos Empleado que contienen los datos simplificados de los empleados.
+     * @throws Exception Si ocurre un error durante la operación de base de datos.
+     */
     public static LinkedList<Empleado> getAllEmpleadosSimpleBD() throws Exception {
         String query = "SELECT idEmpleado,nombre,apellidos FROM EMPLEADO WHERE puesto = 'VENDEDOR'";
         LinkedList<Empleado> list = new LinkedList<>();
@@ -85,7 +107,13 @@ public class EmpleadoDao {
         return list;
     }
 
-
+    /**
+     * Obtiene un empleado específico de la base de datos por su ID.
+     *
+     * @param id El ID del empleado que se desea obtener.
+     * @return Un objeto Empleado que contiene los datos del empleado, o null si no se encuentra.
+     * @throws Exception Si ocurre un error durante la operación de base de datos.
+     */
     public static Empleado getOneEmpleadosBD(int id) throws Exception {
         String query = "SELECT * FROM EMPLEADO where idEmpleado= ?";
 
@@ -114,9 +142,4 @@ public class EmpleadoDao {
         }
         return null;
     }
-    
-    
-    
-    
-    
 }

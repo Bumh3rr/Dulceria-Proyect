@@ -42,16 +42,25 @@ public class FormBuys extends Form {
     private JButton button_create;
     private LinkedList<Venta> listSale;
 
+    /**
+     * Inicializa el formulario.
+     */
     @Override
     public void formInit() {
         addListSale();
     }
 
+    /**
+     * Refresca el formulario.
+     */
     @Override
     public void formRefresh() {
         addListSale();
     }
 
+    /**
+     * Agrega la lista de ventas.
+     */
     public void addListSale() {
         if (Promiseld.checkPromiseId(KEY)) {
             return;
@@ -69,12 +78,18 @@ public class FormBuys extends Form {
         });
     }
 
+    /**
+     * Constructor de FormBuys.
+     */
     public FormBuys() {
         initComponents();
         initListeners();
         init();
     }
 
+    /**
+     * Inicializa los componentes.
+     */
     private void initComponents() {
         panelTable = new Table();
         button_view = new JButton("Visualizar Venta");
@@ -86,12 +101,17 @@ public class FormBuys extends Form {
         };
     }
 
+    /**
+     * Inicializa los listeners.
+     */
     private void initListeners() {
         button_create.addActionListener(e -> showPanelNewBuy());
         button_view.addActionListener(e -> methodViewInfoBuy());
     }
 
-
+    /**
+     * Inicializa el formulario.
+     */
     private void init() {
         setLayout(new MigLayout("fillx,wrap,insets 7 15 7 15", "[fill]"));
         add(super.createHeader("Ventas", "Administra la información de proveedores y empleados de manera sencilla y organizada. Visualiza, agrega y edita los datos según tus necesidades.", 1));
@@ -100,6 +120,11 @@ public class FormBuys extends Form {
         revalidate();
     }
 
+    /**
+     * Crea el cuerpo del formulario.
+     *
+     * @return El componente JComponent que representa el cuerpo del formulario.
+     */
     private JComponent body() {
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 0"));
         panel.putClientProperty(FlatClientProperties.STYLE, ""
@@ -109,6 +134,11 @@ public class FormBuys extends Form {
         return panel;
     }
 
+    /**
+     * Crea los botones de acciones.
+     *
+     * @return El componente JComponent que contiene los botones de acciones.
+     */
     private JComponent createButtonsAcciones() {
         JPanel panel = new JPanel(new MigLayout("fill"));
         panel.putClientProperty(FlatClientProperties.STYLE, ""
@@ -120,13 +150,18 @@ public class FormBuys extends Form {
         return panel;
     }
 
+    /**
+     * Muestra el panel para realizar una nueva compra.
+     */
     private void showPanelNewBuy() {
         ModalDialog.showModal(this,
                 new CustomModal(new PanelRequestVenta(), "Realizar Venta", "resources/icon/ic_newNote.svg"),
                 ConfigModal.getModelShowModalPush(), PanelRequestVenta.ID);
     }
 
-
+    /**
+     * Muestra la información de una compra seleccionada.
+     */
     private void methodViewInfoBuy() {
         try {
             int row = panelTable.table.getSelectedRow();
@@ -146,7 +181,6 @@ public class FormBuys extends Form {
             Notify.getInstance().showToast(Toast.Type.ERROR, e.getLocalizedMessage());
         }
     }
-
 
     private class Table extends JPanel {
 
@@ -230,6 +264,11 @@ public class FormBuys extends Form {
             revalidate();
         }
 
+        /**
+         * Establece los datos de la tabla.
+         *
+         * @param ventas La lista de ventas a mostrar en la tabla.
+         */
         public void setData(LinkedList<Venta> ventas) {
             cleanData();
             for (Venta venta : ventas) {
@@ -237,6 +276,9 @@ public class FormBuys extends Form {
             }
         }
 
+        /**
+         * Limpia los datos de la tabla.
+         */
         public void cleanData() {
             while (model.getRowCount() > 0) {
                 model.removeRow(0);

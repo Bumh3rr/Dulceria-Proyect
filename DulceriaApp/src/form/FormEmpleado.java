@@ -35,6 +35,10 @@ public class FormEmpleado extends Form {
     private ResponsiveLayout responsiveLayout;
     private JPanel panelEmpleados;
 
+    /**
+     * Constructor de FormEmpleado.
+     * Inicializa los componentes, listeners y refresca la lista de empleados.
+     */
     public FormEmpleado() {
         initComponents();
         initListeners();
@@ -42,21 +46,34 @@ public class FormEmpleado extends Form {
         refreshEmpleados();
     }
 
+    /**
+     * Inicializa el formulario.
+     */
     @Override
     public void formInit() {
         refreshEmpleados();
     }
 
+    /**
+     * Abre el formulario.
+     */
     @Override
     public void formOpen() {
         refreshEmpleados();
     }
 
+    /**
+     * Refresca el formulario.
+     */
     @Override
     public void formRefresh() {
         refreshEmpleados();
     }
 
+    /**
+     * Refresca la lista de empleados.
+     * Obtiene los empleados desde la base de datos y actualiza el panel de empleados.
+     */
     public void refreshEmpleados() {
         if (Promiseld.checkPromiseId(KEY)) {
             return;
@@ -75,18 +92,33 @@ public class FormEmpleado extends Form {
         });
     }
 
+    /**
+     * Inicializa los componentes del formulario.
+     */
     private void initComponents() {
         listEmpleado = new LinkedList<>();
     }
 
+    /**
+     * Inicializa los listeners del formulario.
+     */
     private void initListeners() {
     }
 
+    /**
+     * Inicializa el formulario.
+     * Configura el layout y agrega el cuerpo del formulario.
+     */
     private void init() {
         setLayout(new MigLayout("wrap,fill,insets 0", "[fill]", "[grow 0][fill]"));
         add(body());
     }
 
+    /**
+     * Crea el cuerpo del formulario.
+     *
+     * @return El componente JComponent que representa el cuerpo del formulario.
+     */
     private JComponent body() {
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 0", "[fill]", "[][fill]"));
         JButton buton = new JButton("Agregar Empleado") {
@@ -98,9 +130,9 @@ public class FormEmpleado extends Form {
         buton.putClientProperty(FlatClientProperties.STYLE, ""
                 + "foreground:#FFFFFF");
 
-        //Agregar Producto
+        // Agregar Producto
         buton.addActionListener((e) -> {
-            //Instance Panel
+            // Instancia Panel
             PanelRequestEmpleado panelAdd = new PanelRequestEmpleado(this, Request.INSERTS);
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
                     new SimpleModalBorder(panelAdd, "Agregar Empleado", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
@@ -122,6 +154,11 @@ public class FormEmpleado extends Form {
         return panel;
     }
 
+    /**
+     * Crea los contenedores de empleados.
+     *
+     * @return El componente JComponent que contiene los contenedores de empleados.
+     */
     private JComponent createEmpleadosContainers() {
         responsiveLayout = new ResponsiveLayout(ResponsiveLayout.JustifyContent.FIT_CONTENT, new Dimension(-1, -1), 10, 10);
         panelEmpleados = new JPanel(responsiveLayout);
@@ -148,6 +185,12 @@ public class FormEmpleado extends Form {
         return scrollPane;
     }
 
+    /**
+     * Refresca el panel de empleados.
+     *
+     * @param list La lista de empleados a mostrar en el panel.
+     * @throws Exception Si ocurre un error durante la actualización del panel.
+     */
     private void refreshPanelEmpleados(LinkedList<Empleado> list) throws Exception {
         panelEmpleados.removeAll();
         for (Empleado empleado : list) {
@@ -157,9 +200,14 @@ public class FormEmpleado extends Form {
         panelEmpleados.revalidate();
     }
 
+    /**
+     * Crea un evento para las tarjetas de empleados.
+     *
+     * @return Un consumidor que maneja el evento de las tarjetas de empleados.
+     */
     private Consumer<Empleado> createEventCard() {
         return e -> {
-//            // View Info
+            // Ver información
             PanelInfoEmpleado panel = new PanelInfoEmpleado(e, this);
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
                     new SimpleModalBorder(panel, "Información del Empleado", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
@@ -168,7 +216,6 @@ public class FormEmpleado extends Form {
                         }
                     }), ConfigModal.getModelShowDefault());
         };
-
     }
 
 }
