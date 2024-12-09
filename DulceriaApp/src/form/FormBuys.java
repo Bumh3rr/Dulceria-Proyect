@@ -94,7 +94,7 @@ public class FormBuys extends Form {
 
     private void init() {
         setLayout(new MigLayout("fillx,wrap,insets 7 15 7 15", "[fill]"));
-        add(super.createHeader("Ventas", "Administra la información de proveedores y empleados de manera sencilla y organizada. Visualiza, agrega y edita los datos según tus necesidades.", 1));
+        add(super.createHeader("Ventas", "Visualización de las ventas realizadas y Realización de una nueva venta.", 1));
         add(body(), "grow,push,gapx 7 7");
         updateUI();
         revalidate();
@@ -139,7 +139,7 @@ public class FormBuys extends Form {
             LinkedList<DetalleVenta.DetalleVentaSub> detalles = RequestDetalleVenta.getDetallesVentaAll(venta.getId_venta());
 
             ModalDialog.showModal(this,
-                    new CustomModal(FormManager.getPanelInfoVenta(venta, detalles), "Detalles de Venta", "resources/icon/ic_info.svg"),
+                    new CustomModal(FormManager.getPanelInfoVenta(venta, detalles), "Venta", "resources/icon/ic_info.svg"),
                     ConfigModal.getModelShowDefault(),PanelRequestVenta.ID);
 
         } catch (Exception e) {

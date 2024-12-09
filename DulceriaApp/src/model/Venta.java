@@ -39,7 +39,7 @@ public class Venta {
     public Object[] getVentaArray() {
         return new Object[]{
                 this.id_venta,
-                new DecimalFormat("#,###.00").format(total_venta),
+                new DecimalFormat("$#,###.00").format(total_venta),
                 this.cantidad_total_productos,
                 this.methodPayment,
                 this.fecha_venta.format(DateTimeFormatter.ofPattern("yyyy-MM-dd / hh:mm:ss a")).concat(" / " + WEEKS[this.fecha_venta.getDayOfWeek().getValue() - 1])};

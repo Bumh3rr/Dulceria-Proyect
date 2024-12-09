@@ -42,14 +42,14 @@ public class PanelInfoVenta extends JPanel {
     }
 
     private void initComponents() {
-        label_title1 = new JLabel("Detalles") {
+        label_title1 = new JLabel("Detalles de Venta") {
             @Override
             public void updateUI() {
                 putClientProperty(FlatClientProperties.STYLE, "" + "font:bold +1");
                 super.updateUI();
             }
         };
-        label_title2 = new JLabel("Detalles Productos") {
+        label_title2 = new JLabel("Detalles") {
             @Override
             public void updateUI() {
                 putClientProperty(FlatClientProperties.STYLE, "" + "font:bold +1");

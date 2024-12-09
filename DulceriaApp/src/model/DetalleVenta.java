@@ -36,8 +36,8 @@ public class DetalleVenta {
                     num,
                     this.nombre_producto,
                     this.cantidad,
-                    this.precio_unitario,
-                    this.precio_total
+                    new StringBuilder("$").append(this.precio_unitario),
+                    new StringBuilder("$").append(this.precio_total)
             };
         }
 
