@@ -12,11 +12,19 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 
+/**
+ * Clase FieldTextArea que extiende JTextArea para crear un área de texto con un menú emergente para copiar texto.
+ */
 public class FieldTextArea extends JTextArea {
 
     private final JPopupMenu popupMenu = new JPopupMenu();
     private final JMenuItem copyItem = new JMenuItem("Copiar");
 
+    /**
+     * Constructor de FieldTextArea.
+     *
+     * @param title El título del área de texto.
+     */
     public FieldTextArea(String title) {
         if (title == null || title.isEmpty()) {
             setText("el campo esta vació");
@@ -38,6 +46,12 @@ public class FieldTextArea extends JTextArea {
         addPopMenu();
     }
 
+    /**
+     * Constructor de FieldTextArea con tamaño de fuente.
+     *
+     * @param title El título del área de texto.
+     * @param size  El tamaño de la fuente.
+     */
     public FieldTextArea(String title, int size) {
         if (title == null || title.isEmpty()) {
             setText("el campo esta vació");
@@ -59,6 +73,9 @@ public class FieldTextArea extends JTextArea {
         addPopMenu();
     }
 
+    /**
+     * Constructor de FieldTextArea sin título.
+     */
     public FieldTextArea() {
         setText("");
         setEditable(false);
@@ -67,6 +84,11 @@ public class FieldTextArea extends JTextArea {
         addPopMenu();
     }
 
+    /**
+     * Establece el texto del área de texto.
+     *
+     * @param t El nuevo texto del área de texto.
+     */
     @Override
     public void setText(String t) {
         if (t == null || t.isEmpty()) {
@@ -85,6 +107,9 @@ public class FieldTextArea extends JTextArea {
         }
     }
 
+    /**
+     * Añade un menú emergente con la opción de copiar texto.
+     */
     private void addPopMenu() {
         popupMenu.add(copyItem);
         addMouseListener(new MouseAdapter() {
@@ -119,6 +144,11 @@ public class FieldTextArea extends JTextArea {
         });
     }
 
+    /**
+     * Establece el texto del área de texto.
+     *
+     * @param t El nuevo texto del área de texto.
+     */
     public void setTextField(String t) {
         if (t == null || t.isEmpty()) {
             setText("el campo esta vació");

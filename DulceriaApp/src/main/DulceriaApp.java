@@ -18,20 +18,21 @@ import raven.modal.option.BorderOption;
 import system.FormManager;
 
 /**
- * DulceriaApp is the main class for the Dulceria application, extending JFrame.
- * It initializes the application window and sets up various UI components and settings.
+ * DulceriaApp es la clase principal de la aplicación Dulceria, que extiende JFrame.
+ * Inicializa la ventana de la aplicación y configura varios componentes y ajustes de la interfaz de usuario.
  */
 public class DulceriaApp extends JFrame {
     /**
-     * DulceriaApp is the main class for the Dulceria application, extending JFrame.
-     * It initializes the application window and sets up various UI components and settings.
+     * Constructor de DulceriaApp.
+     * Inicializa la ventana de la aplicación y configura varios componentes y ajustes de la interfaz de usuario.
      */
     public DulceriaApp() {
         init();
     }
+
     /**
-     * DulceriaApp is the main class for the Dulceria application, extending JFrame.
-     * It initializes the application window and sets up various UI components and settings.
+     * Método de inicialización.
+     * Configura la ventana de la aplicación y varios componentes de la interfaz de usuario.
      */
     private void init() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -69,10 +70,12 @@ public class DulceriaApp extends JFrame {
             }
         }).start();
     }
+
     /**
-     * DulceriaApp is the main class for the Dulceria application, extending JFrame.
-     * It initializes the application window and sets up various UI components and settings.
-     * e
+     * Método principal.
+     * Configura y lanza la aplicación Dulceria.
+     *
+     * @param args Argumentos de la línea de comandos.
      */
     public static void main(String[] args) {
         FlatLaf.registerCustomDefaultsSource("themes");
@@ -81,5 +84,4 @@ public class DulceriaApp extends JFrame {
         UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
         EventQueue.invokeLater(() -> new DulceriaApp().setVisible(true));
     }
-
 }

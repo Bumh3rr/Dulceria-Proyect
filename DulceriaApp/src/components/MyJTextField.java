@@ -14,6 +14,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
+/**
+ * Clase MyJTextField que extiende FlatTextField para crear un campo de texto con un menú contextual para acciones de copiar, cortar y pegar.
+ */
 public class MyJTextField extends FlatTextField {
 
     private final JPopupMenu popupMenu = new JPopupMenu();
@@ -22,6 +25,10 @@ public class MyJTextField extends FlatTextField {
     private final JMenuItem cutItem = new JMenuItem("Cortar");
     private final JMenuItem pasteItem = new JMenuItem("Pegar");
 
+    /**
+     * Constructor de MyJTextField.
+     * Inicializa el menú contextual y añade los listeners de ratón para mostrar el menú.
+     */
     public MyJTextField() {
         popupMenu.add(copyItem);
         popupMenu.add(cutItem);

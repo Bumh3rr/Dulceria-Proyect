@@ -3,165 +3,165 @@
 -- Model: New Model    Version: 1.0
 -- MySQL Workbench Forward Engineering
 
+-- Desactiva las verificaciones de unicidad y claves foráneas, y cambia el modo SQL
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema DulceriaApp
+-- Esquema DulceriaApp
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `DulceriaApp` ;
 
--- -----------------------------------------------------
--- Schema DulceriaApp
--- -----------------------------------------------------
+-- Crea el esquema DulceriaApp si no existe
 CREATE SCHEMA IF NOT EXISTS `DulceriaApp` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
 USE `DulceriaApp` ;
 
 -- -----------------------------------------------------
--- Table `DulceriaApp`.`CATEGORIA`
+-- Tabla `DulceriaApp`.`CATEGORIA`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `DulceriaApp`.`CATEGORIA` ;
 
+-- Crea la tabla CATEGORIA si no existe
 CREATE TABLE IF NOT EXISTS `DulceriaApp`.`CATEGORIA` (
-  `id_Categoria` INT(11) NOT NULL AUTO_INCREMENT,
-  `tipo` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`id_Categoria`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 25
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
+                                                         `id_Categoria` INT(11) NOT NULL AUTO_INCREMENT,
+    `tipo` VARCHAR(20) NOT NULL,
+    PRIMARY KEY (`id_Categoria`))
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 25
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `DulceriaApp`.`EMPLEADO`
+-- Tabla `DulceriaApp`.`EMPLEADO`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `DulceriaApp`.`EMPLEADO` ;
 
+-- Crea la tabla EMPLEADO si no existe
 CREATE TABLE IF NOT EXISTS `DulceriaApp`.`EMPLEADO` (
-  `idEmpleado` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(20) NOT NULL,
-  `apellidos` VARCHAR(45) NOT NULL,
-  `telefono` VARCHAR(15) NOT NULL,
-  `direccion` VARCHAR(45) NULL DEFAULT NULL,
-  `rfc` VARCHAR(15) NULL DEFAULT NULL,
-  `puesto` VARCHAR(15) NOT NULL,
-  `estado` VARCHAR(45) NOT NULL,
-  `sueldo` DECIMAL(8,2) NULL DEFAULT NULL,
-  `venta_semanal` DECIMAL(8,2) NULL DEFAULT NULL,
-  `comision` DECIMAL(8,2) GENERATED ALWAYS AS ((case when (`puesto` = _utf8mb4'VENDEDOR') then (`venta_semanal` * 0.10) else 0 end)) STORED,
-  `fecha_registro` DATETIME NOT NULL,
-  `fecha_baja` DATETIME NULL DEFAULT NULL,
-  PRIMARY KEY (`idEmpleado`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 8
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
+                                                        `idEmpleado` INT(11) NOT NULL AUTO_INCREMENT,
+    `nombre` VARCHAR(20) NOT NULL,
+    `apellidos` VARCHAR(45) NOT NULL,
+    `telefono` VARCHAR(15) NOT NULL,
+    `direccion` VARCHAR(45) NULL DEFAULT NULL,
+    `rfc` VARCHAR(15) NULL DEFAULT NULL,
+    `puesto` VARCHAR(15) NOT NULL,
+    `estado` VARCHAR(45) NOT NULL,
+    `sueldo` DECIMAL(8,2) NULL DEFAULT NULL,
+    `venta_semanal` DECIMAL(8,2) NULL DEFAULT NULL,
+    `comision` DECIMAL(8,2) GENERATED ALWAYS AS ((case when (`puesto` = _utf8mb4'VENDEDOR') then (`venta_semanal` * 0.10) else 0 end)) STORED,
+    `fecha_registro` DATETIME NOT NULL,
+    `fecha_baja` DATETIME NULL DEFAULT NULL,
+    PRIMARY KEY (`idEmpleado`))
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 8
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `DulceriaApp`.`VENTAS`
+-- Tabla `DulceriaApp`.`VENTAS`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `DulceriaApp`.`VENTAS` ;
 
+-- Crea la tabla VENTAS si no existe
 CREATE TABLE IF NOT EXISTS `DulceriaApp`.`VENTAS` (
-  `id_Venta` INT(11) NOT NULL AUTO_INCREMENT,
-  `cant_productos` INT(11) NULL DEFAULT NULL,
-  `total_Venta` DECIMAL(8,2) NULL DEFAULT NULL,
-  `fecha_Venta` DATETIME NULL DEFAULT NULL,
-  `metodo_pago` VARCHAR(15) NULL DEFAULT NULL,
-  `EMPLEADO_idEmpleado` INT(11) NOT NULL,
-  PRIMARY KEY (`id_Venta`),
-  INDEX `fk_VENTAS_EMPLEADO1_idx` (`EMPLEADO_idEmpleado` ASC) VISIBLE,
-  CONSTRAINT `fk_VENTAS_EMPLEADO1`
+                                                      `id_Venta` INT(11) NOT NULL AUTO_INCREMENT,
+    `cant_productos` INT(11) NULL DEFAULT NULL,
+    `total_Venta` DECIMAL(8,2) NULL DEFAULT NULL,
+    `fecha_Venta` DATETIME NULL DEFAULT NULL,
+    `metodo_pago` VARCHAR(15) NULL DEFAULT NULL,
+    `EMPLEADO_idEmpleado` INT(11) NOT NULL,
+    PRIMARY KEY (`id_Venta`),
+    INDEX `fk_VENTAS_EMPLEADO1_idx` (`EMPLEADO_idEmpleado` ASC) VISIBLE,
+    CONSTRAINT `fk_VENTAS_EMPLEADO1`
     FOREIGN KEY (`EMPLEADO_idEmpleado`)
     REFERENCES `DulceriaApp`.`EMPLEADO` (`idEmpleado`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 27
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 27
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `DulceriaApp`.`PROVEEDOR`
+-- Tabla `DulceriaApp`.`PROVEEDOR`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `DulceriaApp`.`PROVEEDOR` ;
 
+-- Crea la tabla PROVEEDOR si no existe
 CREATE TABLE IF NOT EXISTS `DulceriaApp`.`PROVEEDOR` (
-  `id_Proveedor` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(20) NOT NULL,
-  `apellido` VARCHAR(10) NOT NULL,
-  `telefono` VARCHAR(15) NOT NULL,
-  `correo` VARCHAR(45) NULL DEFAULT NULL,
-  `estado` VARCHAR(45) NULL DEFAULT NULL,
-  `minicipio` VARCHAR(45) NULL DEFAULT NULL,
-  `calle` VARCHAR(45) NULL DEFAULT NULL,
-  `codigo_postal` VARCHAR(5) NULL DEFAULT NULL,
-  `fecha_registro` DATETIME NULL DEFAULT NULL,
-  PRIMARY KEY (`id_Proveedor`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 8
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
+                                                         `id_Proveedor` INT(11) NOT NULL AUTO_INCREMENT,
+    `nombre` VARCHAR(20) NOT NULL,
+    `apellido` VARCHAR(10) NOT NULL,
+    `telefono` VARCHAR(15) NOT NULL,
+    `correo` VARCHAR(45) NULL DEFAULT NULL,
+    `estado` VARCHAR(45) NULL DEFAULT NULL,
+    `minicipio` VARCHAR(45) NULL DEFAULT NULL,
+    `calle` VARCHAR(45) NULL DEFAULT NULL,
+    `codigo_postal` VARCHAR(5) NULL DEFAULT NULL,
+    `fecha_registro` DATETIME NULL DEFAULT NULL,
+    PRIMARY KEY (`id_Proveedor`))
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 8
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `DulceriaApp`.`PRODUCTO`
+-- Tabla `DulceriaApp`.`PRODUCTO`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `DulceriaApp`.`PRODUCTO` ;
 
+-- Crea la tabla PRODUCTO si no existe
 CREATE TABLE IF NOT EXISTS `DulceriaApp`.`PRODUCTO` (
-  `id_Prod` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre_Prod` VARCHAR(45) NOT NULL,
-  `marca` VARCHAR(45) NOT NULL,
-  `descripcion` VARCHAR(100) NULL DEFAULT NULL,
-  `stock_Disp` INT(11) NOT NULL,
-  `disponibilidad` TINYINT(4) GENERATED ALWAYS AS ((case when (`stock_Disp` > 0) then 1 else 0 end)) VIRTUAL,
-  `precio_Compra` DECIMAL(8,2) NOT NULL,
-  `precio_Venta` DECIMAL(8,2) NOT NULL,
-  `PROVEEDOR_id_Proveedor` INT(11) NOT NULL,
-  `CATEGORIA_id_Categoria` INT(11) NOT NULL,
-  PRIMARY KEY (`id_Prod`),
-  INDEX `fk_PRODUCTO_PROVEEDOR1_idx` (`PROVEEDOR_id_Proveedor` ASC) VISIBLE,
-  INDEX `fk_PRODUCTO_CATEGORIA1_idx` (`CATEGORIA_id_Categoria` ASC) VISIBLE,
-  CONSTRAINT `fk_PRODUCTO_CATEGORIA1`
+                                                        `id_Prod` INT(11) NOT NULL AUTO_INCREMENT,
+    `nombre_Prod` VARCHAR(45) NOT NULL,
+    `marca` VARCHAR(45) NOT NULL,
+    `descripcion` VARCHAR(100) NULL DEFAULT NULL,
+    `stock_Disp` INT(11) NOT NULL,
+    `disponibilidad` TINYINT(4) GENERATED ALWAYS AS ((case when (`stock_Disp` > 0) then 1 else 0 end)) VIRTUAL,
+    `precio_Compra` DECIMAL(8,2) NOT NULL,
+    `precio_Venta` DECIMAL(8,2) NOT NULL,
+    `PROVEEDOR_id_Proveedor` INT(11) NOT NULL,
+    `CATEGORIA_id_Categoria` INT(11) NOT NULL,
+    PRIMARY KEY (`id_Prod`),
+    INDEX `fk_PRODUCTO_PROVEEDOR1_idx` (`PROVEEDOR_id_Proveedor` ASC) VISIBLE,
+    INDEX `fk_PRODUCTO_CATEGORIA1_idx` (`CATEGORIA_id_Categoria` ASC) VISIBLE,
+    CONSTRAINT `fk_PRODUCTO_CATEGORIA1`
     FOREIGN KEY (`CATEGORIA_id_Categoria`)
     REFERENCES `DulceriaApp`.`CATEGORIA` (`id_Categoria`),
-  CONSTRAINT `fk_PRODUCTO_PROVEEDOR1`
+    CONSTRAINT `fk_PRODUCTO_PROVEEDOR1`
     FOREIGN KEY (`PROVEEDOR_id_Proveedor`)
     REFERENCES `DulceriaApp`.`PROVEEDOR` (`id_Proveedor`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 23
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 23
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `DulceriaApp`.`DETALLE_VENTAS`
+-- Tabla `DulceriaApp`.`DETALLE_VENTAS`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `DulceriaApp`.`DETALLE_VENTAS` ;
 
+-- Crea la tabla DETALLE_VENTAS si no existe
 CREATE TABLE IF NOT EXISTS `DulceriaApp`.`DETALLE_VENTAS` (
-  `id_Detalle` INT(11) NOT NULL AUTO_INCREMENT,
-  `cantidad_Prod` INT(11) NOT NULL,
-  `total_Venta` DECIMAL(8,2) NOT NULL,
-  `PRODUCTO_id_Prod` INT(11) NOT NULL,
-  `VENTAS_id_Venta` INT(11) NOT NULL,
-  PRIMARY KEY (`id_Detalle`),
-  INDEX `fk_detalle_ventas_PRODUCTO1_idx` (`PRODUCTO_id_Prod` ASC) VISIBLE,
-  INDEX `fk_DETALLE_VENTAS_VENTAS1_idx` (`VENTAS_id_Venta` ASC) VISIBLE,
-  CONSTRAINT `fk_DETALLE_VENTAS_VENTAS1`
+                                                              `id_Detalle` INT(11) NOT NULL AUTO_INCREMENT,
+    `cantidad_Prod` INT(11) NOT NULL,
+    `total_Venta` DECIMAL(8,2) NOT NULL,
+    `PRODUCTO_id_Prod` INT(11) NOT NULL,
+    `VENTAS_id_Venta` INT(11) NOT NULL,
+    PRIMARY KEY (`id_Detalle`),
+    INDEX `fk_detalle_ventas_PRODUCTO1_idx` (`PRODUCTO_id_Prod` ASC) VISIBLE,
+    INDEX `fk_DETALLE_VENTAS_VENTAS1_idx` (`VENTAS_id_Venta` ASC) VISIBLE,
+    CONSTRAINT `fk_DETALLE_VENTAS_VENTAS1`
     FOREIGN KEY (`VENTAS_id_Venta`)
     REFERENCES `DulceriaApp`.`VENTAS` (`id_Venta`),
-  CONSTRAINT `fk_detalle_ventas_PRODUCTO1`
+    CONSTRAINT `fk_detalle_ventas_PRODUCTO1`
     FOREIGN KEY (`PRODUCTO_id_Prod`)
     REFERENCES `DulceriaApp`.`PRODUCTO` (`id_Prod`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 29
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 29
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
 
-
+-- Restaura las configuraciones originales de modo SQL, claves foráneas y verificaciones de unicidad
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
