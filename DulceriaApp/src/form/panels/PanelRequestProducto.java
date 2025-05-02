@@ -2,7 +2,7 @@ package form.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
-import components.InputText;
+import components.input.InputText;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;

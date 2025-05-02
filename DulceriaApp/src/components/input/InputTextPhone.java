@@ -14,7 +14,7 @@ import javax.swing.text.MaskFormatter;
 public class InputTextPhone extends FlatFormattedTextField {
     private JLabel baseIcon;
     private FlatSVGIcon icon;
-    private final String iconURL = "/resources/icon/ic_phone.svg";
+    private final String iconURL = "resources/icon/ic_phone.svg";
 
     public InputTextPhone() {
         icon = new FlatSVGIcon(iconURL, 0.35f);

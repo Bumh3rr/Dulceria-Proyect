@@ -3,7 +3,9 @@ package dao.request;
 import dao.EmpleadoDao;
 import dao.pool.PoolThreads;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
+import java.util.List;
 import model.Empleado;
 
 /**
@@ -35,27 +37,21 @@ public class RequestEmpleado {
      * @return true si el empleado fue actualizado exitosamente, false en caso contrario.
      * @throws Exception Si ocurre un error durante la operación de base de datos.
      */
-    public static Boolean updateEmpleado(Empleado empleado) throws Exception {
+    public static Boolean updateEmpleado(Empleado empleado,int id) throws Exception {
         return PoolThreads.getInstance().getExecutorService().submit(() -> {
             try {
-                return EmpleadoDao.updateEmpleadoBD(empleado);
+                return EmpleadoDao.updateEmpleadoBD(empleado,id);
             } catch (Exception e) {
                 throw new Exception(e);
             }
         }).get();
     }
 
-    /**
-     * Obtiene un empleado específico por su ID utilizando un pool de hilos.
-     *
-     * @param idEmpleado El ID del empleado que se desea obtener.
-     * @return Un objeto Empleado que contiene los datos del empleado, o null si no se encuentra.
-     * @throws Exception Si ocurre un error durante la operación de base de datos.
-     */
-    public static Empleado getOneEmpledo(int idEmpleado) throws Exception {
+
+    public static LocalDateTime updateStatusEmpleado(Boolean status, int id) throws Exception {
         return PoolThreads.getInstance().getExecutorService().submit(() -> {
             try {
-                return EmpleadoDao.getOneEmpleadosBD(idEmpleado);
+                return EmpleadoDao.updateStatus(status,id);
             } catch (Exception e) {
                 throw new Exception(e);
             }
@@ -68,7 +64,7 @@ public class RequestEmpleado {
      * @return Una lista enlazada de objetos Empleado que contienen los datos de todos los empleados.
      * @throws Exception Si ocurre un error durante la operación de base de datos.
      */
-    public static LinkedList<Empleado> getAllEmpleados() throws Exception {
+    public static List<Empleado> getAllEmpleados() throws Exception {
         return PoolThreads.getInstance().getExecutorService().submit(() -> {
             try {
                 return EmpleadoDao.getAllEmpleadosBD();

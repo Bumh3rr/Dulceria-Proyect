@@ -1,5 +1,6 @@
 package modal;
 
+import java.awt.Color;
 import raven.modal.ModalDialog;
 import raven.modal.option.BorderOption;
 import raven.modal.option.Location;
@@ -33,6 +34,19 @@ public class ConfigModal {
                 .setBackgroundClickType(Option.BackgroundClickType.BLOCK)
                 .setAnimationEnabled(false)
                 .setOpacity(0.6f);
+    }
+
+    public static Option getModelShowModalFromNote() {
+        Option option = ModalDialog.createOption()
+                .setCloseOnPressedEscape(false)
+                .setBackgroundClickType(Option.BackgroundClickType.BLOCK)
+                .setAnimationEnabled(false)
+                .setOpacity(0.25f);
+        option.getBorderOption()
+                .setShadow(BorderOption.Shadow.NONE)
+                .setRound(50).setBorderWidth(0.1f)
+                .setBorderColor(Color.decode("#F5F5F5"));
+        return option;
     }
 
 }

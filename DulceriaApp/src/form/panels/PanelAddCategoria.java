@@ -1,7 +1,7 @@
 package form.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import components.InputText;
+import components.input.InputText;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;

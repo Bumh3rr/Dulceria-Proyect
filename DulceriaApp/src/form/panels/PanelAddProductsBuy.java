@@ -6,7 +6,7 @@ import com.formdev.flatlaf.extras.components.FlatTable;
 import components.MyScrollPane;
 import dao.pool.PoolThreads;
 import dao.request.RequestProducto;
-import modal.cards.CardProductBuy;
+import components.card.cards.CardProductBuy;
 import model.Producto;
 import net.miginfocom.swing.MigLayout;
 import utils.ResponsiveLayout;

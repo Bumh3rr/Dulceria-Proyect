@@ -2,7 +2,7 @@ package form;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
-import modal.cards.CardProducto;
+import components.card.cards.CardProducto;
 import components.Notify;
 import dao.pool.PoolThreads;
 import form.panels.PanelInfoProducto;

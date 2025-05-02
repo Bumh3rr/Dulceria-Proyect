@@ -4,7 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatLabel;
-import components.InputText;
+import components.input.InputText;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;

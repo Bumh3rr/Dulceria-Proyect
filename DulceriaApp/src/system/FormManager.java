@@ -2,12 +2,12 @@ package system;
 
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import form.FormBuys;
-import form.FormProveedoresAndEmpleados;
 import java.awt.EventQueue;
 import java.util.LinkedList;
 import javax.swing.JFrame;
 
 import form.panels.PanelInfoVenta;
+import lombok.Getter;
 import model.DetalleVenta;
 import model.Venta;
 import raven.modal.Drawer;
@@ -24,7 +24,8 @@ public class FormManager {
     private static FormManager instance;
     private static MainForm mainForm;
     private static PanelInfoVenta panelInfoVenta;
-    private JFrame frame;
+    @Getter
+    private static JFrame frame;
 
     /**
      * Obtiene la instancia única de FormManager.
@@ -38,13 +39,9 @@ public class FormManager {
         return instance;
     }
 
-    /**
-     * Instala el gestor de formularios en el marco especificado.
-     *
-     * @param frame el marco JFrame donde se instalará el gestor de formularios
-     */
-    public void install(JFrame frame) {
-        this.frame = frame;
+
+    public void install(JFrame j) {
+        frame = j;
         initForm(FormBuys.class);
     }
 

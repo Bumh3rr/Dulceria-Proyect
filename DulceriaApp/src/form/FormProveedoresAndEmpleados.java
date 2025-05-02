@@ -53,6 +53,7 @@ public class FormProveedoresAndEmpleados extends Form {
         tabb = new JTabbedPane();
         formProveedor = new FormProveedor();
         formEmpleado = new FormEmpleado();
+        formEmpleado.formInit();
     }
 
     private void init() {

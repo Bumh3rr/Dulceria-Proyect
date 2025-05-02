@@ -4,12 +4,17 @@ import dao.pool.PoolConexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
+import java.util.List;
 import lombok.Cleanup;
 import model.Empleado;
+import model.Producto;
 
 /**
  * Clase EmpleadoDao que maneja las operaciones de base de datos para los empleados.
@@ -50,8 +55,8 @@ public class EmpleadoDao {
         return generatedId > 0;
     }
 
-    public static Boolean updateEmpleadoBD(Empleado empleado) throws Exception {
-        String query = "UPDATE EMPLEADO SET nombre=?,apellidos=?,telefono=?,direccion=?,rfc=?,puesto=?,estado=?,sueldo=?,venta_semanal=?,comision=? WHERE idEmpleado=?";
+    public static Boolean updateEmpleadoBD(Empleado empleado, int id) throws Exception {
+        String query = "UPDATE EMPLEADO SET nombre=?,apellidos=?,telefono=?,direccion=?,rfc=?,puesto=?,estado=?,sueldo=? WHERE idEmpleado=?";
         @Cleanup
         Connection connection = PoolConexion.getInstance().getConnection();
         @Cleanup
@@ -64,10 +69,7 @@ public class EmpleadoDao {
         ps.setString(6, empleado.getPuesto().name());
         ps.setString(7, empleado.getEstado().name());
         ps.setDouble(8, empleado.getSueldo());
-        ps.setDouble(9, empleado.getVenta_semanal());
-        ps.setDouble(10, empleado.getComision());
-        ps.setInt(11, empleado.getIdEmpleado());
-
+        ps.setInt(9, id);
         return ps.executeUpdate() > 0;
     }
 
@@ -77,15 +79,16 @@ public class EmpleadoDao {
      * @return Una lista enlazada de objetos Empleado que contienen los datos de todos los empleados.
      * @throws Exception Si ocurre un error durante la operación de base de datos.
      */
-    public static LinkedList<Empleado> getAllEmpleadosBD() throws Exception {
+    public static List<Empleado> getAllEmpleadosBD() throws Exception {
         String query = "SELECT * FROM EMPLEADO";
-        LinkedList<Empleado> list = new LinkedList<>();
+        List<Empleado> list;
         @Cleanup
         Connection connection = PoolConexion.getInstance().getConnection();
         @Cleanup
         Statement statement = connection.createStatement();
         @Cleanup
         ResultSet resultSet = statement.executeQuery(query);
+        list = new ArrayList<>();
         while (resultSet.next()) {
             list.add(new Empleado(resultSet.getInt("idEmpleado"),
                     resultSet.getString("nombre"),
@@ -99,7 +102,7 @@ public class EmpleadoDao {
                     resultSet.getDouble("venta_semanal"),
                     resultSet.getDouble("comision"),
                     resultSet.getTimestamp("fecha_registro").toLocalDateTime(),
-                    resultSet.getObject("fecha_baja")!= null ? resultSet.getTimestamp("fecha_baja").toLocalDateTime() : null));
+                    resultSet.getObject("fecha_baja") != null ? resultSet.getTimestamp("fecha_baja").toLocalDateTime() : null));
         }
         return list;
     }
@@ -159,8 +162,27 @@ public class EmpleadoDao {
                     resultSet.getDouble("venta_semanal"),
                     resultSet.getDouble("comision"),
                     resultSet.getTimestamp("fecha_registro").toLocalDateTime(),
-                    resultSet.getObject("fecha_baja")!= null ? resultSet.getTimestamp("fecha_baja").toLocalDateTime() : null);
+                    resultSet.getObject("fecha_baja") != null ? resultSet.getTimestamp("fecha_baja").toLocalDateTime() : null);
         }
         return null;
+    }
+
+    public static LocalDateTime updateStatus(Boolean status, int id) throws Exception {
+        String query = "UPDATE EMPLEADO SET estado= ?, fecha_baja = ? WHERE idEmpleado = ?";
+        LocalDateTime dateLow = null;
+        @Cleanup
+        Connection connection = PoolConexion.getInstance().getConnection();
+        @Cleanup
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setString(1, status ? Empleado.Status.Activo.name() : Empleado.Status.Inactivo.name());
+        if (status) {
+            ps.setObject(2, null);
+        } else {
+            dateLow = LocalDateTime.now();
+            ps.setTimestamp(2, Timestamp.valueOf(dateLow));
+        }
+        ps.setInt(3, id);
+        ps.executeUpdate();
+        return dateLow;
     }
 }

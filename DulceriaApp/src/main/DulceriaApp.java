@@ -7,6 +7,7 @@ import com.formdev.flatlaf.util.SystemInfo;
 import components.Notify;
 import dao.pool.PoolConexion;
 import drawer.DrawerBuildDulceria;
+import fonts.FontPublicaSans;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -81,8 +82,7 @@ public class DulceriaApp extends JFrame {
     public static void main(String[] args) {
         FlatLaf.registerCustomDefaultsSource("themes");
         FlatMacLightLaf.setup();
-        FlatRobotoFont.install();
-        UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
+        UIManager.put("defaultFont", FontPublicaSans.getInstance().getFont(FontPublicaSans.FontType.MEDIUM, 13f));
         EventQueue.invokeLater(DulceriaApp::new);
     }
 }

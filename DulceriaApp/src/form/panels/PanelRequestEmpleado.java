@@ -1,370 +1,137 @@
 package form.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatLabel;
-import components.InputText;
+import components.input.InputDecimal;
+import components.input.InputText;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
-import components.Notify;
+import components.button.ButtonDefault;
 import components.input.InputTextPhone;
-import form.FormEmpleado;
-import dao.request.RequestEmpleado;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Optional;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.MaskFormatter;
-import javax.swing.text.NumberFormatter;
 import model.Empleado;
 import net.miginfocom.swing.MigLayout;
 import raven.modal.Toast;
-import raven.modal.component.ModalBorderAction;
-import raven.modal.component.SimpleModalBorder;
-import raven.modal.listener.ModalController;
-import raven.modal.toast.ToastPromise;
-import utils.Request;
+import utils.CheckExpression;
+import utils.CheckInput;
 
 public class PanelRequestEmpleado extends JPanel {
-
-    private final String KEY = getClass().getName();
-    private MyTxtAreaDescrip description;
-    private Request request;
-    private Empleado empleado;
-    private FormEmpleado form;
-    private PanelInfoEmpleado formInfo;
-
-    private InputText inputNombre, inputApellido, inputRFC;
-    private InputText inputDireccion;
-    private JFormattedTextField inputPhone;
-    private FlatComboBox<String> inputPuesto;
-    private JFormattedTextField inputSueldo;
-
+    private InputText firstname, lastname, rfc,address;
+    private InputTextPhone phone;
+    private FlatComboBox<String> puesto;
+    private JFormattedTextField sueldo;
     private JButton button;
 
-    //add
-    public PanelRequestEmpleado(FormEmpleado form, Request request) {
-        this.form = form;
-        this.request = request;
-
-        initComponents();
-        initListeners();
-        init();
+    public void installEventButton(Runnable event) {
+        button.addActionListener((e) -> event.run());
     }
 
-    //update
-    public PanelRequestEmpleado(Empleado empleado, PanelInfoEmpleado formInfo, Request request) {
-        this.empleado = empleado;
-        this.formInfo = formInfo;
-        this.request = request;
+    public PanelRequestEmpleado setEmpleado(Empleado empleado){
+        firstname.setText(empleado.getNombre());
+        lastname.setText(empleado.getApellido());
+        phone.setValue(empleado.getTelefono());
+        address.setText(empleado.getDireccion());
+        rfc.setText(empleado.getRfc());
+        puesto.setSelectedItem(empleado.getPuesto().toString());
+        sueldo.setValue(empleado.getSueldo());
+        button.setText("Actualizar");
+        return this;
+    }
 
+    public PanelRequestEmpleado() {
         initComponents();
-        initListeners();
         init();
     }
 
     private void initComponents() {
-        try {
-            NumberFormatter decimalFormatter = new NumberFormatter(new DecimalFormat("#,##0.00"));
-            decimalFormatter.setValueClass(Double.class);
-            decimalFormatter.setMinimum(0.0);
-            decimalFormatter.setMaximum(Double.MAX_VALUE);
-            decimalFormatter.setAllowsInvalid(false);
-
-            description = new MyTxtAreaDescrip("");
-            inputNombre = new InputText("Ingresa el Nombre");
-            inputApellido = new InputText("Ingresa el Apellido");
-
-            inputPhone = new InputTextPhone();
-            inputPhone.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###-###-####")));
-
-            inputPuesto = new FlatComboBox<>();
-            inputPuesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Selecione el Estado", "VENDEDOR", "SUPERVISOR"}));
-            inputPuesto.setMaximumRowCount(8);
-
-            inputSueldo = new JFormattedTextField();
-            inputSueldo.setFormatterFactory(new DefaultFormatterFactory(decimalFormatter));
-            inputSueldo.setValue(Double.MIN_NORMAL);
-
-            inputRFC = new InputText("Ingresa el RFC de 13 Digitos");
-            inputDireccion = new InputText();
-
-            button = new JButton() {
-                @Override
-                public boolean isDefaultButton() {
-                    return true;
-                }
-            };
-        } catch (ParseException e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
-        }
-
-    }
-
-    private void initListeners() {
-        switch (request) {
-
-            case INSERTS -> {
-                button.setText("Agregar");
-                description.setText("Ingresa los Datos de tu Empleado");
-                button.addActionListener((e)
-                        -> ModalBorderAction.getModalBorderAction(button).doAction(SimpleModalBorder.OK_OPTION)
-                );
-
-            }
-
-            case UPDATE -> {
-                button.setText("Actualizar");
-                description.setText("Permite Modificar la información del Empleado");
-                inputNombre.setText(empleado.getNombre());
-                inputApellido.setText(empleado.getApellido());
-                inputPhone.setText(empleado.getTelefono());
-                inputPuesto.setSelectedItem(empleado.getPuesto());
-                inputSueldo.setValue(empleado.getSueldo());
-                inputRFC.setText(empleado.getRfc());
-                inputDireccion.setText(empleado.getDireccion());
-            }
-
-            default ->
-                throw new AssertionError();
-        }
+        firstname = new InputText("Ingresa el Nombre", 45).setIcon("resources/icon/ic_name.svg");
+        lastname = new InputText("Ingresa el Apellido", 45).setIcon("resources/icon/ic_name.svg");
+        phone = new InputTextPhone();
+        puesto = new FlatComboBox<>();
+        puesto.setModel(new DefaultComboBoxModel<>(new String[]{"Seleccione el Estado", "VENDEDOR", "SUPERVISOR"}));
+        puesto.setMaximumRowCount(8);
+        sueldo = new InputDecimal(50000);
+        rfc = new InputText("Ingresa el RFC de 13 Dígitos", 15);
+        address = new InputText("Ingresa la Dirección", 45).setIcon("resources/icon/ic_address.svg");
+        button = new ButtonDefault("Aceptar");
     }
 
     private void init() {
         setLayout(new MigLayout("fillx,insets 0", "[center]", "[center]"));
-
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 0 45 0 45", "fill,400!"));
-
-        button.putClientProperty(FlatClientProperties.STYLE, "" + "foreground:#FFFFFF");
-
-        description.putClientProperty(FlatClientProperties.STYLE, ""
-                + "[light]foreground:lighten(@foreground,30%);"
-                + "[dark]foreground:darken(@foreground,30%);"
-                + "background:null");
-
-        inputNombre.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Nombre");
-        inputNombre.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_name.svg", 0.35f));
-        inputNombre.putClientProperty(FlatClientProperties.STYLE, ""
-                + "iconTextGap:10;"
-                + "showClearButton:true");
-
-        inputApellido.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Apellido");
-        inputApellido.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_name.svg", 0.35f));
-        inputApellido.putClientProperty(FlatClientProperties.STYLE, ""
-                + "iconTextGap:10;"
-                + "showClearButton:true");
-
-        JLabel lbLada = new JLabel("+52", new FlatSVGIcon("resources/icon/ic_phone.svg", 0.35f), JLabel.RIGHT);
-        lbLada.putClientProperty(FlatClientProperties.STYLE, ""
-                + "border:0,8,0,0;"
-                + "[light]foreground:lighten(@foreground,30%);"
-                + "[dark]foreground:darken(@foreground,30%);");
-
-        inputPhone.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_COMPONENT, lbLada);
-        inputPhone.putClientProperty(FlatClientProperties.STYLE, ""
-                + "iconTextGap:10;"
-                + "showClearButton:true");
-
-        inputDireccion.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Direccion");
-        inputDireccion.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("resources/icon/ic_address.svg", 0.35f));
-        inputDireccion.putClientProperty(FlatClientProperties.STYLE, ""
-                + "iconTextGap:10;"
-                + "showClearButton:true");
-
-        inputRFC.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingresa el RFC de 13 Digitos");
-        inputRFC.putClientProperty(FlatClientProperties.STYLE, ""
-                + "showClearButton:true");
-
-        JLabel signo = new JLabel("$", JLabel.RIGHT);
-        signo.putClientProperty(FlatClientProperties.STYLE, ""
-                + "border:0,8,0,0;"
-                + "[light]foreground:lighten(@foreground,30%);"
-                + "[dark]foreground:darken(@foreground,30%);");
-
-        inputSueldo.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_COMPONENT, signo);
-        inputSueldo.putClientProperty(FlatClientProperties.STYLE, ""
-                + "iconTextGap:10;"
-                + "showClearButton:true");
 
         JLabel jLabel = new JLabel("DATOS PERSONALES");
         jLabel.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:bold +1");
-
         JLabel labelAddres = new FlatLabel();
         labelAddres.setText("DATOS DEL TRABAJO");
         labelAddres.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:bold +1");
 
-        panel.add(description);
-        panel.add(jLabel, "grow 0,gapy 5,al center");
+        panel.add(jLabel, "grow 0,al center");
         panel.add(new JLabel("Nombre Completo"));
-        panel.add(inputNombre, "split 2");
-        panel.add(inputApellido);
+        panel.add(firstname, "split 2");
+        panel.add(lastname);
         panel.add(new JLabel("Telefono"));
-        panel.add(inputPhone);
+        panel.add(phone);
         panel.add(new JLabel("RFC"));
-        panel.add(inputRFC);
-        panel.add(new JLabel("Direccion"));
-        panel.add(inputDireccion);
+        panel.add(rfc);
+        panel.add(new JLabel("Dirección"));
+        panel.add(address);
         panel.add(labelAddres, "grow 0,al center");
         panel.add(new JLabel("Puesto"));
-        panel.add(inputPuesto);
+        panel.add(puesto);
         panel.add(new JLabel("Sueldo"));
-        panel.add(inputSueldo);
+        panel.add(sueldo);
         panel.add(button, "grow 0,gapy 10,al trail");
-
         add(new MyScrollPane(panel));
-        updateUI();
-        revalidate();
     }
 
-    public void commitInserts(ModalController controller) {
-        if (Toast.checkPromiseId(KEY)) {
-            controller.consume();
-            return;
-        }
-        Toast.showPromise(SwingUtilities.windowForComponent(form), "Agregar", Notify.getInstance().getSelectedOptionTop(),
-                new ToastPromise(KEY) {
-            @Override
-            public void execute(ToastPromise.PromiseCallback toas) {
-                try {
-                    controller.consume();
-                    toas.update("Verificando");
-                    if (insert()) {
-                        new Thread(() -> form.refreshEmpleados()).start();
-                        toas.done(Toast.Type.SUCCESS, "Empleado Agregado Exitoxamente");
-                        controller.close();
-                    } else {
-                        controller.consume();
-                        toas.done(Toast.Type.ERROR, "Operación fallida");
-                    }
-                } catch (Exception e) {
-                    if (e.getMessage().contains("Data too long")) {
-                        toas.done(Toast.Type.WARNING, "Has Revasado el Limite de Caracteres\n"
-                                + e.getLocalizedMessage());
-                    } else {
-                        toas.done(Toast.Type.ERROR, "Surgió un problema al agregar al Empleado ala base de datos"
-                                + "\nCausa: " + e.getLocalizedMessage());
-                    }
-                    controller.consume();
-                }
-            }
-        });
-    }
-
-    private Boolean insert() throws Exception {
+    public Optional<Empleado> getValue(){
         Toast.closeAll();
-        if (toastIsEmptyCampos()) {
-            return false;
-        }
-        String nombre = inputNombre.getText().strip();
-        String apellido = inputApellido.getText().strip();
-        String telefono = inputPhone.getText();
-        String direccion = inputDireccion.getText().isEmpty() ? null : inputDireccion.getText();
-        String rfc = inputRFC.getText().isEmpty() ? null : inputRFC.getText();
-        Empleado.Puesto puesto = Empleado.Puesto.valueOf(inputPuesto.getSelectedItem().toString());
+        if (checkInputs()) return Optional.empty();
+        String nombre = firstname.getText().strip();
+        String apellido = lastname.getText().strip();
+        String telefono = phone.getText();
+        String direccion = address.getText().isEmpty() ? null : address.getText();
+        String rfc = this.rfc.getText().isEmpty() ? null : this.rfc.getText();
+        Empleado.Puesto puesto = Empleado.Puesto.valueOf(this.puesto.getSelectedItem().toString());
         Empleado.Status estado = Empleado.Status.Activo;
-        Double sueldo = inputSueldo.getValue() == null ? 0.00 : Double.valueOf(inputSueldo.getValue().toString());
+        Double sueldo = this.sueldo.getValue() == null ? 0.00 : Double.valueOf(this.sueldo.getValue().toString());
         LocalDateTime dateRegister = LocalDateTime.now();
 
-        return RequestEmpleado.addEmpleado(new Empleado(nombre, apellido, telefono, direccion, rfc, puesto, estado, sueldo, dateRegister));
+        Empleado empleado = Empleado.builder()
+                .nombre(nombre)
+                .apellido(apellido)
+                .telefono(telefono)
+                .direccion(direccion)
+                .rfc(rfc)
+                .puesto(puesto)
+                .estado(estado)
+                .sueldo(sueldo)
+                .fecha_registro(dateRegister)
+                .build();
+        return Optional.ofNullable(empleado);
     }
 
-    public void commitUpdate(ModalController controller) {
-        if (Toast.checkPromiseId(KEY)) {
-            controller.consume();
-            return;
-        }
-        Toast.showPromise(SwingUtilities.windowForComponent(formInfo), "Actualizar", Notify.getInstance().getSelectedOptionTop(),
-                new ToastPromise(KEY) {
-            @Override
-            public void execute(ToastPromise.PromiseCallback toas) {
-                try {
-                    controller.consume();
-                    toas.update("Verificando");
-                    if (update()) {
-                        new Thread(() -> formInfo.refreshFields()).start();
-                        toas.done(Toast.Type.SUCCESS, "Empleado Actualizado Exitoxamente");
-                        controller.close();
-                    } else {
-                        controller.consume();
-                        toas.done(Toast.Type.ERROR, "Operación fallida");
-                    }
-                } catch (Exception e) {
-                    if (e.getMessage().contains("Data too long")) {
-                        toas.done(Toast.Type.WARNING, "Has Revasado el Limite de Caracteres\n"
-                                + e.getLocalizedMessage());
-                    } else {
-                        toas.done(Toast.Type.ERROR, "Surgió un problema al agregar al Empleado ala base de datos"
-                                + "\nCausa: " + e.getLocalizedMessage());
-                    }
-                    controller.consume();
-                }
-            }
-        });
-    }
-
-    private Boolean update() throws Exception {
-        Toast.closeAll();
-        if (toastIsEmptyCampos()) {
-            return false;
-        }
-        String nombre = inputNombre.getText().strip();
-        String apellido = inputApellido.getText().strip();
-        String telefono = inputPhone.getText();
-        String direccion = inputDireccion.getText().isEmpty() ? null : inputDireccion.getText();
-        String rfc = inputRFC.getText().isEmpty() ? null : inputRFC.getText();
-        Empleado.Puesto puesto = Empleado.Puesto.valueOf(inputPuesto.getSelectedItem().toString());
-        Double sueldo = inputSueldo.getValue() == null ? 0.00 : Double.valueOf(inputSueldo.getValue().toString());
-
-        empleado.setNombre(nombre);
-        empleado.setApellido(apellido);
-        empleado.setTelefono(telefono);
-        empleado.setDireccion(direccion);
-        empleado.setRfc(rfc);
-        empleado.setPuesto(puesto);
-        empleado.setSueldo(sueldo);
-
-        return RequestEmpleado.updateEmpleado(empleado);
-    }
-
-    private Boolean toastIsEmptyCampos() throws Exception {
-        if (verifyInputEmpty(inputNombre, "Nombre")) {
+    private boolean checkInputs() {
+        // Datos requeridos
+        if (CheckInput.isInvalidInput(firstname.getText(), CheckExpression::isNameValid, "Nombre", "solo debe contener letras"))
             return true;
-        }
-        if (verifyInputEmpty(inputApellido, "Apellidos")) {
+        if (CheckInput.isInvalidInput(lastname.getText(), CheckExpression::isNameValid, "Apellidos", "solo debe contener letras"))
             return true;
-        }
-        if (inputPhone.getValue() == null) {
-            Notify.getInstance().showToast(Toast.Type.WARNING, "Es requerido el campo Telefono");
-            return true;
-        }
-        if (inputPuesto.getSelectedIndex() == 0) {
-            Notify.getInstance().showToast(Toast.Type.WARNING, "Es requerido el campo Puesto");
-            return true;
-        }
-        return false;
-    }
+        if (CheckInput.isInvalidSelection(this.puesto.getSelectedIndex(), "Puesto")) return true;
+        if (CheckInput.isNullInput(phone.getValue(), "Teléfono")) return true;
 
-    private Boolean verifyInputEmpty(JTextField field, String str) throws Exception {
-        try {
-            String text = String.valueOf(field.getText().strip());
-            if (text.isEmpty()) {
-                Notify.getInstance().showToast(Toast.Type.WARNING, "Es requerido el campo " + str);
-                return true;
-            }
-        } catch (Exception e) {
-            return true;
-        }
+        // Opcionales
+        if (CheckInput.isOptionalInvalidInput(rfc.getText(), CheckExpression::isValidRFCTaller, "RFC")) return true;
         return false;
     }
 
