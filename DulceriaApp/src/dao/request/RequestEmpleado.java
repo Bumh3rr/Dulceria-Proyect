@@ -29,6 +29,23 @@ public class RequestEmpleado {
     }
 
     /**
+     * Actualiza un empleado existente utilizando un pool de hilos.
+     *
+     * @param empleado El objeto Empleado que contiene los datos actualizados del empleado.
+     * @return true si el empleado fue actualizado exitosamente, false en caso contrario.
+     * @throws Exception Si ocurre un error durante la operación de base de datos.
+     */
+    public static Boolean updateEmpleado(Empleado empleado) throws Exception {
+        return PoolThreads.getInstance().getExecutorService().submit(() -> {
+            try {
+                return EmpleadoDao.updateEmpleadoBD(empleado);
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
+        }).get();
+    }
+
+    /**
      * Obtiene un empleado específico por su ID utilizando un pool de hilos.
      *
      * @param idEmpleado El ID del empleado que se desea obtener.

@@ -4,7 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatLabel;
-import components.MyJTextField;
+import components.InputText;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
@@ -41,13 +41,13 @@ public class PanelRequestSupplier extends JPanel {
     private Request request;
     private Proveedor supplier;
 
-    private MyJTextField inputFirtsName;
-    private MyJTextField inputLastName;
+    private InputText inputFirtsName;
+    private InputText inputLastName;
     private JFormattedTextField inputPhone;
-    private MyJTextField inputEmail;
+    private InputText inputEmail;
     private FlatComboBox<String> inputState;
     private FlatComboBox<String> inputMunicipality;
-    private MyJTextField inputStreet;
+    private InputText inputStreet;
     private JFormattedTextField inputZip;
 
     private JButton button;
@@ -80,17 +80,17 @@ public class PanelRequestSupplier extends JPanel {
     private void initComponents() {
         try {
             description = new MyTxtAreaDescrip("");
-            inputFirtsName = new MyJTextField();
-            inputLastName = new MyJTextField();
+            inputFirtsName = new InputText();
+            inputLastName = new InputText();
             inputPhone = new JFormattedTextField();
             inputPhone.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###-###-####")));
-            inputEmail = new MyJTextField();
+            inputEmail = new InputText();
             inputState = new FlatComboBox<>();
             inputState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Selecione el Estado"}));
             inputState.setMaximumRowCount(8);
             inputMunicipality = new FlatComboBox<>();
             inputMunicipality.setMaximumRowCount(8);
-            inputStreet = new MyJTextField();
+            inputStreet = new InputText();
             inputZip = new JFormattedTextField();
             inputZip.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("#####")));
 

@@ -71,7 +71,6 @@ public class PanelInfoEmpleado extends JPanel {
     public void refreshFields() {
         try {
             this.empleado = RequestEmpleado.getOneEmpledo(empleado.getIdEmpleado());
-
             fieldID.setTextField(String.valueOf(empleado.getIdEmpleado()));
             fieldFirtsName.setTextField(empleado.getNombre());
             fieldLastName.setTextField(empleado.getApellido());
@@ -129,8 +128,9 @@ public class PanelInfoEmpleado extends JPanel {
             PanelRequestEmpleado panelAdd = new PanelRequestEmpleado(empleado, this, Request.UPDATE);
             ModalDialog.showModal(SwingUtilities.windowForComponent(this),
                     new SimpleModalBorder(panelAdd, "Actualizar Empleado", SimpleModalBorder.DEFAULT_OPTION, (controller, action) -> {
+                        controller.consume();
                         if (action == SimpleModalBorder.OK_OPTION) {
-                            panelAdd.commitInserts(controller);
+                            panelAdd.commitUpdate(controller);
                         } else if (action == SimpleModalBorder.CANCEL_OPTION) {
                             controller.close();
                         }

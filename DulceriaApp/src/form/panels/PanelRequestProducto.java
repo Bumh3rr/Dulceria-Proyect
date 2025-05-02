@@ -2,7 +2,7 @@ package form.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
-import components.MyJTextField;
+import components.InputText;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
@@ -39,9 +39,9 @@ public class PanelRequestProducto extends JPanel {
     private Producto producto;
     private PanelInfoProducto formInfo;
 
-    private MyJTextField inputNombre;
-    private MyJTextField inputMarca;
-    private MyJTextField inputDescripcion;
+    private InputText inputNombre;
+    private InputText inputMarca;
+    private InputText inputDescripcion;
     private JFormattedTextField inputStock;
     private JFormattedTextField inputPrecioCompra;
     private JFormattedTextField inputPrecioVenta;
@@ -137,9 +137,9 @@ public class PanelRequestProducto extends JPanel {
 
         description = new MyTxtAreaDescrip("Agregar Producto, Agrega un nuevo producto a la base de datos");
 
-        inputNombre = new MyJTextField();
-        inputMarca = new MyJTextField();
-        inputDescripcion = new MyJTextField();
+        inputNombre = new InputText();
+        inputMarca = new InputText();
+        inputDescripcion = new InputText();
 
         inputStock = new JFormattedTextField();
         inputStock.setFormatterFactory(new DefaultFormatterFactory(numberFormatter));

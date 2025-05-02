@@ -4,10 +4,11 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatLabel;
-import components.MyJTextField;
+import components.InputText;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
+import components.input.InputTextPhone;
 import form.FormEmpleado;
 import dao.request.RequestEmpleado;
 import java.text.DecimalFormat;
@@ -42,10 +43,8 @@ public class PanelRequestEmpleado extends JPanel {
     private FormEmpleado form;
     private PanelInfoEmpleado formInfo;
 
-    private MyJTextField inputNombre;
-    private MyJTextField inputApellido;
-    private MyJTextField inputRFC;
-    private MyJTextField inputDireccion;
+    private InputText inputNombre, inputApellido, inputRFC;
+    private InputText inputDireccion;
     private JFormattedTextField inputPhone;
     private FlatComboBox<String> inputPuesto;
     private JFormattedTextField inputSueldo;
@@ -82,10 +81,10 @@ public class PanelRequestEmpleado extends JPanel {
             decimalFormatter.setAllowsInvalid(false);
 
             description = new MyTxtAreaDescrip("");
-            inputNombre = new MyJTextField();
-            inputApellido = new MyJTextField();
+            inputNombre = new InputText("Ingresa el Nombre");
+            inputApellido = new InputText("Ingresa el Apellido");
 
-            inputPhone = new JFormattedTextField();
+            inputPhone = new InputTextPhone();
             inputPhone.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###-###-####")));
 
             inputPuesto = new FlatComboBox<>();
@@ -96,8 +95,8 @@ public class PanelRequestEmpleado extends JPanel {
             inputSueldo.setFormatterFactory(new DefaultFormatterFactory(decimalFormatter));
             inputSueldo.setValue(Double.MIN_NORMAL);
 
-            inputRFC = new MyJTextField();
-            inputDireccion = new MyJTextField();
+            inputRFC = new InputText("Ingresa el RFC de 13 Digitos");
+            inputDireccion = new InputText();
 
             button = new JButton() {
                 @Override
@@ -233,7 +232,6 @@ public class PanelRequestEmpleado extends JPanel {
             controller.consume();
             return;
         }
-
         Toast.showPromise(SwingUtilities.windowForComponent(form), "Agregar", Notify.getInstance().getSelectedOptionTop(),
                 new ToastPromise(KEY) {
             @Override
@@ -279,6 +277,64 @@ public class PanelRequestEmpleado extends JPanel {
         LocalDateTime dateRegister = LocalDateTime.now();
 
         return RequestEmpleado.addEmpleado(new Empleado(nombre, apellido, telefono, direccion, rfc, puesto, estado, sueldo, dateRegister));
+    }
+
+    public void commitUpdate(ModalController controller) {
+        if (Toast.checkPromiseId(KEY)) {
+            controller.consume();
+            return;
+        }
+        Toast.showPromise(SwingUtilities.windowForComponent(formInfo), "Actualizar", Notify.getInstance().getSelectedOptionTop(),
+                new ToastPromise(KEY) {
+            @Override
+            public void execute(ToastPromise.PromiseCallback toas) {
+                try {
+                    controller.consume();
+                    toas.update("Verificando");
+                    if (update()) {
+                        new Thread(() -> formInfo.refreshFields()).start();
+                        toas.done(Toast.Type.SUCCESS, "Empleado Actualizado Exitoxamente");
+                        controller.close();
+                    } else {
+                        controller.consume();
+                        toas.done(Toast.Type.ERROR, "Operación fallida");
+                    }
+                } catch (Exception e) {
+                    if (e.getMessage().contains("Data too long")) {
+                        toas.done(Toast.Type.WARNING, "Has Revasado el Limite de Caracteres\n"
+                                + e.getLocalizedMessage());
+                    } else {
+                        toas.done(Toast.Type.ERROR, "Surgió un problema al agregar al Empleado ala base de datos"
+                                + "\nCausa: " + e.getLocalizedMessage());
+                    }
+                    controller.consume();
+                }
+            }
+        });
+    }
+
+    private Boolean update() throws Exception {
+        Toast.closeAll();
+        if (toastIsEmptyCampos()) {
+            return false;
+        }
+        String nombre = inputNombre.getText().strip();
+        String apellido = inputApellido.getText().strip();
+        String telefono = inputPhone.getText();
+        String direccion = inputDireccion.getText().isEmpty() ? null : inputDireccion.getText();
+        String rfc = inputRFC.getText().isEmpty() ? null : inputRFC.getText();
+        Empleado.Puesto puesto = Empleado.Puesto.valueOf(inputPuesto.getSelectedItem().toString());
+        Double sueldo = inputSueldo.getValue() == null ? 0.00 : Double.valueOf(inputSueldo.getValue().toString());
+
+        empleado.setNombre(nombre);
+        empleado.setApellido(apellido);
+        empleado.setTelefono(telefono);
+        empleado.setDireccion(direccion);
+        empleado.setRfc(rfc);
+        empleado.setPuesto(puesto);
+        empleado.setSueldo(sueldo);
+
+        return RequestEmpleado.updateEmpleado(empleado);
     }
 
     private Boolean toastIsEmptyCampos() throws Exception {

@@ -38,7 +38,7 @@ public class PoolConexion {
         try {
             HikariConfig config = new HikariConfig();
             // Configuración de la conexión a la base de datos
-            config.setJdbcUrl("jdbc:mysql://usczjlneyqxrdref:EnUbzvDZDJ7Nqt0yHuCY@brgz2hmn59kjulcjaoig-mysql.services.clever-cloud.com:3306/brgz2hmn59kjulcjaoig");
+            config.setJdbcUrl("jdbc:mysql://usczjlneyqxrdref:EnUbzvDZDJ7Nqt0yHuCY@bwfpuptwwgzdhssgcbxe-mysql.services.clever-cloud.com:3306/bwfpuptwwgzdhssgcbxe");
             config.setUsername("usczjlneyqxrdref");
             config.setPassword("EnUbzvDZDJ7Nqt0yHuCY");
 

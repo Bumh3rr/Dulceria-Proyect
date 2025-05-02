@@ -50,6 +50,27 @@ public class EmpleadoDao {
         return generatedId > 0;
     }
 
+    public static Boolean updateEmpleadoBD(Empleado empleado) throws Exception {
+        String query = "UPDATE EMPLEADO SET nombre=?,apellidos=?,telefono=?,direccion=?,rfc=?,puesto=?,estado=?,sueldo=?,venta_semanal=?,comision=? WHERE idEmpleado=?";
+        @Cleanup
+        Connection connection = PoolConexion.getInstance().getConnection();
+        @Cleanup
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setString(1, empleado.getNombre());
+        ps.setString(2, empleado.getApellido());
+        ps.setString(3, empleado.getTelefono());
+        ps.setString(4, empleado.getDireccion());
+        ps.setString(5, empleado.getRfc());
+        ps.setString(6, empleado.getPuesto().name());
+        ps.setString(7, empleado.getEstado().name());
+        ps.setDouble(8, empleado.getSueldo());
+        ps.setDouble(9, empleado.getVenta_semanal());
+        ps.setDouble(10, empleado.getComision());
+        ps.setInt(11, empleado.getIdEmpleado());
+
+        return ps.executeUpdate() > 0;
+    }
+
     /**
      * Obtiene todos los empleados de la base de datos.
      *

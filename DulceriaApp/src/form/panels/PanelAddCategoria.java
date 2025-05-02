@@ -1,7 +1,7 @@
 package form.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import components.MyJTextField;
+import components.InputText;
 import components.MyScrollPane;
 import components.MyTxtAreaDescrip;
 import components.Notify;
@@ -27,7 +27,7 @@ public class PanelAddCategoria extends JPanel {
 
     private String KEY = getClass().getName();
     private MyTxtAreaDescrip description;
-    private MyJTextField inputNombreCategoria;
+    private InputText inputNombreCategoria;
     private JButton button;
 
     /**
@@ -45,7 +45,7 @@ public class PanelAddCategoria extends JPanel {
      */
     private void initComponents() {
         description = new MyTxtAreaDescrip("Agrega una nueva categoria");
-        inputNombreCategoria = new MyJTextField();
+        inputNombreCategoria = new InputText();
         button = new JButton("Agregar Categoria") {
             @Override
             public boolean isDefaultButton() {

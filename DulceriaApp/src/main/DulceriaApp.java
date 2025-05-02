@@ -69,6 +69,7 @@ public class DulceriaApp extends JFrame {
                 throw new RuntimeException(e);
             }
         }).start();
+        setVisible(true);
     }
 
     /**
@@ -82,6 +83,6 @@ public class DulceriaApp extends JFrame {
         FlatMacLightLaf.setup();
         FlatRobotoFont.install();
         UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
-        EventQueue.invokeLater(() -> new DulceriaApp().setVisible(true));
+        EventQueue.invokeLater(DulceriaApp::new);
     }
 }
